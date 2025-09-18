@@ -163,8 +163,16 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-RECAPTCHA_PUBLIC_KEY = '6LcNbKMpAAAAAJ74l_BjVKYNnPZr_5YZQyIEt3Fj'
-RECAPTCHA_PRIVATE_KEY = '6LcNbKMpAAAAAOMgzboSkbOP8E1kV16QfzIW_wqw'
+if DEBUG:
+    # Claves de prueba para desarrollo local (funcionan con localhost)
+    RECAPTCHA_PUBLIC_KEY = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
+    RECAPTCHA_PRIVATE_KEY = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'
+    # Silenciar el warning de las claves de prueba en desarrollo
+    SILENCED_SYSTEM_CHECKS = ['django_recaptcha.recaptcha_test_key_error']
+else:
+    # Claves de producción
+    RECAPTCHA_PUBLIC_KEY = '6LcNbKMpAAAAAJ74l_BjVKYNnPZr_5YZQyIEt3Fj'
+    RECAPTCHA_PRIVATE_KEY = '6LcNbKMpAAAAAOMgzboSkbOP8E1kV16QfzIW_wqw'
 
 
 
