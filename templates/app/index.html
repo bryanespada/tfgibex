@@ -1,0 +1,299 @@
+{% extends '../base/base.html' %}
+{% block content %}
+{% load static %}
+
+<div class="right_col" role="main">
+  <div class="x_panel">
+    <div class="x_title">
+      <h2>{{config.app_name}}</h2>  
+      <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+      <div class="row">
+        <div class="col">
+          <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+              {% for post in blog %}
+                <li data-target="#carouselExampleIndicators" data-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></li>
+              {% endfor %}
+            </ol>
+
+            <div class="carousel-inner">
+              {% for post in blog %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}" class="background: var(--app_primary)">
+                  {% if post.pic %}
+                  <img class="d-block w-100" 
+                    style="height: 800px !important; object-fit: cover !important;" 
+                    src="{% if post.pic %}/media/{{post.pic}}{% endif %}" 
+                    alt="{{post.title}}">
+                  </img>
+                  {% else %}
+                  <div class="d-block w-100" style="background-color: var(--app-primary); height: 800px !important; object-fit: cover !important;"></div>
+                  {% endif %}
+                  <div class="carousel-caption d-none d-md-block custom-carousel-title" style="text-align:-webkit-center;">
+                    <h5>{{post.title}}</h5>
+                    <p style="max-width:500px;">{{post.description | truncatewords:30}}</p>
+                    <a href="{{post.url}}" target="_blank"><div class="mt-4 p-2 border border-white" style="max-width:fit-content;"> <span style="color:white;">Show more</span> </div></a>
+                  </div>
+                </div>
+              {% endfor %}
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Function to choose the next corresponding color 
+    function get_colour_list(requested_colours) {
+        var selected_borders = [];
+        var selected_backgrounds = [];
+        var colours = ['{{config.app_color_1}}', '{{config.app_color_2}}', '{{config.app_color_3}}', '{{config.app_color_4}}', '{{config.app_color_5}}', '{{config.app_color_6}}', '{{config.app_color_7}}', '{{config.app_color_8}}']; // Available colours
+        var currentIndex = 0; // Index to take colours
+        for (var i = 0; i < requested_colours; i++) {
+            var colourIndex = currentIndex % colours.length; // Get the element index
+            selected_borders.push(colours[colourIndex]); // Append the selected colour
+            selected_backgrounds.push(colours[colourIndex] + '{{config.app_transparency_factor}}'); // Append the same colour with it's transparency
+            currentIndex++; // Increment the index to choose next colour
+        }
+        return [selected_borders, selected_backgrounds]; // Return both arrays
+    }
+  </script>
+
+
+  <div class="row">
+    
+    <!-- Col 1/3 -->
+    <div class="col-md-4 col-sm-4 ">
+      <div class="x_panel tile" style="height:auto;">
+
+        <!-- Title -->
+        <div class="x_title">
+            <h2>Top 10 Surgical Areas</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="x_content">
+          <div class="col-md-12 col-sm-12">
+            {% if top_10.surgical_areas.show %}
+              <!-- Chart Canvas -->
+              <canvas id="admin_chart_1_3" style="height:500px!important;width:100%!important;"></canvas>
+              <!-- Chart script -->
+              <script>
+                  const ctx_admin_chart_1_3 = document.getElementById('admin_chart_1_3');
+                  var labels_1_3 = {{top_10.surgical_areas.labels | safe}};
+                  var colours_array_1_3 = get_colour_list(labels_1_3.length);
+
+                  new Chart(ctx_admin_chart_1_3, {
+                      type: 'bar',
+                      data: {
+                          labels: labels_1_3,
+                          datasets: [{
+                              label: "Total access",
+                              data: {{top_10.surgical_areas.values}},
+                              borderColor: colours_array_1_3[0],
+                              backgroundColor: colours_array_1_3[1],
+                              hoverOffset: 5,
+                              borderRadius: 0
+                          }]
+                      },
+                      options: {
+                          indexAxis: 'y',
+                          animation: {
+                              delay: (context) => {
+                                  let delay = 0;
+                                  if (context.type === 'data') {
+                                      delay = context.dataIndex * 400 + context.datasetIndex * 50;
+                                  }
+                                  return delay;
+                              },
+                          },
+                          responsive: true,
+                          maintainAspectRatio: false,
+                          title: {
+                              display: false,
+                          },
+                          plugins: {
+                              legend: {
+                                  display: false,
+                              }
+                          },
+                          elements: {
+                              bar: {
+                                  borderWidth: 2,
+                              }
+                          }
+                      }
+                  });
+              </script>
+            {% else %}
+              <div id="admin_chart_2_3" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">No data</div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+     <!-- Col 2/3 -->
+     <div class="col-md-4 col-sm-4 ">
+      <div class="x_panel tile" style="height:auto;">
+
+        <!-- Title -->
+        <div class="x_title">
+            <h2>Top 10 Surgery Types</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="x_content">
+          <div class="col-md-12 col-sm-12">
+            {% if top_10.surgery_types.show %}
+              <!-- Chart Canvas -->
+              <canvas id="admin_chart_2_3" style="height:500px!important;width:100%!important;"></canvas>
+              <!-- Chart script -->
+              <script>
+                  const ctx_admin_chart_2_3 = document.getElementById('admin_chart_2_3');
+                  var labels_2_3 = {{top_10.surgery_types.labels | safe}};
+                  var colours_array_2_3 = get_colour_list(labels_2_3.length);
+
+                  new Chart(ctx_admin_chart_2_3, {
+                      type: 'bar',
+                      data: {
+                          labels: labels_2_3,
+                          datasets: [{
+                              label: "Total access",
+                              data: {{top_10.surgery_types.values}},
+                              borderColor: colours_array_2_3[0],
+                              backgroundColor: colours_array_2_3[1],
+                              hoverOffset: 5,
+                              borderRadius: 0
+                          }]
+                      },
+                      options: {
+                          indexAxis: 'y',
+                          animation: {
+                              delay: (context) => {
+                                  let delay = 0;
+                                  if (context.type === 'data') {
+                                      delay = context.dataIndex * 400 + context.datasetIndex * 50;
+                                  }
+                                  return delay;
+                              },
+                          },
+                          responsive: true,
+                          maintainAspectRatio: false,
+                          title: {
+                              display: false,
+                          },
+                          plugins: {
+                              legend: {
+                                  display: false,
+                              }
+                          },
+                          elements: {
+                              bar: {
+                                  borderWidth: 2,
+                              }
+                          }
+                      }
+                  });
+              </script>
+            {% else %}
+              <div id="admin_chart_2_3" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">No data</div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+     <!-- Col 3/3 -->
+     <div class="col-md-4 col-sm-4 ">
+      <div class="x_panel tile" style="height:auto;">
+
+        <!-- Title -->
+        <div class="x_title">
+            <h2>Top Peripheral Blocks</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="x_content">
+          <div class="col-md-12 col-sm-12">
+            {% if top_10.peripheral_blocks.show %}
+              <!-- Chart Canvas -->
+              <canvas id="admin_chart_3_3" style="height:500px!important;width:100%!important;"></canvas>
+              <!-- Chart script -->
+              <script>
+                  const ctx_admin_chart_3_3 = document.getElementById('admin_chart_3_3');
+                  var labels_3_3 = {{top_10.peripheral_blocks.labels | safe}};
+                  var colours_array_3_3 = get_colour_list(labels_3_3.length);
+
+                  new Chart(ctx_admin_chart_3_3, {
+                      type: 'bar',
+                      data: {
+                          labels: labels_3_3,
+                          datasets: [{
+                              label: "Total access",
+                              data: {{top_10.peripheral_blocks.values}},
+                              borderColor: colours_array_3_3[0],
+                              backgroundColor: colours_array_3_3[1],
+                              hoverOffset: 5,
+                              borderRadius: 0
+                          }]
+                      },
+                      options: {
+                          indexAxis: 'y',
+                          animation: {
+                              delay: (context) => {
+                                  let delay = 0;
+                                  if (context.type === 'data') {
+                                      delay = context.dataIndex * 400 + context.datasetIndex * 50;
+                                  }
+                                  return delay;
+                              },
+                          },
+                          responsive: true,
+                          maintainAspectRatio: false,
+                          title: {
+                              display: false,
+                          },
+                          plugins: {
+                              legend: {
+                                  display: false,
+                              }
+                          },
+                          elements: {
+                              bar: {
+                                  borderWidth: 2,
+                              }
+                          }
+                      }
+                  });
+              </script>
+            {% else %}
+              <div id="admin_chart_2_3" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">No data</div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

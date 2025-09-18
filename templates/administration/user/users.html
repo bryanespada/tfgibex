@@ -1,0 +1,130 @@
+{% extends '../../base/base.html' %}
+{% block content %}
+{% load custom_tags %}
+{% load static %}
+
+
+<!-- page content -->
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Users</h3>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="row" style="display: block;">
+
+            <div class="clearfix"></div>
+
+            <div class="col-md-12 col-sm-12  ">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Showing all users</h2>
+
+                        {% if messages %}
+                            <script>
+                            function hide_message(){
+                                const message_label = document.querySelector("#message");
+                                message_label.style.display = "none";
+                            }
+                            </script>
+                            {% for message in messages %}
+                                <p id="message" {% if message.tags %} class="messages {{ message.tags }}"{% endif %} style="text-align: -webkit-center;color:{{config.app_color_1}};font-weight:800;margin-top:30px; margin-bottom:9px;">{{ message }} <i class="fa-solid fa-circle-xmark" onclick="hide_message()"></i></p>
+                            {% endfor %}
+                        {% endif %}
+
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li>
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div class="x_content">
+
+
+
+
+
+
+
+
+                        <div class="table-responsive">
+                            <table class="table table-striped jambo_table bulk_action">
+                                <thead>
+                                    <tr class="headings">
+                                        <th class="column-title fit-content">Pic</th>
+                                        <th class="column-title">ID</th>
+                                        <th class="column-title">Username</th>
+                                        <th class="column-title">Name</th>
+                                        <th class="column-title">Register date</th>
+                                        <th class="column-title">Last connection</th>
+                                        <th class="column-title">Active</th>
+                                        <th class="column-title">Staff</th>
+                                        <th class="column-title no-link last" style="text-align: right !important;"><span class="nobr">Actions</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {% for custom_user in custom_users %}
+                                        <tr class="even pointer">
+                                            <td>
+                                                <div class="profile_pic">
+                                                    <img src="{% if custom_user.pic %}/media/{{custom_user.pic}}{% else %}{% static 'img/default_profile.jpg' %}{% endif %}" alt="profile pic" class="img-circle profile_img" style="height: 60px; width: 60px; margin-left: 0px; margin-top: 0px;object-fit: cover;">
+                                                </div>
+                                            </td>
+                                            <td>#{{custom_user.pk}}</td>
+                                            <td>{{custom_user.username}}</td>
+                                            <td>{{custom_user.first_name}} {{ custom_user.last_name }}</td>
+                                            <td>{{ custom_user.date_joined|date:"d/m/Y H:i" }}</td>
+                                            <td>{{ custom_user.last_login|date:"d/m/Y H:i" }}</td>
+                                            <td>{% if custom_user.is_active %} <i class="fa-solid fa-user-check" style="color:{{config.app_success}}"></i> {% else %} <i class="fa-solid fa-user-xmark" style="color:{{config.app_danger}}"></i>{% endif %}</td>
+                                            <td>{% if custom_user|has_group:'Administration' %} <i class="fa-solid fa-user-shield" style="color:{{config.app_success}}"></i> {% else %} <i class="fa-solid fa-user" style="color:{{config.app_color_2}}"></i> {% endif %}</td>
+                                            <td class="last" style="text-align: right !important;"><a href="#">
+                                                
+                                                {% if not custom_user.is_staff %}
+                                                <a href="{% url 'administration_user_make_admin' custom_user_id=custom_user.id %}"><i class="fa-solid fa-shield-halved" title="Change admin status"></i></a>
+                                                {% endif %}
+                                                
+                                                {% if not custom_user.is_staff %}
+                                                <a href="{% url 'administration_user_deactivate_account' custom_user_id=custom_user.id %}"><i class="fa-solid fa-ban" title="Change account status"></i></a>
+                                                {% endif %}
+                                                
+                                                {% if not custom_user.is_staff %}
+                                                <a href="{% url 'administration_user_delete' custom_user_id=custom_user.id %}" onclick="return confirm('Area you sure?')"><i class="fa-solid fa-trash" title="Delete"></i></a>
+                                                {% endif %}
+                                                
+                                                <a href="{% url 'administration_user_edit' custom_user_id=custom_user.id %}"><i class="fa-regular fa-pen-to-square" title="Edit"></i></a>
+                                                
+                                            </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+
+
+
+
+
+
+                        
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /page content -->
+
+{% endblock %}

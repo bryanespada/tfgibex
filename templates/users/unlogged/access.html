@@ -1,0 +1,73 @@
+{% extends 'users/unlogged/base.html' %}
+
+{% block content %}
+
+<div class="login_wrapper">
+  <div class="animate form login_form">
+    <section class="login_content">
+      <form method="post" action="{% url 'access' %}">
+        {% csrf_token %}
+        <h1>Access</h1>
+        <div>
+          {{ form.username }}
+        </div>
+        <div>
+          {{ form.password }}
+        </div>
+        <div style='text-align: -webkit-center;'>
+          {{ form.captcha }}
+        </div>
+        <div class="text-danger" style='margin-top:20px;'>{{signin_message}}</div>
+        <div style='margin-top:20px;'>
+          <button type="submit" class="btn btn-default submit">Log in</button>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="separator">
+          <p class="change_link">New to site?
+            <a href="{% url 'register' %}" class="to_register"> Create Account </a>
+          </p>
+          <p class="change_link">
+            <a href="{% url 'password_reset' %}" class="to_register"> Lost your password?</a>
+          </p>
+
+          <div class="clearfix"></div>
+          <br />
+
+          {% if config.google_oauth_client_id %}
+          <div id="g_id_onload"
+                data-client_id="{{ config.google_oauth_client_id }}"
+                data-context="signup"
+                data-ux_mode="redirect"
+                data-login_uri="{{ config.app_url }}users/auth-receiver"
+                data-itp_support="true">
+            </div>
+
+            <div class="g_id_signin"
+                data-type="standard"
+                data-shape="rectangular"
+                data-theme="outline"
+                data-text="Access with Google"
+                data-size="large"
+                data-logo_alignment="left">
+            </div>
+            {% endif %}
+
+
+          <div class="clearfix"></div>
+          <br />
+
+          <div>
+            <h1><i class="{{config.app_icon}}"></i> {{config.app_name}}</h1>
+            <p>©
+              <script>document.write(new Date().getFullYear());</script> All Rights Reserved.
+              {{config.app_name}}.<br />Privacy and Terms
+            </p>
+          </div>
+        </div>
+      </form>
+    </section>
+  </div>
+</div>
+{% endblock content %}

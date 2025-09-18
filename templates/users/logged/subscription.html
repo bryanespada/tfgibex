@@ -1,0 +1,309 @@
+{% extends '../../base/base.html' %}
+{% load static %}
+{% load custom_tags %}
+{% block content %}
+
+<!-- page content -->
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>My subscription</h3>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="row" style="display: block;">
+
+            <div class="clearfix"></div>
+
+            <div class="col-md-12 col-sm-12  ">
+
+                {% if request.user|has_group:'Administration' %}
+                    <div class="x_panel">
+                        <div class="x_content">
+                            <div class="table-responsive">
+
+                                <div class="row" style="display: inline-block;width:100%;">
+                                    <div class="tile_count">
+                                    <div class="col-md-12 col-sm-12  tile_stats_count">
+                                        <span class="count_top">You are</span>
+                                        <div class="count blue">Administrator</div>
+                                    </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                {% elif request.user|is_premium %}
+                    <div class="x_panel">
+                        <div class="x_content">
+                            <div class="table-responsive">
+
+                                <div class="row" style="display: inline-block;width:100%;">
+                                    <div class="tile_count">
+                                    <div class="col-md-12 col-sm-12  tile_stats_count">
+                                        <span class="count_top">You are</span>
+                                        <div class="count green">Premium</div>
+                                        <span class="count_bottom"><i class="green">1 </i> active subscription</span>
+                                    </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="x_panel">
+                        <div class="x_content">
+                            <div class="table-responsive">
+
+                                <div class="row" style="display: inline-block;width:100%;">
+                                    <div class="tile_count">
+                                    <div class="col-md-12 col-sm-12  tile_stats_count">
+                                        <span class="count_top">You are</span>
+                                        <div class="count red">Freemium</div>
+                                        <span class="count_bottom"><i class="red">0 </i> active subscription</span>
+                                    </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Showing all products</h2>
+
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li>
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div class="x_content">
+
+                        <script src="https://www.paypal.com/sdk/js?client-id={{config.paypal_client_id}}&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
+                        <script async src="https://js.stripe.com/v3/buy-button.js"> </script>
+
+                        {% for product in products %}
+                        <div class="col-md-3   widget widget_tally_box" style="min-width: 350px;">
+                            <div class="x_panel ui-ribbon-container" style="min-height: 470px;">
+
+                                {% if product.discount %}
+                                <div class="ui-ribbon-wrapper">
+                                    <div class="ui-ribbon">
+                                        {{product.discount|stringformat:"d"}}% Off
+                                    </div>
+                                </div>
+                                {% endif %}
+                                
+                                <div class="x_title">
+                                    <h2>Premium access</h2>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="x_content">
+
+                                    <div style="text-align: center; margin-bottom: 17px">
+                                        <h4 class="name_title">
+                                            {% if product.discount %}
+                                                <del> {{ product.price |stringformat:"d" }} </del> &nbsp; {{product.final_price |stringformat:"d"}} {{config.currency}}
+                                            {% else %}
+                                                {{ product.price |stringformat:"d" }}  {{config.currency}}
+                                            {% endif %}
+                                        </h4>
+                                    </div>
+
+                                    <h3 class="name_title">{{product.get_interval_display}}</h3>
+
+                                    <div class="divider"></div>
+
+                                    <h4 class="name_title">{{product.title}}</h4>
+
+                                    <p>{{product.description}}</p>
+
+                                    <!-- if product.id == active_subscription.payment_product_id -->
+
+                                        <div class="divider"></div>
+
+                                        <div style="text-align: center; margin-bottom: 17px">
+                                            <div class="text-center">
+                                                <h3 style="color:{{config.app_success}};">
+                                                    Active
+                                                </h3>
+                                            </div>
+                                        </div>
+
+
+                                    <!-- else  -->
+
+                                        {% if product.paypal_subscription_id %}
+
+                                            <div class="divider"></div>
+
+                                            <div id="paypal-button-container-{{product.paypal_subscription_id}}"></div>
+                                            <script>
+                                                paypal.Buttons({
+                                                    style: {
+                                                        shape: 'rect',
+                                                        color: 'silver',
+                                                        layout: 'vertical',
+                                                        label: 'subscribe'
+                                                    },
+                                                    createSubscription: function(data, actions) {
+                                                        return actions.subscription.create({
+                                                            /* Creates the subscription */
+                                                            custom_id: '{{request.user.id}}',
+                                                            plan_id: '{{product.paypal_subscription_id}}',
+                                                            custom_product_id: '{{product.paypal_subscription_id}}'
+                                                        });
+                                                    },
+                                                    onApprove: function(data, actions) {
+                                                        window.location.href = "{% url 'paypal_successful' %}";
+                                                    },
+                                                    onError(err) {
+                                                        window.location.href = "{% url 'paypal_cancelled' %}";
+                                                    },
+                                                    ontouchcancel(err) {
+                                                        window.location.href = "{% url 'paypal_cancelled' %}";
+                                                    }
+                                                }).render('#paypal-button-container-{{product.paypal_subscription_id}}'); // Renders the PayPal button
+                                                
+                                           </script>
+                                        {% endif %}
+
+                                        {% if product.stripe_subscription_id %}
+
+                                        <div class="divider"></div>
+
+                                        <div style="text-align-last: center;">
+                                            <style>
+                                                .stripe-button {
+                                                display: flex;
+                                                background-color: #2c2e2f;
+                                                justify-content: center;
+                                                align-items: center;
+                                                color: #fff;
+                                                border-radius: 4px;
+                                                border: 1px solid transparent;
+                                                padding: 4px 24px;
+                                                font-size: 13px;
+                                                text-decoration: none;
+                                                cursor: pointer;
+                                                transition: background-color 0.3s;
+                                                width: 100%;
+                                                }
+                                            </style>
+                                            
+                                            <a href="{% url 'stripe_checkout' product_id=product.stripe_subscription_id %}">
+                                                <button class="stripe-button"> Pay with <i class="fa-brands fa-cc-stripe" style="font-size: 30px;margin-left: 5px;"></i> </button>
+                                            </a>
+                                        </div>
+
+                                        {% endif %}
+
+                                    <!-- endif -->
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+
+                    </div>
+                </div>
+
+
+
+
+
+                {% if subscriptions %}
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Previous subscriptions</h2>
+
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li>
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div class="x_content">
+
+                        <div class="table-responsive">
+                            <table class="table table-striped jambo_table bulk_action">
+                                <thead>
+                                    <tr class="headings">
+                                        <th class="column-title">ID </th>
+                                        <th class="column-title">Payment Product ID</th>
+                                        <th class="column-title">Payment Subscription ID</th>
+                                        <th class="column-title">Amount </th>
+                                        <th class="column-title">Gateway </th>
+                                        <th class="column-title">Start date </th>
+                                        <th class="column-title">Due date </th>
+                                        <th class="column-title last">On date </th>
+                                        <th class="column-title last">Status</th>
+                                        <th class="column-title last">Options</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {% for subscription in subscriptions %}
+                                    <tr class="even pointer">
+                                        <td># {{ subscription.pk }} </td>
+                                        <td># {{ subscription.payment_product_id }} </td>
+                                        <td>{{ subscription.payment_subscription_id }} </td>
+                                        <td>{{ subscription.amount }} {{ subscription.currency }} </td>
+                                        <td>{{ subscription.payment_method }} </td>
+                                        <td>{{ subscription.start_date|date:"d/m/Y" }} </td>
+                                        <td>{{ subscription.due_date|date:"d/m/Y" }} </td>
+                                        <td>
+                                            {% if subscription.due_date >= today.date %} 
+                                                <i class="fa-solid fa-circle-check" style="color:{{config.app_success}}"></i>
+                                            {% else %}
+                                                <i class="fa-solid fa-circle-xmark" style="color:{{config.app_danger}}"></i>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ subscription.status }} </td>
+
+                                        <td class="last" style="text-align: right !important;">
+                                            {% if susbcription.status == 'ACTIVE' %}
+                                            <a href="{% url 'cancel_subscription' payment_subscription_id=subscription.payment_subscription_id %}" onclick="return confirm('Are you sure?')">
+                                                <i class="fa-solid fa-ban"></i>
+                                            </a>
+                                            {% endif %}
+                                        </td>
+                                        
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+                {% endif %}
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /page content -->
+
+{% endblock %}

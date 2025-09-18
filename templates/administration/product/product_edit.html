@@ -1,0 +1,189 @@
+{% extends '../../base/base.html' %}
+{% block content %}
+
+<!-- page content -->
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Products</h3>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="row" style="display: block;">
+
+            <div class="clearfix"></div>
+
+            <div class="col-md-12 col-sm-12  ">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Edit product</h2>
+
+                        {% if messages %}
+                            <script>
+                                function hide_message() {
+                                    const message_label = document.querySelector("#message");
+                                    message_label.style.display = "none";
+                                }
+                            </script>
+                            {% for message in messages %}
+                            <p id="message" {% if message.tags %} class="messages {{ message.tags }}" {% endif %}
+                                style="text-align: -webkit-center;color:{{config.app_color_1}};font-weight:800;margin-top:30px; margin-bottom:9px;">
+                                {{ message }} <i class="fa-solid fa-circle-xmark" onclick="hide_message()"></i></p>
+                            {% endfor %}
+                        {% endif %}
+
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li>
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div class="x_content">
+
+
+
+
+
+                        <form action="" role="form" method="POST" class="text-start">
+                            {% csrf_token %}
+                            
+                            <div class="tab-content" id="myTabContent">
+
+                                <div class="tab-pane fade show active" id="general" role="tabpanel"
+                                    aria-labelledby="general-tab">
+                                    <div class="seccion bg-gray-100 border-radius-lg">
+                                        
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12 title-in-tag">
+                                                <div class="font-weight-bold">Title</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <p class="p-class">{{ form.title }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12 title-in-tag">
+                                                <div class="font-weight-bold">Description</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <p class="p-class">{{ form.description }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12 title-in-tag">
+                                                <div class="font-weight-bold">Price</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <small class="form-text text-muted">Float number (30.0)</small>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <p class="p-class">{{ form.price }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12 title-in-tag">
+                                                <div class="font-weight-bold">Discount</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <small class="form-text text-muted">Just to show, not applied</small>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <p class="p-class">{{ form.discount }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12 title-in-tag">
+                                                <div class="font-weight-bold">Interval count</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <small class="form-text text-muted">Only integer numbers</small>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <p class="p-class">{{ form.interval_count }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12 title-in-tag">
+                                                <div class="font-weight-bold">Interval unit</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <small class="form-text text-muted">W for week, M for month, Y for year</small>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <p class="p-class">{{ form.interval_unit }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="font-weight-bold">Stripe Subscription ID</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12 form-group has-feedback">
+                                                <p class="p-class">{{ form.stripe_subscription_id }} </p>
+                                                <span class="fa-brands fa-stripe fa-lg form-control-feedback left" aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="font-weight-bold">Paypal Subscription ID</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12 form-group has-feedback">
+                                                <p class="p-class">{{ form.paypal_subscription_id }} </p>
+                                                <span class="fa-brands fa-paypal fa-lg form-control-feedback left" aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12 title-in-tag">
+                                                <div class="font-weight-bold">Published</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <small class="form-text text-muted">Available to subscribe</small>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <div
+                                                    class="input-group input-group-outline mb-3">
+                                                    <p class="p-class">{{ form.public }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{message}}
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary" style="background:{{ config.app_color_2 }};border:1px solid {{ config.app_color_1 }}">Save <i class="fa-solid fa-check" style="font-size:0.875rem"></i></button>
+                            </div>
+                        </form>
+
+
+
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /page content -->
+
+{% endblock %}

@@ -1,0 +1,38 @@
+<div class="seccion bg-gray-100 border-radius-lg">
+    <div class="table-responsive">
+        <table class="table tables table-striped jambo_table bulk_action">
+            <thead>
+                <tr class="headings">
+                    <th class="column-title">ID</th>
+                    <th class="column-title">User</th>
+                    <th class="column-title">Timestamp</th>
+                    <th class="column-title">Action</th>
+                    <th class="column-title">Status</th>
+                    <th class="column-title">Country</th>
+                    <th class="column-title">Active subscription</th>
+                    <th class="column-title">Surgical Area</th>
+                    <th class="column-title">Surgery Type</th>
+                    <th class="column-title">Peripheral Block</th>
+                    <th class="column-title">Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tracking_log in tracking_logs %}
+                    <tr class="even pointer" data-log-id="{{tracking_log.pk}}" data-log-type="tracking">
+                        <td># {{tracking_log.pk}} </td>
+                        <td>{{tracking_log.user.username}} </td>
+                        <td>{{tracking_log.timestamp|date:"d/m/Y H:i"}}</td>
+                        <td>{{tracking_log.action_type}}</td>
+                        <td>{{tracking_log.status}}</td>
+                        <td>{{tracking_log.country}}</td>
+                        <td>{{tracking_log.has_active_subscription}}</td>
+                        <td>{{tracking_log.surgical_area}}</td>
+                        <td>{{tracking_log.surgery_type}}</td>
+                        <td>{{tracking_log.peripheral_block}}</td>
+                        <td>{{tracking_log.details}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

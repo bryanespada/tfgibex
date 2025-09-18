@@ -1,0 +1,343 @@
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">#{{log_details.pk}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {% if log_type == 'user' %}
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="log_id">ID:</label>
+                                    <input type="text" id="log_id" class="form-control" value="{{ log_details.pk }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="username">Username:</label>
+                                    <input type="text" id="username" class="form-control" value="{% if log_details.user.username %}{{ log_details.user.username }}{% else %}Anonymus{% endif %}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="timestamp">Timestamp:</label>
+                                    <input type="text" id="timestamp" class="form-control" value="{{ log_details.timestamp|date:'d/m/Y H:i' }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="action">Action:</label>
+                                    <input type="text" id="action" class="form-control" value="{{ log_details.action_type }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="status">Status:</label>
+                                    <input type="text" id="status" class="form-control" value="{{ log_details.status }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ip">IP:</label>
+                                    <input type="text" id="ip" class="form-control" value="{{ log_details.ip }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="continent">Continent:</label>
+                                    <input type="text" id="continent" class="form-control" value="{{ log_details.continent }}" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="country">Country:</label>
+                                    <input type="text" id="country" class="form-control" value="{{ log_details.country }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="region">Region:</label>
+                                    <input type="text" id="region" class="form-control" value="{{ log_details.region }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="city">City:</label>
+                                    <input type="text" id="city" class="form-control" value="{{ log_details.city }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="postal_code">ZIP Code:</label>
+                                    <input type="text" id="postal_code" class="form-control" value="{{ log_details.postal }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="latitude">Latitude:</label>
+                                    <input type="text" id="latitude" class="form-control" value="{{ log_details.lat }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="longitude">Longitude:</label>
+                                    <input type="text" id="longitude" class="form-control" value="{{ log_details.lng }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="change_by_admin">Change by Admin:</label>
+                                    <input type="text" id="change_by_admin" class="form-control" value="{{ log_details.change_by_admin }}" readonly>
+                                </div>
+                                
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="details">Details:</label>
+                                    <input type="textarea" id="details" class="form-control" value="{{ log_details.details }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="details">Locations:</label>
+                                    <iframe src="https://maps.google.com/maps?q={{ log_details.lat }},{{ log_details.lng }}&z=13&t=h&output=embed" width="100%" height="200" frameborder="0" style="border:0"></iframe>
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+                
+                {% elif log_type == 'admin' %}
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="log_id">ID:</label>
+                                    <input type="text" id="log_id" class="form-control" value="{{ log_details.pk }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="username">Username:</label>
+                                    <input type="text" id="username" class="form-control" value="{% if log_details.user.username %}{{ log_details.user.username }}{% else %}Anonymus{% endif %}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="timestamp">Timestamp:</label>
+                                    <input type="text" id="timestamp" class="form-control" value="{{ log_details.timestamp|date:'d/m/Y H:i' }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="action">Action:</label>
+                                    <input type="text" id="action" class="form-control" value="{{ log_details.action_type }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="status">Status:</label>
+                                    <input type="text" id="status" class="form-control" value="{{ log_details.status }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ip">IP:</label>
+                                    <input type="text" id="ip" class="form-control" value="{{ log_details.ip }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="continent">Continent:</label>
+                                    <input type="text" id="continent" class="form-control" value="{{ log_details.continent }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="country">Country:</label>
+                                    <input type="text" id="country" class="form-control" value="{{ log_details.country }}" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                
+                                <div class="form-group">
+                                    <label for="region">Region:</label>
+                                    <input type="text" id="region" class="form-control" value="{{ log_details.region }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="city">City:</label>
+                                    <input type="text" id="city" class="form-control" value="{{ log_details.city }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="postal_code">ZIP Code:</label>
+                                    <input type="text" id="postal_code" class="form-control" value="{{ log_details.postal }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="latitude">Latitude:</label>
+                                    <input type="text" id="latitude" class="form-control" value="{{ log_details.lat }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="longitude">Longitude:</label>
+                                    <input type="text" id="longitude" class="form-control" value="{{ log_details.lng }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="change_by_admin">Change by Admin:</label>
+                                    <input type="text" id="change_by_admin" class="form-control" value="{{ log_details.change_by_admin }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="country">Item:</label>
+                                    <input type="text" id="country" class="form-control" value="{{ log_details.item }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="details">Details:</label>
+                                    <input type="textarea" id="details" class="form-control" value="{{ log_details.details }}" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="details">Locations:</label>
+                                    <iframe src="https://maps.google.com/maps?q={{ log_details.lat }},{{ log_details.lng }}&z=18&t=h&output=embed" width="100%" height="200" frameborder="0" style="border:0"></iframe>
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+                    
+                {% elif log_type == 'subscription' %}
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="subscription_user">User:</label>
+                                    <input type="text" id="subscription_user" class="form-control" value="{{ log_details.user.username }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="subscription_timestamp">Timestamp:</label>
+                                    <input type="text" id="subscription_timestamp" class="form-control" value="{{ log_details.timestamp|date:'d/m/Y H:i' }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="subscription_action">Action:</label>
+                                    <input type="text" id="subscription_action" class="form-control" value="{{ log_details.action_type }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="subscription_status">Status:</label>
+                                    <input type="text" id="subscription_status" class="form-control" value="{{ log_details.status }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="subscription_ip">IP:</label>
+                                    <input type="text" id="subscription_ip" class="form-control" value="{{ log_details.ip }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="subscription_continent">Continent:</label>
+                                    <input type="text" id="subscription_continent" class="form-control" value="{{ log_details.continent }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="subscription_country">Country:</label>
+                                    <input type="text" id="subscription_country" class="form-control" value="{{ log_details.country }}" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="subscription_region">Region:</label>
+                                    <input type="text" id="subscription_region" class="form-control" value="{{ log_details.region }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="subscription_city">City:</label>
+                                    <input type="text" id="subscription_city" class="form-control" value="{{ log_details.city }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="subscription_postal">ZIP Code:</label>
+                                    <input type="text" id="subscription_postal" class="form-control" value="{{ log_details.postal }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="subscription_lat">Latitude:</label>
+                                    <input type="text" id="subscription_lat" class="form-control" value="{{ log_details.lat }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="subscription_lng">Longitude:</label>
+                                    <input type="text" id="subscription_lng" class="form-control" value="{{ log_details.lng }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="subscription_gateway">Payment Gateway:</label>
+                                    <input type="text" id="subscription_gateway" class="form-control" value="{{ log_details.payment_gateway }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="subscription_receiver">Receiver:</label>
+                                    <input type="text" id="subscription_receiver" class="form-control" value="{{ log_details.receiver.username }}" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="subscription_details">Details:</label>
+                                    <textarea id="subscription_details" class="form-control" readonly>{{ log_details.details }}</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="details">Locations:</label>
+                                    <iframe src="https://maps.google.com/maps?q={{ log_details.lat }},{{ log_details.lng }}&z=18&t=h&output=embed" width="100%" height="200" frameborder="0" style="border:0"></iframe>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                {% elif log_type == 'tracking' %}
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="tracking_pk">ID:</label>
+                                    <input type="text" id="tracking_pk" class="form-control" value="# {{ log_details.pk }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tracking_user">User:</label>
+                                    <input type="text" id="tracking_user" class="form-control" value="{{ log_details.user.username }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tracking_timestamp">Timestamp:</label>
+                                    <input type="text" id="tracking_timestamp" class="form-control" value="{{ log_details.timestamp|date:'d/m/Y H:i' }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tracking_action">Action:</label>
+                                    <input type="text" id="tracking_action" class="form-control" value="{{ log_details.action_type }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tracking_status">Status:</label>
+                                    <input type="text" id="tracking_status" class="form-control" value="{{ log_details.status }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tracking_ip">IP:</label>
+                                    <input type="text" id="tracking_ip" class="form-control" value="{{ log_details.ip }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tracking_continent">Continent:</label>
+                                    <input type="text" id="tracking_continent" class="form-control" value="{{ log_details.continent }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tracking_country">Country:</label>
+                                    <input type="text" id="tracking_country" class="form-control" value="{{ log_details.country }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tracking_details">Details:</label>
+                                    <textarea id="tracking_details" class="form-control" readonly>{{ log_details.details }}</textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="tracking_region">Region:</label>
+                                    <input type="text" id="tracking_region" class="form-control" value="{{ log_details.region }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tracking_city">City:</label>
+                                    <input type="text" id="tracking_city" class="form-control" value="{{ log_details.city }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tracking_postal">ZIP Code:</label>
+                                    <input type="text" id="tracking_postal" class="form-control" value="{{ log_details.postal }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tracking_lat">Latitude:</label>
+                                    <input type="text" id="tracking_lat" class="form-control" value="{{ log_details.lat }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tracking_lng">Longitude:</label>
+                                    <input type="text" id="tracking_lng" class="form-control" value="{{ log_details.lng }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tracking_subscription">Has Active Subscription:</label>
+                                    <input type="text" id="tracking_subscription" class="form-control" value="{{ log_details.has_active_subscription }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tracking_surgical_area">Surgical Area:</label>
+                                    <input type="text" id="tracking_surgical_area" class="form-control" value="{{ log_details.surgical_area }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tracking_surgery_type">Surgery Type:</label>
+                                    <input type="text" id="tracking_surgery_type" class="form-control" value="{{ log_details.surgery_type }}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tracking_peripheral_block">Peripheral Block:</label>
+                                    <input type="text" id="tracking_peripheral_block" class="form-control" value="{{ log_details.peripheral_block }}" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="details">Locations:</label>
+                                    <iframe src="https://maps.google.com/maps?q={{ log_details.lat }},{{ log_details.lng }}&z=18&t=h&output=embed" width="100%" height="200" frameborder="0" style="border:0"></iframe>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#exampleModal').modal('show'); // Show modal on page load
+    });
+</script>

@@ -1,0 +1,35 @@
+.nav.navbar-right.panel_toolbox {
+    min-width: 0px;
+}
+
+.seccion {
+    padding: 15px !important;
+    margin-top: 20px !important;
+    /*margin-bottom: 20px !important;*/
+}
+
+.input-group {
+    margin-bottom: 0px;
+}
+
+.campo-agrupado {
+    margin-top: 10px !important;
+    margin-bottom: 15px !important;
+    padding: 10px !important;
+}
+
+.mb-3 {
+    margin-bottom: 0px !important;
+}
+
+small {
+    font-style: italic !important;
+}
+
+.title-in-tag {
+    margin-bottom: 5px;
+}
+
+.p-class {
+    margin-bottom: 0px!important;
+}

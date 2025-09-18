@@ -1,0 +1,116 @@
+{% extends '../../base/base.html' %}
+{% block content %}
+{% load custom_tags %}
+
+<!-- page content -->
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Products</h3>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="row" style="display: block;">
+
+            <div class="clearfix"></div>
+
+            <div class="col-md-12 col-sm-12  ">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Showing all products</h2>
+
+                        {% if messages %}
+                            <script>
+                            function hide_message(){
+                                const message_label = document.querySelector("#message");
+                                message_label.style.display = "none";
+                            }
+                            </script>
+                            {% for message in messages %}
+                                <p id="message" {% if message.tags %} class="messages {{ message.tags }}"{% endif %} style="text-align: -webkit-center;color:{{config.app_color_1}};font-weight:800;margin-top:30px; margin-bottom:9px;">{{ message }} <i class="fa-solid fa-circle-xmark" onclick="hide_message()"></i></p>
+                            {% endfor %}
+                        {% endif %}
+
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li>
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div class="x_content">
+
+
+
+
+
+
+
+
+                        <div class="table-responsive">
+                            <table class="table table-striped jambo_table bulk_action">
+                                <thead>
+                                    <tr class="headings">
+                                        <th class="column-title" style="width: 0%;">ID</th>
+                                        <th class="column-title">Title</th>
+                                        <th class="column-title" style="width: 0%;">Period</th>
+                                        <th class="column-title" style="width: 0%;">Price</th>
+                                        <th class="column-title" style="width: 0%;">Discount</th>
+                                        <th class="column-title w-auto text-wrap">Final price</th>
+                                        <th class="column-title">Stripe subscription ID</th>
+                                        <th class="column-title">Paypal subscription ID</th>
+                                        <th class="column-title">Published</th>
+                                        <th class="column-title no-link last" style="text-align: right !important;"><span class="nobr">Actions</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {% for product in products %}
+                                        <tr class="even pointer">
+                                            <td>#{{ product.pk }} </td>
+                                            <td>{{ product.title }} </td>
+                                            <td>{{ product.interval_count}}{{ product.interval_unit }} </td>
+                                            <td>{{ product.price }} {{ config.currency }} </td>
+                                            <td>{{ product.discount }} %</td>
+                                            <td>{{ product.final_price }} {{ config.currency }} </td>
+                                            <td>{{ product.stripe_subscription_id }}</td>
+                                            <td>{{ product.paypal_subscription_id }}</td>
+                                            <td>{% if product.public %} <i class="fa-solid fa-circle-check" style="color:{{config.app_success}}"></i> {% else %} <i class="fa-solid fa-circle-xmark" style="color:{{config.app_danger}}"></i> {% endif %} </td>
+                                            <td class="last" style="text-align: right !important;"><a href="#">
+                                                                                                
+                                                <a href="{% url 'administration_product_edit' product_id=product.id %}"><i class="fa-regular fa-pen-to-square" title="Edit"></i></a>
+                                                
+                                                <a href="{% url 'administration_product_delete' product_id=product.id %}" onclick="return confirm('Area you sure?')"><i class="fa-solid fa-trash" title="Delete"></i></a>
+                                                
+                                            </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+
+
+
+
+
+
+                        
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /page content -->
+
+{% endblock %}

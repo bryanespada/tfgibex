@@ -1,0 +1,132 @@
+{% load static %}
+{% load custom_tags %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta http-equiv="Content-Security-Policy" content="default-src * self blob: data: gap:; script-src * 'self' 'unsafe-eval' 'unsafe-inline' blob: data: gap: https://*.paypal.com https://*.paypalobjects.com https://objects.paypal.cn; style-src * self 'unsafe-inline' blob: data: gap:; object-src * 'self' blob: data: gap:; img-src * self 'unsafe-inline' blob: data: gap:; connect-src self * 'unsafe-inline' blob: data: gap:; frame-src * self blob: data: gap:;">
+
+
+    <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/ico" />
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  
+    <title>{% block title %} {{config.app_name}} {% endblock %}</title>
+
+    <!-- Bootstrap -->
+    <link href="{% static 'app/vendors/bootstrap/dist/css/bootstrap.css' %}" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- NProgress -->
+    <link href="{% static 'app/vendors/nprogress/nprogress.css' %}" rel="stylesheet">
+    <!-- iCheck -->
+    <link href="{% static 'app/vendors/iCheck/skins/flat/green.css' %}" rel="stylesheet">
+	
+    <!-- bootstrap-progressbar -->
+    <link href="{% static 'app/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css' %}" rel="stylesheet">
+    <!-- JQVMap -->
+    <link href="{% static 'app/vendors/jqvmap/dist/jqvmap.min.css' %}" rel="stylesheet"/>
+    <!-- bootstrap-daterangepicker -->
+    <link href="{% static 'app/vendors/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+    
+    <!-- LottieFiles -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.9/lottie.min.js"></script>
+
+    <!-- Import ChartJS library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Custom Theme Style -->
+    <link href="{% static 'app/build/css/custom.css' %}" rel="stylesheet">
+    <link href="{% static 'css/switchery.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ config.google_analytics_tag_id }}"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', '{{ config.google_analytics_tag_id }}');
+    </script>
+
+    
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+
+    {% include '../base/style.html' %}
+
+  </head>
+
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        
+        <!-- sidebar menu -->
+        {% if request.user|has_group:'Administration' %}
+          {% include '../base/sidebar_admin.html' %}
+        {% else %}
+          {% include '../base/sidebar_user.html' %}
+        {% endif %}
+        <!-- /sidebar menu -->
+
+        <!-- top navigation -->
+        {% include '../base/top_navigation.html' %}
+        <!-- /top navigation -->
+
+        <!-- page content -->
+        {% block content %}
+        {% endblock %}
+        <!-- /page content -->
+
+        <!-- footer content -->
+        {% include '../base/footer.html' %}
+        <!-- /footer content -->
+      </div>
+    </div>
+
+    <!-- Bootstrap -->
+    <script src="{% static 'app/vendors/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+    <!-- FastClick -->
+    <script src="{% static 'app/vendors/fastclick/lib/fastclick.js' %}"></script>
+    
+    <!-- gauge.js -->
+    <script src="{% static 'app/vendors/gauge.js/dist/gauge.min.js' %}"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="{% static 'app/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js' %}"></script>
+    <!-- iCheck -->
+    <script src="{% static 'app/vendors/iCheck/icheck.min.js' %}"></script>
+    <!-- Skycons -->
+    <script src="{% static 'app/vendors/skycons/skycons.js' %}"></script>
+    <!-- Flot -->
+    <script src="{% static 'app/vendors/Flot/jquery.flot.js' %}"></script>
+    <script src="{% static 'app/vendors/Flot/jquery.flot.pie.js' %}"></script>
+    <script src="{% static 'app/vendors/Flot/jquery.flot.time.js' %}"></script>
+    <script src="{% static 'app/vendors/Flot/jquery.flot.stack.js' %}"></script>
+    <script src="{% static 'app/vendors/Flot/jquery.flot.resize.js' %}"></script>
+    <!-- Flot plugins -->
+    <script src="{% static 'app/vendors/flot.orderbars/js/jquery.flot.orderBars.js' %}"></script>
+    <script src="{% static 'app/vendors/flot-spline/js/jquery.flot.spline.min.js' %}"></script>
+    <script src="{% static 'app/vendors/flot.curvedlines/curvedLines.js' %}"></script>
+    <!-- DateJS -->
+    <script src="{% static 'app/vendors/DateJS/build/date.js' %}"></script>
+    <!-- JQVMap -->
+    <script src="{% static 'app/vendors/jqvmap/dist/jquery.vmap.js' %}"></script>
+    <script src="{% static 'app/vendors/jqvmap/dist/maps/jquery.vmap.world.js' %}"></script>
+    <script src="{% static 'app/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js' %}"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="{% static 'app/vendors/moment/min/moment.min.js' %}"></script>
+    <script src="{% static 'app/vendors/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+
+    <!-- Custom Theme Scripts -->
+    <script src="{% static 'js/switchery.js' %}"></script>
+    <script src="{% static 'app/build/js/custom.js' %}"></script>
+    <script src="{% static 'js/functions.js' %}"></script>
+  </body>
+</html>

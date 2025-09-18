@@ -1,0 +1,44 @@
+{% extends '../base/base_error.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Bootstrap -->
+<link href="{% static 'app/vendors/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+<!-- Font Awesome -->
+<link href="{% static 'app/vendors/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+   
+<!-- Custom Theme Style -->
+<link href="{% static 'app/build/css/custom.min.css' %}" rel="stylesheet">
+
+<!-- NProgress -->
+<link href="{% static 'app/vendors/nprogress/nprogress.css' %}" rel="stylesheet">
+
+<!-- page content -->
+<div class="col-md-12">
+  <div class="col-middle">
+    <div class="text-center text-center">
+      <h1 class="error-number">404</h1>
+      <h2>Sorry but we couldn't find this page</h2>
+      <p>This page you are looking for does not exist.<br/>
+        <a href="mailto:{{config.smtp_email_account}}">Report this?</a>
+      </p>
+      <div class="mid_center">
+        <a href="{{config.app_url}}"><button class="btn btn-secondary" type="button">Go back!</button></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- jQuery -->
+  <script src="{% static 'app/vendors/jquery/dist/jquery.min.js' %}"></script>
+  <!-- Bootstrap -->
+  <script src="{% static 'app/vendors/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+  <!-- FastClick -->
+  <script src="{% static 'app/vendors/fastclick/lib/fastclick.js' %}"></script>
+  <!-- NProgress -->
+  <script src="{% static 'app/vendors/nprogress/nprogress.js' %}"></script>
+
+  <!-- Custom Theme Scripts -->
+  <script src="{% static 'app/build/js/custom.min.js' %}"></script>
+  
+{% endblock %}

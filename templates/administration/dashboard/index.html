@@ -1,0 +1,779 @@
+{% extends '../../base/base.html' %}
+{% block content %}
+{% load static %}
+
+<div class="right_col" role="main">
+    <!-- top tiles -->
+    <div class="row" style="display: inline-block;">
+        <div class="tile_count">
+
+            <div class="col-md-2 col-sm-4  tile_stats_count">
+                <span class="count_top"><i class="fa-solid fa-user"></i> Total Users</span>
+                <div class="count">{{total_users}}</div>
+                <span class="count_bottom">
+                    {% if total_users_last_week %}
+                    <i class="green">
+                        <i class="fa fa-sort-asc"></i>
+                        {{total_users_last_week}}
+                    </i>
+                    {% else %}
+                    <i class="red">
+                        <i class="fa fa-sort-desc"></i>
+                        {{total_users_last_week}}
+                    </i>
+                    {% endif %}
+                    From last Week
+            </div>
+
+            <div class="col-md-2 col-sm-4  tile_stats_count">
+                <span class="count_top"><i class="fa-solid fa-user-shield"></i> Total Admins</span>
+                <div class="count">{{total_admins}}</div>
+                <span class="count_bottom">
+                    {% if total_admins_last_week %}
+                    <i class="green">
+                        <i class="fa fa-sort-asc"></i>
+                        {{total_admins_last_week}}
+                    </i>
+                    {% else %}
+                    <i class="red">
+                        <i class="fa fa-sort-desc"></i>
+                        {{total_admins_last_week}}
+                    </i>
+                    {% endif %}
+                    From last Week
+                    <i class="green"><i class="fa fa-sort-asc"></i>{{total_admins_last_week}} </i> From last Week</span>
+            </div>
+
+            <div class="col-md-2 col-sm-4  tile_stats_count">
+                <span class="count_top"><i class="fa-solid fa-user-plus"></i> User increasement</span>
+                <div class="count">{{total_users_increasement |stringformat:"d"}}%</div>
+                <span class="count_bottom">
+                    {% if total_users_last_week %}
+                    <i class="green">
+                        <i class="fa fa-sort-asc"></i>
+                        {{total_admin_increasement |stringformat:"d"}}%
+                    </i>
+                    {% else %}
+                    <i class="red">
+                        <i class="fa fa-sort-desc"></i>
+                        {{total_admin_increasement |stringformat:"d"}}%
+                    </i>
+                    {% endif %}
+                    Admins
+                </span>
+            </div>
+
+            <div class="col-md-2 col-sm-4  tile_stats_count">
+                <span class="count_top"><i class="fa-brands fa-stripe-s"></i> Subscriptions</span>
+                <div class="count">{{total_active_subscriptions}}</div>
+                <span class="count_bottom">
+                    {% if total_active_subscriptions_last_week %}
+                    <i class="green">
+                        <i class="fa fa-sort-asc"></i>
+                        {{total_active_subscriptions_last_week}}
+                    </i>
+                    {% else %}
+                    <i class="red">
+                        <i class="fa fa-sort-desc"></i>
+                        {{total_active_subscriptions_last_week}}
+                    </i>
+                    {% endif %}
+                    From last week
+                </span>
+            </div>
+
+            <div class="col-md-2 col-sm-4  tile_stats_count">
+                <span class="count_top"><i class="fa-solid fa-square"></i> Peripheral blocks</span>
+                <div class="count">{{total_peripheral_blocks}}</div>
+                <span class="count_bottom">
+                    {{total_peripheral_blocks_free}} In free mode
+                </span>
+            </div>
+
+            <div class="col-md-2 col-sm-4  tile_stats_count">
+                <span class="count_top"><i class="fa-solid fa-square-check"></i> Products</span>
+                <div class="count">{{total_products}}</div>
+                <span class="count_bottom">
+                    {{total_products_published}} Available
+                </span>
+            </div>
+
+        </div>
+    </div>
+    <!-- /top tiles -->
+
+
+
+    <script>
+        // Function to choose the next corresponding color 
+        function get_colour_list(requested_colours) {
+            var selected_borders = [];
+            var selected_backgrounds = [];
+            var colours = ['{{config.app_color_1}}', '{{config.app_color_2}}', '{{config.app_color_3}}', '{{config.app_color_4}}', '{{config.app_color_5}}', '{{config.app_color_6}}', '{{config.app_color_7}}', '{{config.app_color_8}}']; // Available colours
+            var currentIndex = 0; // Index to take colours
+            for (var i = 0; i < requested_colours; i++) {
+                var colourIndex = currentIndex % colours.length; // Get the element index
+                selected_borders.push(colours[colourIndex]); // Append the selected colour
+                selected_backgrounds.push(colours[colourIndex] + '{{config.app_transparency_factor}}'); // Append the same colour with it's transparency
+                currentIndex++; // Increment the index to choose next colour
+            }
+            return [selected_borders, selected_backgrounds]; // Return both arrays
+        }
+    </script>
+
+
+
+    <!-- First row /8-4 -->
+    <div class="row">
+
+        <!-- First col /8 -->
+        <div class="col-md-8 col-sm-8 ">
+            <div class="dashboard_graph">
+
+                <!-- Title -->
+                <div class="row x_title">
+                    <div class="col-md-6">
+                        <h3>Visitors and new users</h3>
+                    </div>
+                </div>
+
+                <!-- Chart Canvas -->
+                <div class="col-md-12 col-sm-12">
+                    <canvas id="admin_chart_1_1" style="height:500px!important;width:100%!important;"></canvas>
+                </div>
+
+                <!-- Chart script -->
+                <script>
+                    const ctx_admin_chart_1_1 = document.getElementById('admin_chart_1_1');
+
+                    new Chart(ctx_admin_chart_1_1, {
+                        type: 'line',
+                        data: {
+                            labels: {{visitors.dates | safe}},
+                            datasets: [
+                                {
+                                    data: {{visitors.count | safe}},
+                                    cubicInterpolationMode: 'monotone',
+                                    label: "Visitors",
+                                    borderColor: "{{config.app_color_1}}", // Border color
+                                    fill: true, // Area color
+                                    backgroundColor: '{{config.app_color_1}}{{config.app_transparency_factor}}', // Border color with transparency
+                                    pointStyle: 'circle', // Point shape
+                                    pointRadius: 10, // Point shape size
+                                    pointHoverRadius: 25 // When the point expands itself on hover
+                                },
+                                {
+                                    data: {{new_users.count | safe}},
+                                    cubicInterpolationMode: 'monotone',
+                                    label: "New users",
+                                    borderColor: "{{config.app_color_4}}", // Border color
+                                    fill: true, // Area color
+                                    backgroundColor: '{{config.app_color_4}}{{config.app_transparency_factor}}', // Border color with transparency
+                                    pointStyle: 'circle', // Point shape
+                                    pointRadius: 10, // Point shape size
+                                    pointHoverRadius: 25 // When the point expands itself on hover
+                                }
+                            ]
+                        },
+                        options: {
+                            title: {
+                                display: true,
+                                text: 'World population per region (in millions)'
+                            },
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: false,
+                                }
+                            },
+                            animation: {
+                                delay: (context) => {
+                                    let delay = 0;
+                                    if (context.type === 'data') {
+                                        delay = context.dataIndex * 200 + context.datasetIndex * 50;
+                                    }
+                                    return delay;
+                                },
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true, // Initialize iun 0 y-axis
+                                    ticks: {
+                                        stepSize: 1 // Forces step size to be 1 units
+                                    }
+                                },
+                                x: {
+                                    ticks: {
+                                        maxTicksLimit: 10 // Define el número máximo de etiquetas en el eje x
+                                    }
+                                }
+                            }
+                        }
+                    });
+                </script>
+
+                <div class="clearfix"></div>
+            </div>
+        </div>
+
+
+        <!-- Second col /4 -->
+        <div class="col-md-4 col-sm-4 ">
+            <div class="dashboard_graph">
+
+                <!-- Title -->
+                <div class="row x_title">
+                    <div class="col-md-6">
+                        <h3>Earning</h3>
+                    </div>
+                </div>
+
+                <!-- Chart Canvas -->
+                <div class="col-md-12 col-sm-12">
+                    {% if total_earned.show %}
+                        <!-- Chart Canvas -->
+                        <canvas id="admin_chart_1_2" style="height:500px!important;width:100%!important;"></canvas>
+                        <!-- Chart script -->
+                        <script>
+                            const ctx_admin_chart_1_2 = document.getElementById('admin_chart_1_2');
+
+                            new Chart(ctx_admin_chart_1_2, {
+                                type: 'line',
+                                data: {
+                                    labels: {{total_earned.dates | safe}},
+                                    datasets: [
+                                        {
+                                            data: {{total_earned.amount}},
+                                            cubicInterpolationMode: 'monotone',
+                                            label: "Total earned",
+                                            borderColor: "#03586a",
+                                            fill: true,
+                                            backgroundColor: '#03586a{{config.app_transparency_factor}}',
+                                            pointStyle: 'circle',
+                                            pointRadius: 10,
+                                            pointHoverRadius: 25
+                                        }
+                                    ]
+                                },
+                                options: {
+                                    title: {
+                                        display: true,
+                                        text: 'World population per region (in millions)'
+                                    },
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    plugins: {
+                                        legend: {
+                                            display: false,
+                                        }
+                                    },
+                                    animation: {
+                                        delay: (context) => {
+                                            let delay = 0;
+                                            if (context.type === 'data') {
+                                                delay = context.dataIndex * 400 + context.datasetIndex * 50;
+                                            }
+                                            return delay;
+                                        },
+                                    },
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true // Initialize iun 0 y-axis
+                                        },
+                                        x: {
+                                            ticks: {
+                                                maxTicksLimit: 20 // Define el número máximo de etiquetas en el eje x
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                        </script>
+                        {% else %}
+                            <div id="admin_chart_1_2" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">No data</div>
+                        {% endif %}
+
+                </div>
+
+
+                <div class="clearfix"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <br />
+
+    <!-- Second row /4-4-4 -->
+    <div class="row">
+
+        <!-- First col /4 -->
+        <div class="col-md-4 col-sm-4 ">
+            <div class="x_panel tile" style="height:auto;">
+
+                <!-- Title -->
+                <div class="x_title">
+                    <h2>Top products</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
+                        <li><a class="close-link"><i class="fa fa-close"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="x_content">
+
+                    <div class="col-md-12 col-sm-12">
+                        
+                        {% if top_products.show %}
+                            <!-- Chart Canvas -->
+                            <canvas id="admin_chart_2_1" style="height:500px!important;width:100%!important;"></canvas>
+                            <!-- Chart script -->
+                            <script>
+                                const ctx_admin_chart_2_1 = document.getElementById('admin_chart_2_1');
+                                var labels_2_1 = {{top_products.names | safe}};
+                                var colours_array_2_1 = get_colour_list(labels_2_1.length);
+
+                                new Chart(ctx_admin_chart_2_1, {
+                                    type: 'bar',
+                                    data: {
+                                        labels: labels_2_1,
+                                        datasets: [{
+                                            label: "Total access",
+                                            data: {{top_products.values}},
+                                            borderColor: colours_array_2_1[0],
+                                            backgroundColor: colours_array_2_1[1],
+                                            hoverOffset: 5,
+                                            borderRadius: 25
+                                        }]
+                                    },
+                                    options: {
+                                        indexAxis: 'y',
+                                        animation: {
+                                            delay: (context) => {
+                                                let delay = 0;
+                                                if (context.type === 'data') {
+                                                    delay = context.dataIndex * 400 + context.datasetIndex * 50;
+                                                }
+                                                return delay;
+                                            },
+                                        },
+                                        responsive: true,
+                                        maintainAspectRatio: false,
+                                        title: {
+                                            display: false,
+                                        },
+                                        plugins: {
+                                            legend: {
+                                                display: false,
+                                            }
+                                        },
+                                        elements: {
+                                            bar: {
+                                                borderWidth: 2,
+                                            }
+                                        }
+                                    }
+                                });
+                            </script>
+                        {% else %}
+                            <div id="admin_chart_2_1" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">No data</div>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Second col /4 -->
+        <div class="col-md-4 col-sm-4 ">
+            <div class="x_panel tile" style="height:auto;">
+
+                <!-- Title -->
+                <div class="x_title">
+                    <h2>Top blocks</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
+                        <li><a class="close-link"><i class="fa fa-close"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="x_content">
+
+                    <div class="col-md-12 col-sm-12">
+                        
+                        {% if top_blocks.show %}
+                            <!-- Chart Canvas -->
+                            <canvas id="admin_chart_2_2" style="height:500px!important;width:100%!important;"></canvas>
+                            <!-- Chart script -->
+                            <script>
+                                const ctx_admin_chart_2_2 = document.getElementById('admin_chart_2_2');
+                                var labels_2_2 = {{top_blocks.names | safe}};
+                                var colours_array_2_2 = get_colour_list(labels_2_2.length);
+
+                                new Chart(ctx_admin_chart_2_2, {
+                                    type: 'bar',
+                                    data: {
+                                        labels: labels_2_2,
+                                        datasets: [{
+                                            label: "Total access",
+                                            data: {{top_blocks.values}},
+                                            borderColor: colours_array_2_2[0],
+                                            backgroundColor: colours_array_2_2[1],
+                                            hoverOffset: 5,
+                                            borderRadius: 25
+                                        }]
+                                    },
+                                    options: {
+                                        indexAxis: 'y',
+                                        animation: {
+                                            delay: (context) => {
+                                                let delay = 0;
+                                                if (context.type === 'data') {
+                                                    delay = context.dataIndex * 400 + context.datasetIndex * 50;
+                                                }
+                                                return delay;
+                                            },
+                                        },
+                                        responsive: true,
+                                        maintainAspectRatio: false,
+                                        title: {
+                                            display: false,
+                                        },
+                                        plugins: {
+                                            legend: {
+                                                display: false,
+                                            }
+                                        },
+                                        elements: {
+                                            bar: {
+                                                borderWidth: 2,
+                                            }
+                                        }
+                                    }
+                                });
+                            </script>
+                        {% else %}
+                            <div id="admin_chart_2_2" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">No data</div>
+                        {% endif %}
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Third col /4 -->
+        <div class="col-md-4 col-sm-4 ">
+            <div class="x_panel tile" style="height:auto;">
+
+                <!-- Title -->
+                <div class="x_title">
+                    <h2>Top countries</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
+                        <li><a class="close-link"><i class="fa fa-close"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="x_content">
+                    <div class="col-md-12 col-sm-12">
+                        
+                        {% if top_countries.show %}
+                            <!-- Chart Canvas -->
+                            <canvas id="admin_chart_2_3" style="height:500px!important;width:100%!important;"></canvas>
+                            <!-- Chart script -->
+                            <script>
+                                const ctx_admin_chart_2_3 = document.getElementById('admin_chart_2_3');
+                                var labels_2_3 = {{top_countries.names | safe}};
+                                var colours_array_2_3 = get_colour_list(labels_2_3.length);
+
+                                new Chart(ctx_admin_chart_2_3, {
+                                    type: 'bar',
+                                    data: {
+                                        labels: labels_2_3,
+                                        datasets: [{
+                                            label: "Total access",
+                                            data: {{top_countries.values}},
+                                            borderColor: colours_array_2_3[0],
+                                            backgroundColor: colours_array_2_3[1],
+                                            hoverOffset: 5,
+                                            borderRadius: 50
+                                        }]
+                                    },
+                                    options: {
+                                        indexAxis: 'y',
+                                        animation: {
+                                            delay: (context) => {
+                                                let delay = 0;
+                                                if (context.type === 'data') {
+                                                    delay = context.dataIndex * 400 + context.datasetIndex * 50;
+                                                }
+                                                return delay;
+                                            },
+                                        },
+                                        responsive: true,
+                                        maintainAspectRatio: false,
+                                        title: {
+                                            display: false,
+                                        },
+                                        plugins: {
+                                            legend: {
+                                                display: false,
+                                            }
+                                        },
+                                        elements: {
+                                            bar: {
+                                                borderWidth: 2,
+                                            }
+                                        }
+                                    }
+                                });
+                            </script>
+                        {% else %}
+                            <div id="admin_chart_2_3" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">No data</div>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Third row /4-4-4 -->
+    <div class="row">
+
+        <!-- First col /4 -->
+        <div class="col-md-4 col-sm-4 ">
+            <div class="x_panel tile" style="height:auto;">
+
+                <!-- Title -->
+                <div class="x_title">
+                    <h2>Requests by continent</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
+                        <li><a class="close-link"><i class="fa fa-close"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="x_content">
+
+                    <div class="col-md-12 col-sm-12">
+                        
+                        {% if total_loads_continent.show %}
+                            <!-- Chart Canvas -->
+                            <canvas id="admin_chart_3_1" style="height:500px!important;width:100%!important;"></canvas>
+                            <!-- Chart script -->
+                            <script>
+                                const ctx_admin_chart_3_1 = document.getElementById('admin_chart_3_1');
+                                var labels_3_1 = {{total_loads_continent.names | safe}};
+                                var colours_array_3_1 = get_colour_list(labels_3_1.length);
+
+                                new Chart(ctx_admin_chart_3_1, {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: labels_3_1,
+                                        datasets: [{
+                                            label: "Total requests",
+                                            data: {{total_loads_continent.values}},
+                                            borderColor: colours_array_3_1[0],
+                                            backgroundColor: colours_array_3_1[1],
+                                            hoverOffset: 5
+                                        }]
+                                    },
+                                    options: {
+                                        animation: {
+                                            delay: (context) => {
+                                                let delay = 0;
+                                                if (context.type === 'data') {
+                                                    delay = context.dataIndex * 400 + context.datasetIndex * 50;
+                                                }
+                                                return delay;
+                                            },
+                                        },
+                                        responsive: true,
+                                        maintainAspectRatio: false,
+                                        title: {
+                                            display: false,
+                                        },
+                                        plugins: {
+                                            legend: {
+                                                display: true,
+                                                position: 'right'
+                                            }
+                                        }
+                                    }
+                                });
+                            </script>
+                        {% else %}
+                            <div id="admin_chart_3_1" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">No data</div>
+                        {% endif %}
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Second col /4 -->
+        <div class="col-md-4 col-sm-4 ">
+            <div class="x_panel tile" style="height:auto;">
+
+                <!-- Title -->
+                <div class="x_title">
+                    <h2>Users by country</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
+                        <li><a class="close-link"><i class="fa fa-close"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="x_content">
+
+                    <div class="col-md-12 col-sm-12">
+                        {% if total_registered_country.show %}
+                        <!-- Chart Canvas -->
+                        <canvas id="admin_chart_3_2" style="height:500px!important;width:100%!important;"></canvas>
+                        <!-- Chart script -->
+                        <script>
+                            const ctx_admin_chart_3_2 = document.getElementById('admin_chart_3_2');
+                            var labels_3_2 = {{total_registered_country.names | safe}};
+                            var colours_array_3_2 = get_colour_list(labels_3_2.length);
+
+                            new Chart(ctx_admin_chart_3_2, {
+                                type: 'doughnut',
+                                data: {
+                                    labels: labels_3_2,
+                                    datasets: [{
+                                        label: "Total registers",
+                                        data: {{total_registered_country.values}},
+                                        borderColor: colours_array_3_2[0],
+                                        backgroundColor: colours_array_3_2[1],
+                                        hoverOffset: 5
+                                    }]
+                                },
+                                options: {
+                                    animation: {
+                                        delay: (context) => {
+                                            let delay = 0;
+                                            if (context.type === 'data') {
+                                                delay = context.dataIndex * 400 + context.datasetIndex * 50;
+                                            }
+                                            return delay;
+                                        },
+                                    },
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    title: {
+                                        display: false,
+                                    },
+                                    plugins: {
+                                        legend: {
+                                            display: true,
+                                            position: 'right'
+                                        }
+                                    }
+                                }
+                            });
+                        </script>
+                        {% else %}
+                            <div id="admin_chart_3_2" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">No data</div>
+                        {% endif %}
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Third col /4 -->
+        <div class="col-md-4 col-sm-4 ">
+            <div class="x_panel tile" style="height:auto;">
+
+                <!-- Title -->
+                <div class="x_title">
+                    <h2>Subscriptions by country</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
+                        <li><a class="close-link"><i class="fa fa-close"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="x_content">
+
+                    <div class="col-md-12 col-sm-12">
+                        {% if total_subscriptions_country.show %}
+                            <!-- Chart Canvas -->
+                            <canvas id="admin_chart_3_3" style="height:500px!important;width:100%!important;"></canvas>
+                            <!-- Chart script -->
+                            <script>
+                                const ctx_admin_chart_3_3 = document.getElementById('admin_chart_3_3');
+                                var labels_3_3 = {{total_subscriptions_country.names | safe}};
+                                var colours_array_3_3 = get_colour_list(labels_3_3.length);
+
+                                new Chart(ctx_admin_chart_3_3, {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: labels_3_3,
+                                        datasets: [{
+                                            label: "Total subscriptions",
+                                            data: {{total_subscriptions_country.values}},
+                                            borderColor: colours_array_3_3[0],
+                                            backgroundColor: colours_array_3_3[1],
+                                            hoverOffset: 5
+                                        }]
+                                    },
+                                    options: {
+                                        animation: {
+                                            delay: (context) => {
+                                                let delay = 0;
+                                                if (context.type === 'data') {
+                                                    delay = context.dataIndex * 400 + context.datasetIndex * 50;
+                                                }
+                                                return delay;
+                                            },
+                                        },
+                                        responsive: true,
+                                        maintainAspectRatio: false,
+                                        title: {
+                                            display: false,
+                                        },
+                                        plugins: {
+                                            legend: {
+                                                display: true,
+                                                position: 'right'
+                                            }
+                                        }
+                                    }
+                                });
+                            </script>
+                        {% else %}
+                            <div id="admin_chart_3_3" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">No data</div>
+                        {% endif %}
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+{% endblock %}

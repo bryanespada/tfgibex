@@ -1,0 +1,451 @@
+{% extends '../../base/base.html' %}
+{% block content %}
+
+<!-- page content -->
+<div class="right_col" role="main">
+
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Parameters</h3>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="row" style="display: block;">
+
+            <div class="clearfix"></div>
+
+            <div class="col-md-12 col-sm-12  ">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Showing general configuration</h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li>
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+
+
+                        {% include '../../errors/error_messages.html' %}
+
+                        <form action="" role="form" method="POST" class="text-start">
+                            {% csrf_token %}
+
+                            <ul class="nav nav-tabs bar_tabs" id="myTab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="general-tab" data-toggle="tab" href="#general"
+                                        role="tab" aria-controls="general" aria-selected="true">General</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="email-tab" data-toggle="tab" href="#email" role="tab"
+                                        aria-controls="email" aria-selected="true">Email</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="branding-tab" data-toggle="tab" href="#branding" role="tab"
+                                        aria-controls="branding" aria-selected="false">Branding</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="payment-tab" data-toggle="tab" href="#payment" role="tab"
+                                        aria-controls="payment" aria-selected="false">Payment</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="google-oauth-tab" data-toggle="tab" href="#google-oauth"
+                                        role="tab" aria-controls="google-oauth" aria-selected="false">Google</a>
+                                </li>
+                            </ul>
+
+
+                            <div class="tab-content" id="myTabContent">
+
+                                <div class="tab-pane fade show active" id="general" role="tabpanel"
+                                    aria-labelledby="general-tab">
+                                    <div class="seccion bg-gray-100 border-radius-lg">
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12 title-in-tag">
+                                                <div class="font-weight-bold">Application name</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <p class="p-class">{{ form.app_name }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12 title-in-tag">
+                                                <div class="font-weight-bold">Application acronym</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <p class="p-class">{{ form.app_syncopation }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12 title-in-tag">
+                                                <div class="font-weight-bold">Application URL</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <p class="p-class">{{ form.app_url }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="font-weight-bold">Activate logs</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <small class="form-text text-muted">Take values 0 or 1</small>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <p class="p-class">{{ form.app_logs }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="tab-pane fade" id="email" role="tabpanel" aria-labelledby="email-tab">
+                                    <div class="seccion bg-gray-100 border-radius-lg">
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="font-weight-bold">SMTP Email account</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <p class="p-class">{{ form.smtp_email_account }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="font-weight-bold">SMTP password</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <p class="p-class">{{ form.smtp_password }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="font-weight-bold">SMTP Server</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <p class="p-class">{{ form.smtp_server }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="font-weight-bold">SMTP Port</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <p class="p-class">{{ form.smtp_port }}</p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane fade" id="branding" role="tabpanel" aria-labelledby="branding-tab">
+                                    <div class="seccion bg-gray-100 border-radius-lg">
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="font-weight-bold">App primary</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12  form-group has-feedback">
+                                                <p class="p-class">{{ form.app_primary }} </p>
+                                                <span class="fa-solid fa-square fa-lg form-control-feedback left"
+                                                    style="color: var(--app-primary)" aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="font-weight-bold">Color #1</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12  form-group has-feedback">
+                                                <p class="p-class"> {{ form.app_color_1 }} </p>
+                                                <span class="fa-solid fa-square fa-lg form-control-feedback left"
+                                                    style="color: var(--app-color-1)" aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="font-weight-bold">Color #2</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12  form-group has-feedback">
+                                                <p class="p-class">{{ form.app_color_2 }} </p>
+                                                <span class="fa-solid fa-square fa-lg form-control-feedback left"
+                                                    style="color: {{ config.app_color_2 }}" aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="font-weight-bold">Color #3</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12  form-group has-feedback">
+                                                <p class="p-class">{{ form.app_color_3 }} </p>
+                                                <span class="fa-solid fa-square fa-lg form-control-feedback left"
+                                                    style="color: {{ config.app_color_3 }}" aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="font-weight-bold">Color #4</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12  form-group has-feedback">
+                                                <p class="p-class">{{ form.app_color_4 }} </p>
+                                                <span class="fa-solid fa-square fa-lg form-control-feedback left"
+                                                    style="color: {{ config.app_color_4 }}" aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="font-weight-bold">Color #5</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12  form-group has-feedback">
+                                                <p class="p-class">{{ form.app_color_5 }} </p>
+                                                <span class="fa-solid fa-square fa-lg form-control-feedback left"
+                                                    style="color: {{ config.app_color_5 }}" aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="font-weight-bold">Color #6</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12  form-group has-feedback">
+                                                <p class="p-class">{{ form.app_color_6 }} </p>
+                                                <span class="fa-solid fa-square fa-lg form-control-feedback left"
+                                                    style="color: {{ config.app_color_6 }}" aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="font-weight-bold">Color #7</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12  form-group has-feedback">
+                                                <p class="p-class">{{ form.app_color_7 }} </p>
+                                                <span class="fa-solid fa-square fa-lg form-control-feedback left"
+                                                    style="color: {{ config.app_color_7 }}" aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="font-weight-bold">Color #8</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12  form-group has-feedback">
+                                                <p class="p-class">{{ form.app_color_8 }} </p>
+                                                <span class="fa-solid fa-square fa-lg form-control-feedback left"
+                                                    style="color: {{ config.app_color_8 }}" aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="font-weight-bold">Success color</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12  form-group has-feedback">
+                                                <p class="p-class">{{ form.app_success }} </p>
+                                                <span class="fa-solid fa-square fa-lg form-control-feedback left"
+                                                    style="color: {{ config.app_success }}" aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="font-weight-bold">Danger color</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12  form-group has-feedback">
+                                                <p class="p-class">{{ form.app_danger }} </p>
+                                                <span class="fa-solid fa-square fa-lg form-control-feedback left"
+                                                    style="color: {{ config.app_danger }}" aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="font-weight-bold">Transparency factor</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <small class="form-text text-muted">Hexa between 00-FF</small>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <p class="p-class">{{ form.app_transparency_factor }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="font-weight-bold">Application icon</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <small class="form-text text-muted">Gotten from <a
+                                                        href="https://fontawesome.com/search"
+                                                        target="_blank">https://fontawesome.com/search</a></small>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12  form-group has-feedback">
+                                                <p class="p-class">{{ form.app_icon }}</p>
+                                                <span class="{{ config.app_icon }} fa-lg form-control-feedback left"
+                                                    aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane fade" id="payment" role="tabpanel" aria-labelledby="payment-tab">
+                                    <div class="seccion bg-gray-100 border-radius-lg">
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="font-weight-bold">Currency</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <small class="form-text text-muted">It has to be the same as
+                                                    Stripe</small>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <p class="p-class">{{ form.currency }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="clearfix"></div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="font-weight-bold">PayPal client ID</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <p class="p-class">{{ form.paypal_client_id }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="font-weight-bold">PayPal secret key</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <p class="p-class">{{ form.paypal_secret_key }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="font-weight-bold">PayPal account email</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <p class="p-class">{{ form.paypal_account_email }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="clearfix"></div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="font-weight-bold">Stripe public key</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <p class="p-class">{{ form.stripe_public_key }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="font-weight-bold">Stripe secret key</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <p class="p-class">{{ form.stripe_secret_key }}</p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane fade" id="google-oauth" role="tabpanel"
+                                    aria-labelledby="google-oauth-tab">
+                                    <div class="seccion bg-gray-100 border-radius-lg">
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="font-weight-bold">Google OAuth Client ID</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <small class="form-text text-muted">Gotten from <a
+                                                        href="https://console.cloud.google.com/apis/dashboard"
+                                                        target="_blank">https://console.cloud.google.com/apis/dashboard</a></small>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <p class="p-class">{{ form.google_oauth_client_id }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="font-weight-bold">Google OAuth Client Secret</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <small class="form-text text-muted">Gotten from <a
+                                                        href="https://console.cloud.google.com/apis/dashboard"
+                                                        target="_blank">https://console.cloud.google.com/apis/dashboard</a></small>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <p class="p-class">{{ form.google_oauth_client_secret }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="font-weight-bold">Google Analytics Tag ID</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <small class="form-text text-muted">Gotten from <a
+                                                        href="https://analytics.google.com/"
+                                                        target="_blank">https://analytics.google.com/</a></small>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <p class="p-class">{{ form.google_analytics_tag_id }}</p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            {{message}}
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">
+                                    Save <i class="fa-solid fa-check"></i>
+                                </button>
+                            </div>
+                        </form>
+
+
+
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /page content -->
+
+{% endblock %}

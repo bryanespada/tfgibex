@@ -1,0 +1,124 @@
+{% extends '../../base/base.html' %}
+{% block content %}
+{% load custom_tags %}
+
+<!-- page content -->
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Subscriptions</h3>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="row" style="display: block;">
+
+            <div class="clearfix"></div>
+
+            <div class="col-md-12 col-sm-12  ">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Showing all subscriptions</h2>
+
+                        {% if messages %}
+                            <script>
+                            function hide_message(){
+                                const message_label = document.querySelector("#message");
+                                message_label.style.display = "none";
+                            }
+                            </script>
+                            {% for message in messages %}
+                                <p id="message" {% if message.tags %} class="messages {{ message.tags }}"{% endif %} style="text-align: -webkit-center;color:{{config.app_color_1}};font-weight:800;margin-top:30px; margin-bottom:9px;">{{ message }} <i class="fa-solid fa-circle-xmark" onclick="hide_message()"></i></p>
+                            {% endfor %}
+                        {% endif %}
+
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li>
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div class="x_content">
+
+
+
+
+
+
+
+
+                        <div class="table-responsive">
+                            <table class="table table-striped jambo_table bulk_action">
+                                <thead>
+                                    <tr class="headings">
+                                        <th class="column-title">ID</th>
+                                        <th class="column-title">User</th>
+                                        <th class="column-title">Amount</th>
+                                        <th class="column-title">Payment gateway</th>
+                                        <th class="column-title">Product ID</th>
+                                        <th class="column-title">Payment subscription ID</th>
+                                        <th class="column-title">Start date</th>
+                                        <th class="column-title">Due date</th>
+                                        <th class="column-title">Active</th>
+                                        <th class="column-title">Status</th>
+                                        <th class="column-title no-link last" style="text-align: right !important;"><span class="nobr">Actions</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {% for subscription in subscriptions %}
+                                        <tr class="even pointer">
+                                            <td>#{{ subscription.pk }} </td>
+                                            <td>{{ subscription.user.username }} </td>
+                                            <td>{{ subscription.amount }} {{ subscription.currency }} </td>
+                                            <td>{{ subscription.payment_method }} </td>
+                                            <td>{{ subscription.payment_product_id }} </td>
+                                            <td>{{ subscription.payment_subscription_id }} </td>
+                                            <td>{{ subscription.start_date|date:"d/m/Y" }} </td>
+                                            <td>{{ subscription.due_date|date:"d/m/Y" }} </td>
+                                            <td>{% if subscription.due_date >= today.date %} <i class="fa-solid fa-circle-check" style="color:{{config.app_success}}"></i> {% else %} <i class="fa-solid fa-circle-xmark" style="color:{{config.app_danger}}"></i> {% endif %} </td>
+                                            <td>{{ subscription.status }}</td>
+                                            <td class="last" style="text-align: right !important;"><a href="#">
+
+                                                {% if subscription.status == "ACTIVE" %}
+                                                    <a href="{% url 'cancel_subscription' payment_subscription_id=subscription.payment_subscription_id %}" onclick="return confirm('Are you sure?')"><i class="fa-solid fa-ban" title="Cancel"></i></a>
+                                                {% endif %}
+                                                
+                                                {% if subscription.status == "CANCELED" %}
+                                                <a href="{% url 'administration_subscription_delete' subscription_id=subscription.id %}" onclick="return confirm('Are you sure?')"><i class="fa-solid fa-trash" title="Delete"></i></a>
+                                                {% endif %}
+                                                
+                                                <a href="{% url 'administration_subscription_edit' subscription_id=subscription.id %}"><i class="fa-regular fa-pen-to-square" title="Edit"></i></a>
+
+                                            </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+
+
+
+
+
+
+                        
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /page content -->
+
+{% endblock %}

@@ -1,0 +1,34 @@
+<div class="seccion bg-gray-100 border-radius-lg">
+    <div class="table-responsive">
+        <table class="table tables table-striped jambo_table bulk_action">
+            <thead>
+                <tr class="headings">
+                    <th class="column-title">ID</th>
+                    <th class="column-title">User</th>
+                    <th class="column-title">Timestamp</th>
+                    <th class="column-title">Action</th>
+                    <th class="column-title">Status</th>
+                    <th class="column-title">Country</th>
+                    <th class="column-title">Payment gateway</th>
+                    <th class="column-title">Receptor</th>
+                    <th class="column-title">Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for subscription_log in subscription_logs %}
+                    <tr class="even pointer" data-log-id="{{subscription_log.pk}}" data-log-type="subscription">
+                        <td># {{subscription_log.pk}} </td>
+                        <td>{{subscription_log.user.username}} </td>
+                        <td>{{subscription_log.timestamp|date:"d/m/Y H:i"}}</td>
+                        <td>{{subscription_log.action_type}}</td>
+                        <td>{{subscription_log.status}}</td>
+                        <td>{{subscription_log.country}}</td>
+                        <td>{{subscription_log.payment_gateway}}</td>
+                        <td>{{subscription_log.receiver.username}}</td>
+                        <td>{{subscription_log.details}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

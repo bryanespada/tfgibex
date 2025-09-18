@@ -1,0 +1,70 @@
+{% extends '../base/base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- page content -->
+<div class="right_col" role="main">
+    <div class="">
+
+        <div class="clearfix"></div>
+
+        <div class="row" style="display: block;">
+            <div class="clearfix"></div>
+            <div class="col-md-12 col-sm-12  ">
+                <div class="x_panel">
+                    <div class="x_content">
+                        <div class="table-responsive">
+
+
+
+                            <div class="row" style="display: inline-block;width:100%;">
+                                <div class="tile_count">
+                                    <div class="col-md-12 col-sm-12  tile_stats_count" style="text-align:-webkit-center;">
+
+                                        <div id="animation-container" style="max-width:200px;max-height:200px;"></div>
+                                        <script>
+                                            var animation = bodymovin.loadAnimation({
+                                                container: document.getElementById('animation-container'),
+                                                renderer: 'svg',
+                                                loop: false,
+                                                autoplay: true,
+                                                path: '{% static "animations/success.json" %}'
+                                            });
+
+                                            function redireccionar() {
+                                                window.location.href = "{{ config.app_url }}"; // Redirect to index
+                                            }
+                                            setTimeout(redireccionar, 5000); // Set in 5 seconds
+
+                                        </script>
+
+                                        <div class="count green" style="margin-top: 60px; margin-bottom: 20px;">Subscription successful</div>
+                                        <h6>You are being redirected in a few seconds. Please wait...</h6>
+
+                                        <div class="text-center"style="margin-top: 60px;">
+                                            <a href="/" >
+                                                <button type="button" class="btn btn-primary" style="background:{{ config.app_color_2 }};border:1px solid {{ config.app_color_1 }}">
+                                                    <i class="fa-solid fa-backward" style="font-size:0.875rem"></i> Go back
+                                                </button>
+                                            </a>
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /page content -->
+
+{% endblock %}

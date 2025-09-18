@@ -1,0 +1,77 @@
+{% extends '../base/base.html' %}
+{% block content %}
+
+
+<!-- page content -->
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                {% if surgery_area_title is not None %}
+                    <h3>{{ surgery_area_title }}</h3>
+                {% else %}
+                    <h3>Surgical types</h3>
+                {% endif %}
+            </div>
+            
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="row" style="display: block;">
+            <div class="clearfix"></div>
+            <div class="col-md-12 col-sm-12  ">
+
+                <div class="x_panel">
+
+                    {% if messages %}
+                    <script>
+                        function hide_message() {
+                            const message_label = document.querySelector("#message");
+                            message_label.style.display = "none";
+                        }
+                    </script>
+                    {% for message in messages %}
+                    <p id="message" {% if message.tags %} class="messages {{ message.tags }}" {% endif %}
+                        style="text-align: -webkit-center;color:{{ config.app_color_1 }};font-weight:800;margin-top:30px; margin-bottom:9px;">
+                        {{ message }} <i class="fa-solid fa-circle-xmark" onclick="hide_message()"></i>
+                    </p>
+                    {% endfor %}
+                    {% endif %}
+
+                        <h2>Search surgery types</h2>
+                        <input type="text" class="form-control" id="filterInput" oninput="filterTable()"
+                            placeholder="Search surgical area..">
+                        <div class="table-responsive mt-4">
+                            <table id="mytable" class="table table-hover main-table">
+                                <tbody>
+                                    {% for surgery_type in surgery_types %}
+                                    {# apps/ urls.py #}
+                                    <tr>
+                                        <td style="width: 50px;" data-url="{% url 'user_peripheral_blocks' surgery_type_id=surgery_type.id %}" onclick="redirect(this)">
+                                            <i class="fa-solid fa-circle-arrow-right"></i> 
+                                        </td>
+                                        <td data-url="{% url 'user_peripheral_blocks' surgery_type_id=surgery_type.id %}" onclick="redirect(this)"> 
+                                                <b>{{surgery_type.title}}</b>
+                                            <p>
+                                                {{surgery_type.description|linebreaksbr}}
+                                            </p>
+                                        </td>      
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div id="noResultsMessage" class="mt-3 d-none">
+                            <p class="warning">No results found.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /page content -->
+
+{% endblock %}

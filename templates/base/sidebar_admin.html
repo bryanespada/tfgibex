@@ -1,0 +1,145 @@
+{% load static %}
+{% load custom_tags %}
+<div class="col-md-3 left_col">
+    <div class="left_col scroll-view">
+      <div class="navbar nav_title" style="border: 0;">
+        <a href="/administration/dashboard" class="site_title"><i class="{{config.app_icon}}"></i> <span style="margin-left:10px;">{{config.app_syncopation}}</span></a>
+      </div>
+
+      <div class="clearfix"></div>
+
+      <!-- menu profile quick info -->
+      <div class="profile clearfix">
+        <div class="profile_pic">
+          <img src="{% if user.pic %}/media/{{ user.pic }}{% else %}{% static 'img/default_profile.jpg' %}{% endif %}" alt="..." class="img-circle profile_img" style="height: 60px; width: 60px; object-fit: cover;">
+        </div>
+        <div class="profile_info">
+          <span>Welcome,</span>
+          <h2>
+            {% if user.first_name %}
+                {{user.first_name|truncatechars:12}}
+              {% else %}
+                {{user.username|truncatechars:12}} 
+              {% endif %}
+          </h2>
+        </div>
+      </div>
+      <!-- /menu profile quick info -->
+
+      <br />
+
+   
+      <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+        <div class="menu_section">
+          <h3>General</h3>
+          <ul class="nav side-menu">
+            <li><a><i class="fa-solid fa-chart-line"></i> Dashboards <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <li><a href="/administration/dashboard">General</a></li>
+              </ul>
+            </li>
+            <li><a><i class="fa-solid fa-gear"></i> Configuration <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <li><a href="/administration/parameters">Parameters</a></li>
+                <li><a href="/administration/logs">Logs</a></li>
+              </ul>
+            </li>
+            <li><a><i class="fa-solid fa-feather"></i> Blog <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <li><a href="/administration/posts">All items</a></li>
+                <li><a href="/administration/post-add">Add new</a></li>
+              </ul>
+            </li>
+            <li><a><i class="fa-solid fa-mobile-screen-button"></i> Public <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <li><a href="/app/dashboard">User dashboard</a></li>
+                <li><a href="/app/surgical-areas"> Surgical areas </span></a></li>
+                <li><a href="/app/surgery-types"> Surgery types </span></a></li>
+                <li><a href="/app/peripheral-blocks"> Peripheral blocks </a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+        
+        <div class="menu_section">
+          <h3>Content</h3>
+          <ul class="nav side-menu">
+            
+            <li><a><i class="fa-solid fa-cubes"></i> Surgical areas <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <li><a href="/administration/surgical_areas">All items</a></li>
+                <li><a href="/administration/surgical_area_add">Add new</a></li>
+              </ul>
+            </li>
+            <li><a><i class="fa-solid fa-cube"></i> Surgery types <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <li><a href="/administration/surgery_types">All items</a></li>
+                <li><a href="/administration/surgery_type_add">Add new</a></li>
+              </ul>
+            </li>
+            <li><a><i class="fa-solid fa-square"></i> Peripheral blocks <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <li><a href="/administration/peripheral_blocks">All items</a></li>
+                <li><a href="/administration/peripheral_block_add">Add new</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+        
+        <div class="menu_section">
+          <h3>Interaction</h3>
+          <ul class="nav side-menu">
+            
+            <li><a><i class="fa-solid fa-users"></i> Users <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <li><a href="/administration/users">All users</a></li>
+                <li><a href="/administration/user_add">Add new</a></li>
+              </ul>
+            </li>
+            <li><a><i class="fa-brands fa-stripe-s"></i> Subscriptions <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <li><a href="/administration/subscriptions">All items</a></li>
+                <li><a href="/administration/subscription_add">Add new</a></li>
+                <li><a href="/administration/assign_product">Assign product</a></li>
+              </ul>
+            </li>
+            <li><a><i class="fa-solid fa-square-check"></i> Products <span class="fa fa-chevron-down"></span></a>
+              <ul class="nav child_menu">
+                <li><a href="/administration/products">All items</a></li>
+                <li><a href="/administration/product_add">Add new</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- /menu footer buttons -->
+      
+      <style>
+        /* Jusst affect footer buttons */
+        .sidebar-footer a:hover {
+          color: white;
+          text-decoration: none;
+        }
+      </style>
+
+      <div class="sidebar-footer hidden-small">
+        <a data-toggle="tooltip" data-placement="top" title="Profile" href="/users/profile">
+          <i class="fa-solid fa-user"></i>
+        </a>
+        <a data-toggle="tooltip" data-placement="top" title="Subscription" href="/users/subscription">
+          <i class="fa-brands fa-stripe-s"></i>
+        </a>
+        <a data-toggle="tooltip" data-placement="top" title="FAQ" target="_blank" href="https://www.tfgibex.com/faq/">
+          <i class="fa-solid fa-circle-question"></i>
+        </a>
+        <a data-toggle="tooltip" data-placement="top" title="Logout" href="/users/exit">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        </a>
+      </div>
+      <!-- /menu footer buttons -->
+    </div>
+  </div>

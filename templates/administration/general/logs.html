@@ -1,0 +1,132 @@
+{% extends '../../base/base.html' %}
+{% block content %}
+
+<!-- page content -->
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Logs</h3>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="row" style="display: block;">
+
+            <div class="clearfix"></div>
+
+            <div class="col-md-12 col-sm-12  ">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Showing general configuration</h2>
+
+                        {% if messages %}
+                        <script>
+                            function hide_message() {
+                                const message_label = document.querySelector("#message");
+                                message_label.style.display = "none";
+                            }
+                        </script>
+                        {% for message in messages %}
+                        <p id="message" {% if message.tags %} class="messages {{ message.tags }}" {% endif %}
+                            style="text-align: -webkit-center;color:{{config.app_color_1}};font-weight:800;margin-top:30px; margin-bottom:9px;">
+                            {{ message }} <i class="fa-solid fa-circle-xmark" onclick="hide_message()"></i></p>
+                        {% endfor %}
+                        {% endif %}
+
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li>
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div class="x_content">
+
+                        <ul class="nav nav-tabs bar_tabs" id="myTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="userlogs-tab" data-toggle="tab" href="#userlogs"
+                                    role="tab" aria-controls="userlogs" aria-selected="true">User</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="adminlogs-tab" data-toggle="tab" href="#adminlogs"
+                                    role="tab" aria-controls="adminlogs" aria-selected="false">Admin</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="subscriptionlogs-tab" data-toggle="tab" href="#subscriptionlogs" role="tab"
+                                    aria-controls="subscriptionlogs" aria-selected="false">Subscription</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="trackinglogs-tab" data-toggle="tab" href="#trackinglogs" role="tab"
+                                    aria-controls="trackinglogs" aria-selected="false">Tracking</a>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content" id="myTabContent">
+
+                            <div class="tab-pane fade show active" id="userlogs" role="tabpanel" aria-labelledby="userlogs-tab">
+                                {% include '../general/logs_tables/logs_user.html' %}
+                            </div>
+
+                            <div class="tab-pane fade" id="adminlogs" role="tabpanel" aria-labelledby="adminlogs-tab">
+                                {% include '../general/logs_tables/logs_admin.html' %}
+                            </div>
+
+                            <div class="tab-pane fade" id="subscriptionlogs" role="tabpanel" aria-labelledby="subscriptionlogs-tab">
+                                {% include '../general/logs_tables/logs_subscription.html' %}
+                            </div>
+
+                            <div class="tab-pane fade" id="trackinglogs" role="tabpanel" aria-labelledby="trackinglogs-tab">
+                                {% include '../general/logs_tables/logs_tracking.html' %}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalContainer">
+</div>
+<!-- /page content -->
+
+<script>
+    $(document).ready(function() {
+        var table_logs = $('.tables').DataTable({
+            "ordering": false,
+            "language": {
+                "emptyTable": "No logs found"
+            },
+            "lengthChange": false,
+            "pageLength": 100
+        });
+
+        // Event listener for opening modal on row click
+        $('.tables').on('click', 'tr', function () {
+            var rowData = table_logs.row(this).data();
+            // Here you can retrieve the data of the clicked row if needed
+            var logId = $(this).data('log-id');
+            var logType = $(this).data('log-type');
+
+
+            // AJAX request to load modal content
+            $.ajax({
+                url: "{% url 'administration_get_log_details' log_type='none' log_id=0 %}".replace(0, logId).replace('none', logType),
+                type: 'GET',
+                success: function(response) {
+                    $('#modalContainer').html(response); // Load modal content into modal container
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error loading modal content:', error);
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

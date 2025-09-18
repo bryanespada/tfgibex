@@ -1,0 +1,30 @@
+<div class="seccion bg-gray-100 border-radius-lg">
+    <div class="table-responsive">
+        <table class="table tables table-striped jambo_table bulk_action">
+            <thead>
+                <tr class="headings">
+                    <th class="column-title">ID</th>
+                    <th class="column-title">User</th>
+                    <th class="column-title">Timestamp</th>
+                    <th class="column-title">Action</th>
+                    <th class="column-title">Status</th>
+                    <th class="column-title">Country</th>
+                    <th class="column-title">Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user_log in user_logs %}
+                <tr class="even pointer" data-log-id="{{user_log.pk}}" data-log-type="user">
+                    <td>#{{user_log.pk}}</td>
+                    <td>{% if user_log.user.username %}{{user_log.user.username}}{% else %}Anonymus{% endif %}</td>
+                    <td>{{user_log.timestamp|date:"d/m/Y H:i"}}</td>
+                    <td>{{user_log.action_type}}</td>
+                    <td>{{user_log.status}}</td>
+                    <td>{{user_log.country}}</td>
+                    <td>{{user_log.details}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
