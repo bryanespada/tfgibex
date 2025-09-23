@@ -71,7 +71,7 @@
 
         <!-- Title -->
         <div class="x_title">
-            <h2>Top 10 Surgical Areas</h2>
+            <h2>Top 10 Mercados</h2>
             <ul class="nav navbar-right panel_toolbox">
                 <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
                 <li><a class="close-link"><i class="fa fa-close"></i></a>
@@ -82,13 +82,13 @@
 
         <div class="x_content">
           <div class="col-md-12 col-sm-12">
-            {% if top_10.surgical_areas.show %}
+            {% if top_10.mercados.show %}
               <!-- Chart Canvas -->
               <canvas id="admin_chart_1_3" style="height:500px!important;width:100%!important;"></canvas>
               <!-- Chart script -->
               <script>
                   const ctx_admin_chart_1_3 = document.getElementById('admin_chart_1_3');
-                  var labels_1_3 = {{top_10.surgical_areas.labels | safe}};
+                  var labels_1_3 = {{top_10.mercados.labels | safe}};
                   var colours_array_1_3 = get_colour_list(labels_1_3.length);
 
                   new Chart(ctx_admin_chart_1_3, {
@@ -97,7 +97,7 @@
                           labels: labels_1_3,
                           datasets: [{
                               label: "Total access",
-                              data: {{top_10.surgical_areas.values}},
+                              data: {{top_10.mercados.values}},
                               borderColor: colours_array_1_3[0],
                               backgroundColor: colours_array_1_3[1],
                               hoverOffset: 5,

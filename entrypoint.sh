@@ -19,8 +19,8 @@ python3 manage.py collectstatic --noinput &&
 # echo "from appmodels.models import Product; Product.objects.create(title='The second title', description='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ut velit dignissim, varius dui vel, sodales magna. Nam maximus nulla ut odio interdum sollicitudin. Maecenas aliquam auctor ante, in facilisis erat varius in.', price='25.00', interval_count='1', interval_unit='M', public=True, discount='30')" | python3 manage.py shell &&
 # echo "from appmodels.models import Product; Product.objects.create(title='The third title', description='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ut velit dignissim, varius dui vel, sodales magna. Nam maximus nulla ut odio interdum sollicitudin. Maecenas aliquam auctor ante, in facilisis erat varius in.', price='150.00', interval_count='1', interval_unit='Y', public=True, discount='55')" | python3 manage.py shell &&
 
-# # Generate a surgical area example 
-# echo "from appmodels.models import SurgicalArea; SurgicalArea.objects.create(title='The title of Surgical Area 1', description='The description of Surgical Area 1')" | python3 manage.py shell &&
+# # Generate a mercado example
+# echo "from appmodels.models import Mercado; Mercado.objects.create(title='The title of Mercado 1', description='The description of Mercado 1')" | python3 manage.py shell &&
 
 # # Generate the Administration group to admins
 # echo "from django.contrib.auth.models import Group; Group.objects.create(name='Administration')" | python3 manage.py shell &&

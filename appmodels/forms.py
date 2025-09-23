@@ -1,5 +1,5 @@
 from django import forms
-from .models import GeneralConfig, SurgicalArea, SurgeryType, PeripheralBlock, Subscription, Product, Blog, Image
+from .models import GeneralConfig, Mercado, SurgeryType, PeripheralBlock, Subscription, Product, Blog, Image
 from users.models import CustomUser
 
 class GeneralConfigForm(forms.ModelForm):
@@ -9,12 +9,12 @@ class GeneralConfigForm(forms.ModelForm):
         fields = ['app_name', 'app_syncopation', 'app_icon', 'app_transparency_factor', 'app_logs', 'app_primary', 'app_color_1', 'app_color_2', 'app_color_3', 'app_color_4', 'app_color_5', 'app_color_6', 'app_color_7', 'app_color_8', 'app_success', 'app_danger', 'app_url', 'smtp_email_account','smtp_password','smtp_server','smtp_port', 'currency', 'paypal_client_id', 'paypal_secret_key', 'paypal_account_email', 'stripe_public_key', 'stripe_secret_key', 'google_oauth_client_id', 'google_oauth_client_secret', 'google_analytics_tag_id']
 
 
-class SurgicalAreaForm(forms.ModelForm):
+class MercadoForm(forms.ModelForm):
 
     description = forms.CharField( widget=forms.Textarea(attrs={'class': 'form-control', 'cols': '40', 'rows': '5'}) )
 
     class Meta:
-        model = SurgicalArea
+        model = Mercado
         fields = ['title', 'description']
 
 
@@ -24,13 +24,13 @@ class SurgeryTypeForm(forms.ModelForm):
     
     class Meta:
         model = SurgeryType
-        fields = ['title', 'description', 'surgical_area']
+        fields = ['title', 'description', 'mercado']
 
 
 class PeripheralBlockForm(forms.ModelForm):
 
     public = forms.BooleanField( required=False, widget=forms.CheckboxInput(attrs={'class': ''}), )
-    surgical_area = forms.ModelChoiceField( queryset = SurgicalArea.objects.all(), required=True )
+    mercado = forms.ModelChoiceField( queryset = Mercado.objects.all(), required=True )
     surgery_type = forms.ModelChoiceField( queryset = SurgeryType.objects.all(), required=True )
     description = forms.CharField( widget=forms.Textarea(attrs={'class': 'form-control', 'cols': '40', 'rows': '5'}) )
 

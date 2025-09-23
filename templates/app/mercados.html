@@ -7,7 +7,7 @@
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>Surgical areas</h3>
+                <h3>Mercados</h3>
             </div>
         </div>
 
@@ -34,22 +34,22 @@
                     {% endfor %}
                     {% endif %}
 
-                        <h2>Search surgical areas</h2>
+                        <h2>Search mercados</h2>
                         <input type="text" class="form-control" id="filterInput" oninput="filterTable()"
-                            placeholder="Search surgical area..">
+                            placeholder="Search mercado..">
                         <div class="table-responsive mt-4">
                             <table id="mytable" class="table table-hover main-table">
                                 <tbody>
-                                    {% for surgical_area in surgical_areas %}
+                                    {% for mercado in mercados %}
                                     {# apps/ urls.py #}
                                     <tr>
-                                        <td style="width: 50px;" data-url="{% url 'user_surgery_types' surgical_area_id=surgical_area.id %}" onclick="redirect(this)">
-                                            <i class="fa-solid fa-circle-arrow-right"></i> 
+                                        <td style="width: 50px;" data-url="{% url 'user_surgery_types' mercado_id=mercado.id %}" onclick="redirect(this)">
+                                            <i class="fa-solid fa-circle-arrow-right"></i>
                                         </td>
-                                        <td data-url="{% url 'user_surgery_types' surgical_area_id=surgical_area.id %}" onclick="redirect(this)"> 
-                                                <b>{{surgical_area.title}}</b>
+                                        <td data-url="{% url 'user_surgery_types' mercado_id=mercado.id %}" onclick="redirect(this)">
+                                                <b>{{mercado.title}}</b>
                                             <p>
-                                                {{surgical_area.description|linebreaksbr}}
+                                                {{mercado.description|linebreaksbr}}
                                             </p>
                                         </td>      
                                     </tr>

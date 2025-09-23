@@ -3,12 +3,12 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.utils import timezone
 from datetime import date, timedelta
-from appmodels.models import GeneralConfig, SurgicalArea, SurgeryType, PeripheralBlock, Subscription, Product, Blog, Image
+from appmodels.models import GeneralConfig, Mercado, SurgeryType, PeripheralBlock, Subscription, Product, Blog, Image
 from users.models import CustomUser
 from logs.models import UserLog, AdminsLog, SubscriptionLog, TrackingLog
 from users.forms import CustomUserCreationByAdminForm, CustomUserEditByAdminForm
 from django.contrib import messages
-from appmodels.forms import GeneralConfigForm, SurgicalAreaForm, SurgeryTypeForm, PeripheralBlockForm, SubscriptionForm, ProductForm, BlogForm, ProductAssignForm, ImageForm
+from appmodels.forms import GeneralConfigForm, MercadoForm, SurgeryTypeForm, PeripheralBlockForm, SubscriptionForm, ProductForm, BlogForm, ProductAssignForm, ImageForm
 from django.contrib.auth.models import Group
 from logs.views import log
 from django.db.models import Count
@@ -329,85 +329,85 @@ def parameters(request):
 
 
 ######################################################################################################################################################
-# CRUD SURGICAL AREAS
+# CRUD MERCADOS
 ######################################################################################################################################################
 
 
 @login_required(login_url="/users/access")
-def surgical_areas(request):
+def mercados(request):
     """
-    Function to get all surgical areas
+    Function to get all mercados
     """
     context = {}
     context['config'] = get_object_or_404(GeneralConfig, id=1)
-    context['surgical_areas'] = SurgicalArea.objects.all().order_by('title')
-    log(request, "AdminsLog", {"action_type":"read", "status":200, "details":"Listing", "item":"SurgicalArea"})
-    return render (request, "administration/surgical_area/surgical_areas.html", context)
+    context['mercados'] = Mercado.objects.all().order_by('title')
+    log(request, "AdminsLog", {"action_type":"read", "status":200, "details":"Listing", "item":"Mercado"})
+    return render (request, "administration/mercado/mercados.html", context)
 
 @login_required(login_url="/users/access")
-def surgical_area_add(request):
+def mercado_add(request):
     """
-    Function to add a new surgical area
+    Function to add a new mercado
     """
     context = {}
     if request.method == 'POST':
-        form = SurgicalAreaForm(request.POST)
+        form = MercadoForm(request.POST)
         if form.is_valid():
-            surgical_area = form.save(commit=False)
-            surgical_area.save()
-            messages.success(request, "Surgical area successfully added")
-            log(request, "AdminsLog", {"action_type":"create", "status":200, "details":f"Created '{surgical_area.title}'", "item":"SurgicalArea"})
-            return redirect('/administration/surgical_areas')
+            mercado = form.save(commit=False)
+            mercado.save()
+            messages.success(request, "Mercado successfully added")
+            log(request, "AdminsLog", {"action_type":"create", "status":200, "details":f"Created '{mercado.title}'", "item":"Mercado"})
+            return redirect('/administration/mercados')
         else:
-            log(request, "AdminsLog", {"action_type":"create", "status":400, "details":f"Invalid form", "item":"SurgicalArea"})
+            log(request, "AdminsLog", {"action_type":"create", "status":400, "details":f"Invalid form", "item":"Mercado"})
 
-    form = SurgicalAreaForm()
+    form = MercadoForm()
     form.fields['title'].widget.attrs.update({'class': 'form-control'})
     form.fields['description'].widget.attrs.update({'class': 'form-control'})
     context['form'] = form
     context['config'] = get_object_or_404(GeneralConfig, id=1)
-    log(request, "AdminsLog", {"action_type":"read", "status":200, "details":f"Creating form", "item":"SurgicalArea"})
-    return render (request, "administration/surgical_area/surgical_area_add.html", context)
+    log(request, "AdminsLog", {"action_type":"read", "status":200, "details":f"Creating form", "item":"Mercado"})
+    return render (request, "administration/mercado/mercado_add.html", context)
 
 @login_required(login_url="/users/access")
-def surgical_area_edit(request, surgical_area_id):
+def mercado_edit(request, mercado_id):
     """
-    Function to edit an existing surgical area
+    Function to edit an existing mercado
     """
     context = {}
-    surgical_area = get_object_or_404(SurgicalArea, id=surgical_area_id)
+    mercado = get_object_or_404(Mercado, id=mercado_id)
     if request.method == 'POST':
-        form = SurgicalAreaForm(request.POST, instance=surgical_area)
+        form = MercadoForm(request.POST, instance=mercado)
         if form.is_valid():
-            surgical_area = form.save(commit=False)
-            surgical_area.save()
-            messages.success(request, "Surgical area successfully updated")
-            log(request, "AdminsLog", {"action_type":"update", "status":200, "details":f"Updated '{surgical_area.title}'", "item":"SurgicalArea"})
-            return redirect('/administration/surgical_areas')
+            mercado = form.save(commit=False)
+            mercado.save()
+            messages.success(request, "Mercado successfully updated")
+            log(request, "AdminsLog", {"action_type":"update", "status":200, "details":f"Updated '{mercado.title}'", "item":"Mercado"})
+            return redirect('/administration/mercados')
         else:
-            log(request, "AdminsLog", {"action_type":"update", "status":400, "details":f"Invalid form updating '{surgical_area.title}'", "item":"SurgicalArea"})
+            log(request, "AdminsLog", {"action_type":"update", "status":400, "details":f"Invalid form updating '{mercado.title}'", "item":"Mercado"})
 
-    form = SurgicalAreaForm(instance=surgical_area)
+    form = MercadoForm(instance=mercado)
     form.fields['title'].widget.attrs.update({'class': 'form-control'})
     form.fields['description'].widget.attrs.update({'class': 'form-control'})
     context['form'] = form
-    context['surgical_area'] = surgical_area
+    context['mercado'] = mercado
     context['config'] = get_object_or_404(GeneralConfig, id=1)
-    log(request, "AdminsLog", {"action_type":"read", "status":200, "details":f"Update form of '{surgical_area.title}'", "item":"SurgicalArea"})
-    return render (request, "administration/surgical_area/surgical_area_edit.html", context)
+    log(request, "AdminsLog", {"action_type":"read", "status":200, "details":f"Update form of '{mercado.title}'", "item":"Mercado"})
+    return render (request, "administration/mercado/mercado_edit.html", context)
 
 @login_required(login_url="/users/access")
-def surgical_area_delete(request, surgical_area_id):
+def mercado_delete(request, mercado_id):
     """
-    Function to delete an existing surgical area
+    Function to delete an existing mercado
     """
-    surgical_area = get_object_or_404(SurgicalArea, id=surgical_area_id)
-    log(request, "AdminsLog", {"action_type":"delete", "status":200, "details":f"Deleted '{surgical_area.title}'", "item":"SurgicalArea"})
-    surgical_area.delete()
-    messages.success(request, "Surgical area successfully deleted")
+    mercado = get_object_or_404(Mercado, id=mercado_id)
+    log(request, "AdminsLog", {"action_type":"delete", "status":200, "details":f"Deleted '{mercado.title}'", "item":"Mercado"})
+    mercado.delete()
+    messages.success(request, "Mercado successfully deleted")
     context = {}
     context['config'] = get_object_or_404(GeneralConfig, id=1)
-    return redirect('/administration/surgical_areas')
+    return redirect('/administration/mercados')
 
 
 ######################################################################################################################################################
@@ -443,12 +443,12 @@ def surgery_type_add(request):
         else:
             log(request, "AdminsLog", {"action_type":"create", "status":400, "details":f"Invalid form", "item":"SurgeryType"})
 
-    surgical_areas = SurgicalArea.objects.all()
+    mercados = Mercado.objects.all()
     form = SurgeryTypeForm()
     form.fields['title'].widget.attrs.update({'class': 'form-control'})
     form.fields['description'].widget.attrs.update({'class': 'form-control'})
-    form.fields['surgical_area'].queryset = surgical_areas # Populate the select options
-    form.fields['surgical_area'].widget.attrs.update({'class': 'form-control'})
+    form.fields['mercado'].queryset = mercados # Populate the select options
+    form.fields['mercado'].widget.attrs.update({'class': 'form-control'})
     context['form'] = form
     context['config'] = get_object_or_404(GeneralConfig, id=1)
     log(request, "AdminsLog", {"action_type":"read", "status":200, "details":f"Creating form", "item":"SurgeryType"})
@@ -475,8 +475,8 @@ def surgery_type_edit(request, surgery_type_id):
     form = SurgeryTypeForm(instance=surgery_type)
     form.fields['title'].widget.attrs.update({'class': 'form-control'})
     form.fields['description'].widget.attrs.update({'class': 'form-control'})
-    form.fields['surgical_area'].queryset = SurgicalArea.objects.all() # Populate the select options
-    form.fields['surgical_area'].widget.attrs.update({'class': 'form-control'})
+    form.fields['mercado'].queryset = Mercado.objects.all() # Populate the select options
+    form.fields['mercado'].widget.attrs.update({'class': 'form-control'})
     context['form'] = form
     context['config'] = get_object_or_404(GeneralConfig, id=1)
     log(request, "AdminsLog", {"action_type":"read", "status":200, "details":f"Update form of '{surgery_type.title}'", "item":"SurgeryType"})
@@ -496,9 +496,9 @@ def surgery_type_delete(request, surgery_type_id):
     return redirect('/administration/surgery_types')
 
 @login_required(login_url="/users/access")
-def get_surgery_types_by_surgical_area(request, surgical_area_id):
-    log(request, "AdminsLog", {"action_type":"read", "status":200, "details":"Listing by Surgical Area", "item":"SurgeryType"})
-    surgery_types = SurgeryType.objects.filter(surgical_area=surgical_area_id)
+def get_surgery_types_by_mercado(request, mercado_id):
+    log(request, "AdminsLog", {"action_type":"read", "status":200, "details":"Listing by Mercado", "item":"SurgeryType"})
+    surgery_types = SurgeryType.objects.filter(mercado=mercado_id)
     surgery_types_list = list(surgery_types.values('id', 'title')) # Change surgery types into a list of dicts
     return JsonResponse(surgery_types_list, safe=False)
 
@@ -538,10 +538,10 @@ def peripheral_block_add(request):
     # Initialize the Form object
     form = PeripheralBlockForm()
 
-    # Get every surgical areas available
-    surgical_areas = SurgicalArea.objects.all()
-    form.fields['surgical_area'].queryset = surgical_areas
-    form.fields['surgical_area'].widget.attrs.update({'class': 'form-control'})
+    # Get every mercados available
+    mercados = Mercado.objects.all()
+    form.fields['mercado'].queryset = mercados
+    form.fields['mercado'].widget.attrs.update({'class': 'form-control'})
 
     # Initialize empty the second select which depends on the first option chosen
     surgery_types = SurgeryType.objects.none()
@@ -581,14 +581,14 @@ def peripheral_block_edit(request, peripheral_block_id):
     # Initialize the Form object
     form = PeripheralBlockForm(instance=peripheral_block)
 
-    # Get every surgical areas available
-    surgical_areas = SurgicalArea.objects.all()
-    form.fields['surgical_area'].queryset = surgical_areas
-    form.fields['surgical_area'].initial = peripheral_block.surgery_type.surgical_area.id
-    form.fields['surgical_area'].widget.attrs.update({'class': 'form-control'})
+    # Get every mercados available
+    mercados = Mercado.objects.all()
+    form.fields['mercado'].queryset = mercados
+    form.fields['mercado'].initial = peripheral_block.surgery_type.mercado.id
+    form.fields['mercado'].widget.attrs.update({'class': 'form-control'})
 
     # Initialize empty the second select which depends on the first option chosen
-    surgery_types = SurgeryType.objects.filter(surgical_area=peripheral_block.surgery_type.surgical_area.id)
+    surgery_types = SurgeryType.objects.filter(mercado=peripheral_block.surgery_type.mercado.id)
     form.fields['surgery_type'].queryset = surgery_types
     form.fields['surgery_type'].initial = peripheral_block.surgery_type.id
     form.fields['surgery_type'].widget.attrs.update({'class': 'form-control'})

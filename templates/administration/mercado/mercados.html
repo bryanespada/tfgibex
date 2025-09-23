@@ -6,7 +6,7 @@
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>Surgical areas</h3>
+                <h3>Mercados</h3>
             </div>
         </div>
 
@@ -19,7 +19,7 @@
             <div class="col-md-12 col-sm-12  ">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Showing all surgical areas</h2>
+                        <h2>Showing all mercados</h2>
 
                         {% if messages %}
                             <script>
@@ -65,14 +65,14 @@
                                 </thead>
 
                                 <tbody>
-                                    {% for area in surgical_areas %}
+                                    {% for area in mercados %}
                                         <tr class="even pointer">
                                             <td>#{{area.pk}} </td>
                                             <td>{{area.title}} </td>
                                             <td>{{area.description}}</td>
                                             <td class="last" style="text-align: right !important;"><a href="#">
-                                                <a href="{% url 'administration_surgical_area_edit' surgical_area_id=area.id %}"><i class="fa-regular fa-pen-to-square"></i></a>
-                                                <a href="{% url 'administration_surgical_area_delete' surgical_area_id=area.id %}" onclick="return confirm('Are you sure?')"><i class="fa-solid fa-trash"></i></a>
+                                                <a href="{% url 'administration_mercado_edit' mercado_id=area.id %}"><i class="fa-regular fa-pen-to-square"></i></a>
+                                                <a href="{% url 'administration_mercado_delete' mercado_id=area.id %}" onclick="return confirm('Are you sure?')"><i class="fa-solid fa-trash"></i></a>
                                             </a>
                                             </td>
                                         </tr>

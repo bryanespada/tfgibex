@@ -29,16 +29,16 @@ urlpatterns = [
     path("user_make_admin/<int:custom_user_id>/", views.user_make_admin, name="administration_user_make_admin"),
     path("user_deactivate_account/<int:custom_user_id>/", views.user_deactivate_account, name="administration_user_deactivate_account"),
     
-    path("surgical_areas/", views.surgical_areas, name="administration_surgical_areas"),
-    path("surgical_area_add/", views.surgical_area_add, name="administration_surgical_area_add"),
-    path("surgical_area_edit/<int:surgical_area_id>/", views.surgical_area_edit, name="administration_surgical_area_edit"),
-    path("surgical_area_delete/<int:surgical_area_id>/", views.surgical_area_delete, name="administration_surgical_area_delete"),
+    path("mercados/", views.mercados, name="administration_mercados"),
+    path("mercado_add/", views.mercado_add, name="administration_mercado_add"),
+    path("mercado_edit/<int:mercado_id>/", views.mercado_edit, name="administration_mercado_edit"),
+    path("mercado_delete/<int:mercado_id>/", views.mercado_delete, name="administration_mercado_delete"),
     
     path("surgery_types/", views.surgery_types, name="administration_surgery_types"),
     path("surgery_type_add/", views.surgery_type_add, name="administration_surgery_type_add"),
     path("surgery_type_edit/<int:surgery_type_id>/", views.surgery_type_edit, name="administration_surgery_type_edit"),
     path("surgery_type_delete/<int:surgery_type_id>/", views.surgery_type_delete, name="administration_surgery_type_delete"),
-    path("get_surgery_types_by_surgical_area/<int:surgical_area_id>/", views.get_surgery_types_by_surgical_area, name="administration_get_surgery_types_by_surgical_area"),
+    path("get_surgery_types_by_mercado/<int:mercado_id>/", views.get_surgery_types_by_mercado, name="administration_get_surgery_types_by_mercado"),
 
     path("peripheral_blocks/", views.peripheral_blocks, name="administration_peripheral_blocks"),
     path("peripheral_block_add/", views.peripheral_block_add, name="administration_peripheral_block_add"),

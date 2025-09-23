@@ -62,10 +62,10 @@
 
                                         <div class="campo-agrupado input-group input-group-outline">
                                             <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Surgical area</div>
+                                                <div class="font-weight-bold">Mercado</div>
                                             </div>
                                             <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.surgical_area }}</p>
+                                                <p class="p-class">{{ form.mercado }}</p>
                                             </div>
                                         </div>
 
@@ -141,11 +141,11 @@
 
                         <script>
                             $(document).ready(function() {
-                                $('#id_surgical_area').change(function() {
-                                    var id_surgical_area = $(this).val();  // Get surgical area id
-                                    if (id_surgical_area) {
+                                $('#id_mercado').change(function() {
+                                    var id_mercado = $(this).val();  // Get mercado id
+                                    if (id_mercado) {
                                         $.ajax({
-                                            url: '/administration/get_surgery_types_by_surgical_area/' + id_surgical_area + '/',
+                                            url: '/administration/get_surgery_types_by_mercado/' + id_mercado + '/',
                                             type: 'GET',
                                             dataType: 'json',
                                             success: function(data) {

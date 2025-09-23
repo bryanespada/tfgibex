@@ -1,13 +1,13 @@
 from django.contrib import admin
-from .models import GeneralConfig, SurgicalArea, SurgeryType, PeripheralBlock, Subscription, Product, Blog, Image
+from .models import GeneralConfig, Mercado, SurgeryType, PeripheralBlock, Subscription, Product, Blog, Image
 
 class GeneralConfigAdmin(admin.ModelAdmin):
     list_display = ('app_name', 'app_syncopation', 'app_url',)  # Campos a mostrar en la lista
 admin.site.register(GeneralConfig, GeneralConfigAdmin)
 
-class SurgicalAreaAdmin(admin.ModelAdmin):
+class MercadoAdmin(admin.ModelAdmin):
     list_display = ('title',)
-admin.site.register(SurgicalArea, SurgicalAreaAdmin)
+admin.site.register(Mercado, MercadoAdmin)
 
 class SurgeryTypeAdmin(admin.ModelAdmin):
     list_display = ('title',)

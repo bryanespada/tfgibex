@@ -89,7 +89,7 @@ def log(request, log_type, log_data):
             lat = geolocation_data['lat'],
             lng = geolocation_data['lng'],
             has_active_subscription = log_data['has_active_subscription'],
-            surgical_area = log_data['surgical_area'],
+            mercado = log_data['mercado'],
             surgery_type = log_data['surgery_type'],
             peripheral_block = log_data['peripheral_block']
         )

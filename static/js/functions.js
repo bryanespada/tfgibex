@@ -5,7 +5,7 @@ function redirect(object) {
     window.location.href = url;
 }
 
-// Funcion para filtrar los elementos de surgical areas y surgery types 
+// Funcion para filtrar los elementos de mercados y surgery types 
 function filterTable() {
     var input, filter, table, tr, td, i, txtValue, noResultsMessage;
     input = document.getElementById("filterInput");

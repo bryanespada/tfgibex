@@ -65,7 +65,7 @@ class GeneralConfig(models.Model):
 
 
 
-class SurgicalArea(models.Model):
+class Mercado(models.Model):
     title = models.CharField(max_length=200, blank=False, null=False, default='')
     description = models.CharField(max_length=6000, blank=True, null=True, default='')
 
@@ -77,7 +77,7 @@ class SurgicalArea(models.Model):
 class SurgeryType(models.Model):
     title = models.CharField(max_length=200, blank=False, null=False, default='')
     description = models.CharField(max_length=6000, blank=True, null=True, default='')
-    surgical_area = models.ForeignKey(SurgicalArea, on_delete=models.CASCADE)
+    mercado = models.ForeignKey(Mercado, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
