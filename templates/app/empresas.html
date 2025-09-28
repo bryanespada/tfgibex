@@ -7,10 +7,10 @@
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                {% if surgery_type_title is not None %}
-                <h3>{{ surgery_type_title }}</h3>
+                {% if bolsa_title is not None %}
+                <h3>{{ bolsa_title }}</h3>
                 {% else %}
-                <h3>Peripheral Blocks</h3>
+                <h3>Empresas</h3>
                 {% endif %}
             </div>
 
@@ -25,16 +25,16 @@
                 <div class="x_panel">
                     {% include '../base/error_messages.html' %}
 
-                    <h2>Search peripheral blocks</h2>
-                    <input type="text" class="form-control" id="filterInputBlock" oninput="filterBlock()" placeholder="Search peripheral blocks..">
+                    <h2>Buscar empresas</h2>
+                    <input type="text" class="form-control" id="filterInputBlock" oninput="filterBlock()" placeholder="Buscar empresas..">
                     
                     <div class="mt-4">
                         <div class="row">
-                            {% for peripheral_block in peripheral_blocks %}
-                                <div class="col-4 blog" style="cursor: pointer" data-url="{% url 'user_peripheral_block' peripheral_block_id=peripheral_block.id %}" onclick="redirect(this)">
+                            {% for empresa in empresas %}
+                                <div class="col-4 blog" style="cursor: pointer" data-url="{% url 'user_empresa' empresa_id=empresa.id %}" onclick="redirect(this)">
                                     <div style="height: 200px; background-color: var(--app-color-1);" class="image view view-first">
                                         
-                                        {% for image in peripheral_block.images.all %}
+                                        {% for image in empresa.images.all %}
                                             {% if forloop.first %} 
                                                 <img style="width: 100%; display: block;" src="{{ image.image.url }}" alt="{{ image.title }}">
                                             {% endif %}
@@ -43,8 +43,8 @@
                                     </div>
                                     
                                     <div class="caption text-center">
-                                        <b>{{ peripheral_block.title }}</b>
-                                        <p>{{ peripheral_block.description|truncatechars:25 }}</p>
+                                        <b>{{ empresa.title }}</b>
+                                        <p>{{ empresa.description|truncatechars:25 }}</p>
                                     </div>  
                                 </div>     
                             {% endfor %}

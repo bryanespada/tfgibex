@@ -48,10 +48,10 @@
                                     {% for bolsa in bolsas %}
                                     {# apps/ urls.py #}
                                     <tr>
-                                        <td style="width: 50px;" data-url="{% url 'user_peripheral_blocks' bolsa_id=bolsa.id %}" onclick="redirect(this)">
+                                        <td style="width: 50px;" data-url="{% url 'user_empresas' bolsa_id=bolsa.id %}" onclick="redirect(this)">
                                             <i class="fa-solid fa-circle-arrow-right"></i>
                                         </td>
-                                        <td data-url="{% url 'user_peripheral_blocks' bolsa_id=bolsa.id %}" onclick="redirect(this)">
+                                        <td data-url="{% url 'user_empresas' bolsa_id=bolsa.id %}" onclick="redirect(this)">
                                                 <b>{{bolsa.title}}</b>
                                             <p>
                                                 {{bolsa.description|linebreaksbr}}

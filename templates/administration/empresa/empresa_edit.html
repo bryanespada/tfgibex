@@ -6,7 +6,7 @@
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>Peripheral blocks</h3>
+                <h3>Empresas</h3>
             </div>
         </div>
 
@@ -19,20 +19,20 @@
             <div class="col-md-12 col-sm-12  ">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Add new peripheral block</h2>
+                        <h2>Editar empresa</h2>
 
                         {% if messages %}
-                        <script>
-                            function hide_message() {
-                                const message_label = document.querySelector("#message");
-                                message_label.style.display = "none";
-                            }
-                        </script>
-                        {% for message in messages %}
-                        <p id="message" {% if message.tags %} class="messages {{ message.tags }}" {% endif %}
-                            style="text-align: -webkit-center;color:{{config.app_color_1}};font-weight:800;margin-top:30px; margin-bottom:9px;">
-                            {{ message }} <i class="fa-solid fa-circle-xmark" onclick="hide_message()"></i></p>
-                        {% endfor %}
+                            <script>
+                                function hide_message() {
+                                    const message_label = document.querySelector("#message");
+                                    message_label.style.display = "none";
+                                }
+                            </script>
+                            {% for message in messages %}
+                            <p id="message" {% if message.tags %} class="messages {{ message.tags }}" {% endif %}
+                                style="text-align: -webkit-center;color:{{config.app_color_1}};font-weight:800;margin-top:30px; margin-bottom:9px;">
+                                {{ message }} <i class="fa-solid fa-circle-xmark" onclick="hide_message()"></i></p>
+                            {% endfor %}
                         {% endif %}
 
                         <ul class="nav navbar-right panel_toolbox">
@@ -124,6 +124,7 @@
                                             </div>
                                         </div>
 
+
                                     </div>
                                 </div>
                             </div>
@@ -162,8 +163,8 @@
                                             }
                                         });
                                     } else {
-                                        // If there are no surgical area selected, clear the second select
-                                        $('#id_surgery_type').empty();
+                                        // If there are no mercado selected, clear the second select
+                                        $('#id_bolsa').empty();
                                     }
                                 });
                             });

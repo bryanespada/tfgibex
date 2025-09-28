@@ -48,7 +48,7 @@ class Migration(migrations.Migration):
             field=models.CharField(default='smtp.servidor-correo.net', max_length=100),
         ),
         migrations.AlterField(
-            model_name='peripheralblock',
+            model_name='empresa',
             name='description',
             field=models.CharField(blank=True, default='', max_length=10000, null=True),
         ),
@@ -81,10 +81,10 @@ class Migration(migrations.Migration):
             name='Image',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', models.ImageField(upload_to=appmodels.models.upload_to_periphera_block_pics)),
+                ('image', models.ImageField(upload_to=appmodels.models.upload_to_empresa_pics)),
                 ('title', models.CharField(default='', max_length=200)),
                 ('description', models.CharField(blank=True, default='', max_length=6000, null=True)),
-                ('peripheral_block', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='images', to='appmodels.peripheralblock')),
+                ('empresa', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='images', to='appmodels.empresa')),
             ],
         ),
     ]

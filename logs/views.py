@@ -91,7 +91,7 @@ def log(request, log_type, log_data):
             has_active_subscription = log_data['has_active_subscription'],
             mercado = log_data['mercado'],
             bolsa = log_data['bolsa'],
-            peripheral_block = log_data['peripheral_block']
+            empresa = log_data['empresa']
         )
 
     else:

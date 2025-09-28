@@ -44,7 +44,7 @@ function filterTable() {
     }
 }
 
-// Funcion para filtrar los elementos de peripheral blocks
+// Funcion para filtrar los elementos de empresas
 function filterBlock() {
     console.log("Cargado Filter Block")
     var filterValue = $('#filterInputBlock').val().toLowerCase();

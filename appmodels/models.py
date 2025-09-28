@@ -84,7 +84,7 @@ class Bolsa(models.Model):
 
 
 
-class PeripheralBlock(models.Model):
+class Empresa(models.Model):
     title = models.CharField(max_length=200, blank=False, null=False, default='')
     description = models.CharField(max_length=10000, blank=True, null=True, default='')
     video_link = models.CharField(max_length=2000, blank=True, null=True, default='')
@@ -98,26 +98,26 @@ class PeripheralBlock(models.Model):
 
 
 
-def upload_to_periphera_block_pics(instance, filename):
+def upload_to_empresa_pics(instance, filename):
     """
     Generate a filename based on a UUID.
     """
-    peripheral_block_id = instance.peripheral_block.id
-    directory = f'peripheral_block_pics/{peripheral_block_id}'
-    if not os.path.exists(directory): # Create, if not exists, the directory where the images are being saved
+    empresa_id = instance.empresa.id
+    directory = f'empresa_pics/{empresa_id}'
+    if not os.path.exists(directory):
         os.makedirs(directory)
 
-    ext = filename.split('.')[-1] # Get file extension
-    filename = f"{uuid4().hex}.{ext}" # Generate unique file name using UUID
-    return f"peripheral_block_pics/{peripheral_block_id}/{filename}" # Return file path with name
+    ext = filename.split('.')[-1]
+    filename = f"{uuid4().hex}.{ext}"
+    return f"empresa_pics/{empresa_id}/{filename}"
 
 
 class Image(models.Model):
 
-    image = models.ImageField(upload_to=upload_to_periphera_block_pics)
+    image = models.ImageField(upload_to=upload_to_empresa_pics)
     title = models.CharField(max_length=200, blank=False, null=False, default='')
     description = models.CharField(max_length=6000, blank=True, null=True, default='')
-    peripheral_block = models.ForeignKey(PeripheralBlock, related_name='images', on_delete=models.CASCADE, null=True)
+    empresa = models.ForeignKey(Empresa, related_name='images', on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.title

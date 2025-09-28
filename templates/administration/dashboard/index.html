@@ -83,10 +83,10 @@
             </div>
 
             <div class="col-md-2 col-sm-4  tile_stats_count">
-                <span class="count_top"><i class="fa-solid fa-square"></i> Peripheral blocks</span>
-                <div class="count">{{total_peripheral_blocks}}</div>
+                <span class="count_top"><i class="fa-solid fa-square"></i> Empresas</span>
+                <div class="count">{{total_empresas}}</div>
                 <span class="count_bottom">
-                    {{total_peripheral_blocks_free}} In free mode
+                    {{total_empresas_free}} En modo gratuito
                 </span>
             </div>
 
@@ -393,7 +393,7 @@
 
                 <!-- Title -->
                 <div class="x_title">
-                    <h2>Top blocks</h2>
+                    <h2>Top empresas</h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
                         <li><a class="close-link"><i class="fa fa-close"></i></a>
@@ -406,13 +406,13 @@
 
                     <div class="col-md-12 col-sm-12">
                         
-                        {% if top_blocks.show %}
+                        {% if top_empresas.show %}
                             <!-- Chart Canvas -->
                             <canvas id="admin_chart_2_2" style="height:500px!important;width:100%!important;"></canvas>
                             <!-- Chart script -->
                             <script>
                                 const ctx_admin_chart_2_2 = document.getElementById('admin_chart_2_2');
-                                var labels_2_2 = {{top_blocks.names | safe}};
+                                var labels_2_2 = {{top_empresas.names | safe}};
                                 var colours_array_2_2 = get_colour_list(labels_2_2.length);
 
                                 new Chart(ctx_admin_chart_2_2, {
@@ -421,7 +421,7 @@
                                         labels: labels_2_2,
                                         datasets: [{
                                             label: "Total access",
-                                            data: {{top_blocks.values}},
+                                            data: {{top_empresas.values}},
                                             borderColor: colours_array_2_2[0],
                                             backgroundColor: colours_array_2_2[1],
                                             hoverOffset: 5,

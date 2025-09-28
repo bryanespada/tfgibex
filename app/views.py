@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from appmodels.models import GeneralConfig, Product, Mercado, Bolsa, PeripheralBlock, Blog, Image
+from appmodels.models import GeneralConfig, Product, Mercado, Bolsa, Empresa, Blog, Image
 from logs.models import TrackingLog
 from django.db.models import Count
 from logs.views import log
@@ -37,16 +37,16 @@ def dashboard(request):
         context['top_10']['bolsas']['labels'].append(bolsa.title)
         context['top_10']['bolsas']['values'].append(block['total'])
     
-    # Get Top10 Peripheral Blocks
-    context['top_10']['peripheral_blocks'] = {}
-    context['top_10']['peripheral_blocks']['labels'] = []
-    context['top_10']['peripheral_blocks']['values'] = []
-    top_10_peripheral_blocks = TrackingLog.objects.filter(peripheral_block__isnull=False).values('peripheral_block').annotate(total=Count('peripheral_block')).order_by('-total')[:10]
-    context['top_10']['peripheral_blocks']['show'] = True if top_10_peripheral_blocks else False # Decide to show or not 
-    for index, block in enumerate(top_10_peripheral_blocks): # Prepare two lists with de labels and values
-        peripheral_block = PeripheralBlock.objects.get(pk=block['peripheral_block'])
-        context['top_10']['peripheral_blocks']['labels'].append(peripheral_block.title)
-        context['top_10']['peripheral_blocks']['values'].append(block['total'])
+    # Get Top10 Empresas
+    context['top_10']['empresas'] = {}
+    context['top_10']['empresas']['labels'] = []
+    context['top_10']['empresas']['values'] = []
+    top_10_empresas = TrackingLog.objects.filter(empresa__isnull=False).values('empresa').annotate(total=Count('empresa')).order_by('-total')[:10]
+    context['top_10']['empresas']['show'] = True if top_10_empresas else False
+    for index, block in enumerate(top_10_empresas):
+        empresa = Empresa.objects.get(pk=block['empresa'])
+        context['top_10']['empresas']['labels'].append(empresa.title)
+        context['top_10']['empresas']['values'].append(block['total'])
 
     log(request, "UserLog", {"action_type":"read", "status":200, "details":"", "item":"Dashboard", "change_by_admin":False})
     return render (request, "app/index.html", context=context)
@@ -57,7 +57,7 @@ def mercados(request):
     context['config'] = get_object_or_404(GeneralConfig, id=1)
     context['mercados'] = Mercado.objects.all()
 
-    log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"List", "item":"Mercado", "has_active_subscription":False, "peripheral_block":None, "surgery_type":None, "mercado":None})
+    log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"List", "item":"Mercado", "has_active_subscription":False, "empresa":None, "bolsa":None, "mercado":None})
     return render (request, "app/mercados.html", context=context)
 
 @login_required(login_url="/users/access")
@@ -70,43 +70,43 @@ def bolsas(request, mercado_id=None):
         selected_mercado = get_object_or_404(Mercado, id=mercado_id) # Search the object to save it in the log
         context['bolsas'] = Bolsa.objects.filter(mercado=mercado_id)
         context['mercado_title']= selected_mercado.title
-        log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"List", "item":"Bolsa", "has_active_subscription":False, "peripheral_block":None, "bolsa":None, "mercado":selected_mercado})
+        log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"List", "item":"Bolsa", "has_active_subscription":False, "empresa":None, "bolsa":None, "mercado":selected_mercado})
 
     # Listing every bolsa
     else:
         context['bolsas'] = Bolsa.objects.all()
-        log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"List every item", "item":"Bolsa", "has_active_subscription":False, "peripheral_block":None, "bolsa":None, "mercado":None})
+        log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"List every item", "item":"Bolsa", "has_active_subscription":False, "empresa":None, "bolsa":None, "mercado":None})
 
     return render (request, "app/bolsas.html", context=context)
 
 @login_required(login_url="/users/access")
-def peripheral_blocks(request, bolsa_id=None):
+def empresas(request, bolsa_id=None):
     context = {}
     context['config'] = get_object_or_404(GeneralConfig, id=1)
 
     # In case of selected bolsa
     if bolsa_id:
         selected_bolsa = get_object_or_404(Bolsa, id=bolsa_id)
-        context['peripheral_blocks'] = PeripheralBlock.objects.filter(bolsa=bolsa_id)
-        log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"List", "item":"PeripheralBlock", "has_active_subscription":False, "peripheral_block":None, "bolsa":selected_bolsa, "mercado":selected_bolsa.mercado})
+        context['empresas'] = Empresa.objects.filter(bolsa=bolsa_id)
+        log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"List", "item":"Empresa", "has_active_subscription":False, "empresa":None, "bolsa":selected_bolsa, "mercado":selected_bolsa.mercado})
 
-    # Listing every peripheral block
+    # Listing every empresa
     else:
-        context['peripheral_blocks'] = PeripheralBlock.objects.all()
-        log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"List", "item":"PeripheralBlock", "has_active_subscription":False, "peripheral_block":None, "bolsa":None, "mercado":None})
+        context['empresas'] = Empresa.objects.all()
+        log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"List", "item":"Empresa", "has_active_subscription":False, "empresa":None, "bolsa":None, "mercado":None})
 
-    return render (request, "app/peripheral_blocks.html", context=context)
+    return render (request, "app/empresas.html", context=context)
 
 @login_required(login_url="/users/access")
-def peripheral_block(request, peripheral_block_id):
+def empresa(request, empresa_id):
     context = {}
     context['config'] = get_object_or_404(GeneralConfig, id=1)
-    selected_peripheral_block = get_object_or_404(PeripheralBlock, id=peripheral_block_id)
-    context['peripheral_block'] = selected_peripheral_block
-    
-    context['images'] = selected_peripheral_block.images.all()
+    selected_empresa = get_object_or_404(Empresa, id=empresa_id)
+    context['empresa'] = selected_empresa
 
-    log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"Element", "item":"PeripheralBlock", "has_active_subscription":False, "peripheral_block":selected_peripheral_block, "bolsa":selected_peripheral_block.bolsa, "mercado":selected_peripheral_block.bolsa.mercado})
-    return render (request, "app/peripheral_block.html", context=context)
+    context['images'] = selected_empresa.images.all()
+
+    log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"Element", "item":"Empresa", "has_active_subscription":False, "empresa":selected_empresa, "bolsa":selected_empresa.bolsa, "mercado":selected_empresa.bolsa.mercado})
+    return render (request, "app/empresa.html", context=context)
 
 

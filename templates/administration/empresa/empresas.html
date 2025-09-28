@@ -6,7 +6,7 @@
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>Peripheral blocks</h3>
+                <h3>Empresas</h3>
             </div>
         </div>
 
@@ -19,7 +19,7 @@
             <div class="col-md-12 col-sm-12  ">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Showing all peripheral blocks</h2>
+                        <h2>Mostrando todas las empresas</h2>
 
                         {% if messages %}
                             <script>
@@ -58,8 +58,8 @@
                                     <tr class="headings">
                                         <th class="column-title" style="width: 0%;">ID </th>
                                         <th class="column-title">Title </th>
-                                        <th class="column-title">Surgery type </th>
-                                        <th class="column-title">Surgical area </th>
+                                        <th class="column-title">Bolsa </th>
+                                        <th class="column-title">Mercado </th>
                                         <th class="column-title" style="width: 0%;">Public </th>
                                         <th class="column-title no-link last" style="width: 0%; text-align: right !important;"><span class="nobr">Actions</span>
                                         </th>
@@ -67,17 +67,17 @@
                                 </thead>
 
                                 <tbody>
-                                    {% for peripheral_block in peripheral_blocks %}
+                                    {% for empresa in empresas %}
                                         <tr class="even pointer">
-                                            <td>#{{peripheral_block.pk}} </td>
-                                            <td>{{peripheral_block.title}} </td>
-                                            <td>{{peripheral_block.surgery_type.title}}</td>
-                                            <td>{{peripheral_block.surgery_type.surgical_area.title}}</td>
-                                            <td>{% if peripheral_block.public %} <i class="fa-solid fa-lock-open" style="color: {{config.app_danger}}"></i> {% else %} <i class="fa-solid fa-lock" style="color: {{config.app_success}}"></i> {% endif %}</td>
+                                            <td>#{{empresa.pk}} </td>
+                                            <td>{{empresa.title}} </td>
+                                            <td>{{empresa.bolsa.title}}</td>
+                                            <td>{{empresa.bolsa.mercado.title}}</td>
+                                            <td>{% if empresa.public %} <i class="fa-solid fa-lock-open" style="color: {{config.app_danger}}"></i> {% else %} <i class="fa-solid fa-lock" style="color: {{config.app_success}}"></i> {% endif %}</td>
                                             <td class="last" style="text-align: right !important;"><a href="#">
-                                                <a href="{% url 'administration_peripheral_block_gallery' peripheral_block_id=peripheral_block.id %}"><i class="fa-regular fa-images"></i></a>
-                                                <a href="{% url 'administration_peripheral_block_edit' peripheral_block_id=peripheral_block.id %}"><i class="fa-regular fa-pen-to-square"></i></a>
-                                                <a href="{% url 'administration_peripheral_block_delete' peripheral_block_id=peripheral_block.id %}" onclick="return confirm('Area you sure?')"><i class="fa-solid fa-trash"></i></a>
+                                                <a href="{% url 'administration_empresa_gallery' empresa_id=empresa.id %}"><i class="fa-regular fa-images"></i></a>
+                                                <a href="{% url 'administration_empresa_edit' empresa_id=empresa.id %}"><i class="fa-regular fa-pen-to-square"></i></a>
+                                                <a href="{% url 'administration_empresa_delete' empresa_id=empresa.id %}" onclick="return confirm('Area you sure?')"><i class="fa-solid fa-trash"></i></a>
                                             </a>
                                             </td>
                                         </tr>

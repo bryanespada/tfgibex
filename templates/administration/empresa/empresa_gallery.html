@@ -6,7 +6,7 @@
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>Peripheral blocks</h3>
+                <h3>Empresas</h3>
             </div>
         </div>
 
@@ -131,7 +131,7 @@
                             <div class="row">
                                 {% for image in images %}
                                 <div class="col-12 col-sm-12 col-md-6 col-lg-4 mb-4 blog" style="cursor: pointer">
-                                    <a href="{% url 'administration_peripheral_block_image_delete' image_id=image.id %}" onclick="return confirm('Area you sure?')">
+                                    <a href="{% url 'administration_empresa_image_delete' image_id=image.id %}" onclick="return confirm('Area you sure?')">
                                         <i class="bg-white fa-solid fa-square-xmark delete-button"></i></a>
                                     
                                     <div>

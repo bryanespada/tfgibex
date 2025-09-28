@@ -40,12 +40,12 @@ urlpatterns = [
     path("bolsa_delete/<int:bolsa_id>/", views.bolsa_delete, name="administration_bolsa_delete"),
     path("get_bolsas_by_mercado/<int:mercado_id>/", views.get_bolsas_by_mercado, name="administration_get_bolsas_by_mercado"),
 
-    path("peripheral_blocks/", views.peripheral_blocks, name="administration_peripheral_blocks"),
-    path("peripheral_block_add/", views.peripheral_block_add, name="administration_peripheral_block_add"),
-    path("peripheral_block_edit/<int:peripheral_block_id>/", views.peripheral_block_edit, name="administration_peripheral_block_edit"),
-    path("peripheral_block_delete/<int:peripheral_block_id>/", views.peripheral_block_delete, name="administration_peripheral_block_delete"),
-    path("peripheral_block_gallery/<int:peripheral_block_id>/", views.peripheral_block_gallery, name="administration_peripheral_block_gallery"),
-    path("peripheral_block_image_delete/<int:image_id>/", views.peripheral_block_image_delete, name="administration_peripheral_block_image_delete"),
+    path("empresas/", views.empresas, name="administration_empresas"),
+    path("empresa_add/", views.empresa_add, name="administration_empresa_add"),
+    path("empresa_edit/<int:empresa_id>/", views.empresa_edit, name="administration_empresa_edit"),
+    path("empresa_delete/<int:empresa_id>/", views.empresa_delete, name="administration_empresa_delete"),
+    path("empresa_gallery/<int:empresa_id>/", views.empresa_gallery, name="administration_empresa_gallery"),
+    path("empresa_image_delete/<int:image_id>/", views.empresa_image_delete, name="administration_empresa_image_delete"),
 
     path("logs/", views.logs, name="administration_logs"),
     path('get_log_details/<str:log_type>/<int:log_id>', views.get_log_details, name='administration_get_log_details'),

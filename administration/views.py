@@ -3,12 +3,12 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.utils import timezone
 from datetime import date, timedelta
-from appmodels.models import GeneralConfig, Mercado, Bolsa, PeripheralBlock, Subscription, Product, Blog, Image
+from appmodels.models import GeneralConfig, Mercado, Bolsa, Empresa, Subscription, Product, Blog, Image
 from users.models import CustomUser
 from logs.models import UserLog, AdminsLog, SubscriptionLog, TrackingLog
 from users.forms import CustomUserCreationByAdminForm, CustomUserEditByAdminForm
 from django.contrib import messages
-from appmodels.forms import GeneralConfigForm, MercadoForm, BolsaForm, PeripheralBlockForm, SubscriptionForm, ProductForm, BlogForm, ProductAssignForm, ImageForm
+from appmodels.forms import GeneralConfigForm, MercadoForm, BolsaForm, EmpresaForm, SubscriptionForm, ProductForm, BlogForm, ProductAssignForm, ImageForm
 from django.contrib.auth.models import Group
 from logs.views import log
 from django.db.models import Count
@@ -61,11 +61,11 @@ def dashboard(request):
     # Get the number of active subscriptions
     context['total_active_subscriptions_last_week'] = Subscription.objects.filter(due_date__gte=timezone.now(), payment_datetime__gte=start_of_last_week).count()
 
-    # Get the number of peripheral blocks
-    context['total_peripheral_blocks'] = PeripheralBlock.objects.all().count()
+    # Get the number of empresas
+    context['total_peripheral_blocks'] = Empresa.objects.all().count()
 
-    # Get the number of peripheral blocks in a free mode
-    context['total_peripheral_blocks_free'] = PeripheralBlock.objects.filter(public=True).count()
+    # Get the number of empresas in a free mode
+    context['total_peripheral_blocks_free'] = Empresa.objects.filter(public=True).count()
 
     # Get the number of products
     context['total_products'] = Product.objects.all().count()
@@ -178,13 +178,13 @@ def dashboard(request):
     ##########################################################################################
     # Chart R2_C2: Top blocks
 
-    # Get the top 8 mos viewed peripheral blocks
-    top_blocks = TrackingLog.objects.exclude(peripheral_block=None).values('peripheral_block__title').annotate(block_count=Count('peripheral_block')).order_by('-block_count')[:8]
+    # Get the top 8 mos viewed empresas
+    top_blocks = TrackingLog.objects.exclude(empresa=None).values('empresa__title').annotate(block_count=Count('empresa')).order_by('-block_count')[:8]
 
     context['top_blocks'] = {}
     context['top_blocks']['show'] = True if top_blocks else False
     # Attach the results to the general context
-    context['top_blocks']['names'] = [block['peripheral_block__title'] for block in top_blocks]
+    context['top_blocks']['names'] = [block['empresa__title'] for block in top_blocks]
     context['top_blocks']['values'] = [block['block_count'] for block in top_blocks]
 
 
@@ -503,40 +503,40 @@ def get_bolsas_by_mercado(request, mercado_id):
     return JsonResponse(bolsas_list, safe=False)
 
 ######################################################################################################################################################
-# CRUD PERIPHERAL BLOCKS
+# CRUD EMPRESAS
 ######################################################################################################################################################
 
 
 @login_required(login_url="/users/access")
-def peripheral_blocks(request):
+def empresas(request):
     """
-    Function to get all peripheral block
+    Function to get all empresas
     """
     context = {}
     context['config'] = get_object_or_404(GeneralConfig, id=1)
-    context['peripheral_blocks'] = PeripheralBlock.objects.all().order_by('title')
-    log(request, "AdminsLog", {"action_type":"read", "status":200, "details":"Listing", "item":"PeripheralBlock"})
-    return render (request, "administration/peripheral_block/peripheral_blocks.html", context)
+    context['empresas'] = Empresa.objects.all().order_by('title')
+    log(request, "AdminsLog", {"action_type":"read", "status":200, "details":"Listing", "item":"Empresa"})
+    return render (request, "administration/empresa/empresas.html", context)
 
 @login_required(login_url="/users/access")
-def peripheral_block_add(request):
+def empresa_add(request):
     """
-    Function to add a new peripheral block
+    Function to add a new empresa
     """
     context = {}
     if request.method == 'POST':
-        form = PeripheralBlockForm(request.POST, request.FILES)
+        form = EmpresaForm(request.POST, request.FILES)
         if form.is_valid():
-            peripheral_block = form.save(commit=False)
-            peripheral_block.save()
-            messages.success(request, "Peripheral block successfully added")
-            log(request, "AdminsLog", {"action_type":"create", "status":200, "details":f"Created '{peripheral_block.title}'", "item":"PeripheralBlock"})
-            return redirect('/administration/peripheral_blocks')
+            empresa = form.save(commit=False)
+            empresa.save()
+            messages.success(request, "Empresa successfully added")
+            log(request, "AdminsLog", {"action_type":"create", "status":200, "details":f"Created '{empresa.title}'", "item":"Empresa"})
+            return redirect('/administration/empresas')
         else:
-            log(request, "AdminsLog", {"action_type":"create", "status":400, "details":f"Invalid form", "item":"PeripheralBlock"})
+            log(request, "AdminsLog", {"action_type":"create", "status":400, "details":f"Invalid form", "item":"Empresa"})
 
     # Initialize the Form object
-    form = PeripheralBlockForm()
+    form = EmpresaForm()
 
     # Get every mercados available
     mercados = Mercado.objects.all()
@@ -558,39 +558,39 @@ def peripheral_block_add(request):
     context['form'] = form
 
     context['config'] = get_object_or_404(GeneralConfig, id=1)
-    log(request, "AdminsLog", {"action_type":"read", "status":200, "details":f"Creating form", "item":"PeripheralBlock"})
-    return render (request, "administration/peripheral_block/peripheral_block_add.html", context)
+    log(request, "AdminsLog", {"action_type":"read", "status":200, "details":f"Creating form", "item":"Empresa"})
+    return render (request, "administration/empresa/empresa_add.html", context)
 
 @login_required(login_url="/users/access")
-def peripheral_block_edit(request, peripheral_block_id):
+def empresa_edit(request, empresa_id):
     """
-    Function to edit an existing peripheral block
+    Function to edit an existing empresa
     """
-    peripheral_block = get_object_or_404(PeripheralBlock, id=peripheral_block_id)
+    empresa = get_object_or_404(Empresa, id=empresa_id)
     context = {}
     if request.method == 'POST':
-        form = PeripheralBlockForm(request.POST, request.FILES, instance=peripheral_block)
+        form = EmpresaForm(request.POST, request.FILES, instance=empresa)
         if form.is_valid():
-            peripheral_block.save()
-            messages.success(request, "Peripheral block successfully updated")
-            log(request, "AdminsLog", {"action_type":"update", "status":200, "details":f"Updated '{peripheral_block.title}'", "item":"PeripheralBlock"})
-            return redirect('/administration/peripheral_blocks')
+            empresa.save()
+            messages.success(request, "Empresa successfully updated")
+            log(request, "AdminsLog", {"action_type":"update", "status":200, "details":f"Updated '{empresa.title}'", "item":"Empresa"})
+            return redirect('/administration/empresas')
         else:
-            log(request, "AdminsLog", {"action_type":"update", "status":400, "details":f"Invalid form updating '{peripheral_block.title}'", "item":"PeripheralBlock"})
+            log(request, "AdminsLog", {"action_type":"update", "status":400, "details":f"Invalid form updating '{empresa.title}'", "item":"Empresa"})
 
     # Initialize the Form object
-    form = PeripheralBlockForm(instance=peripheral_block)
+    form = EmpresaForm(instance=empresa)
 
     # Get every mercados available
     mercados = Mercado.objects.all()
     form.fields['mercado'].queryset = mercados
-    form.fields['mercado'].initial = peripheral_block.bolsa.mercado.id
+    form.fields['mercado'].initial = empresa.bolsa.mercado.id
     form.fields['mercado'].widget.attrs.update({'class': 'form-control'})
 
     # Initialize empty the second select which depends on the first option chosen
-    bolsas = Bolsa.objects.filter(mercado=peripheral_block.bolsa.mercado.id)
+    bolsas = Bolsa.objects.filter(mercado=empresa.bolsa.mercado.id)
     form.fields['bolsa'].queryset = bolsas
-    form.fields['bolsa'].initial = peripheral_block.bolsa.id
+    form.fields['bolsa'].initial = empresa.bolsa.id
     form.fields['bolsa'].widget.attrs.update({'class': 'form-control'})
 
     # Rest of empty fields to fill
@@ -603,38 +603,38 @@ def peripheral_block_edit(request, peripheral_block_id):
     context['form'] = form
 
     context['config'] = get_object_or_404(GeneralConfig, id=1)
-    log(request, "AdminsLog", {"action_type":"read", "status":200, "details":f"Update form of '{peripheral_block.title}'", "item":"PeripheralBlock"})
-    return render (request, "administration/peripheral_block/peripheral_block_edit.html", context)
+    log(request, "AdminsLog", {"action_type":"read", "status":200, "details":f"Update form of '{empresa.title}'", "item":"Empresa"})
+    return render (request, "administration/empresa/empresa_edit.html", context)
 
 @login_required(login_url="/users/access")
-def peripheral_block_delete(request, peripheral_block_id):
+def empresa_delete(request, empresa_id):
     """
-    Function to delete an existing peripheral block
+    Function to delete an existing empresa
     """
-    peripheral_block = get_object_or_404(PeripheralBlock, id=peripheral_block_id)
-    log(request, "AdminsLog", {"action_type":"delete", "status":200, "details":f"Deleted '{peripheral_block.title}'", "item":"PeripheralBlock"})
-    peripheral_block.delete()
-    messages.success(request, "Peripheral block successfully deleted")
+    empresa = get_object_or_404(Empresa, id=empresa_id)
+    log(request, "AdminsLog", {"action_type":"delete", "status":200, "details":f"Deleted '{empresa.title}'", "item":"Empresa"})
+    empresa.delete()
+    messages.success(request, "Empresa successfully deleted")
     context = {}
     context['config'] = get_object_or_404(GeneralConfig, id=1)
-    return redirect('/administration/peripheral_blocks')
+    return redirect('/administration/empresas')
 
 @login_required(login_url="/users/access")
-def peripheral_block_gallery(request, peripheral_block_id):
+def empresa_gallery(request, empresa_id):
     """
-    Function to manage a gallery of an specific peripheral block
+    Function to manage a gallery of an specific empresa
     """
-    peripheral_block = get_object_or_404(PeripheralBlock, id=peripheral_block_id)
+    empresa = get_object_or_404(Empresa, id=empresa_id)
     context = {}
     if request.method == 'POST':
         form = ImageForm(request.POST, request.FILES)
         if form.is_valid():
             image_gallery = form.save(commit=False)
-            image_gallery.peripheral_block = peripheral_block
+            image_gallery.empresa = empresa
             image_gallery.save()
             messages.success(request, "Image successfully added to gallery")
             log(request, "AdminsLog", {"action_type":"create", "status":200, "details":f"Created '{image_gallery.title}'", "item":"Image"})
-            return redirect(reverse('administration_peripheral_block_gallery', kwargs={'peripheral_block_id': peripheral_block_id}))
+            return redirect(reverse('administration_empresa_gallery', kwargs={'empresa_id': empresa_id}))
         else:
             log(request, "AdminsLog", {"action_type":"create", "status":400, "details":f"Invalid form", "item":"Image"})
         messages.error(request, form.errors)
@@ -649,28 +649,28 @@ def peripheral_block_gallery(request, peripheral_block_id):
     # Attach fields configuration to the context
     context['form'] = form
     context['config'] = get_object_or_404(GeneralConfig, id=1)
-    context['peripheral_block'] = peripheral_block
+    context['empresa'] = empresa
 
-    peripheral_block = get_object_or_404(PeripheralBlock, id=peripheral_block_id)
-    context['images'] = peripheral_block.images.all()
+    empresa = get_object_or_404(Empresa, id=empresa_id)
+    context['images'] = empresa.images.all()
 
     log(request, "AdminsLog", {"action_type":"read", "status":200, "details":f"Creating form", "item":"Image"})
-    return render (request, "administration/peripheral_block/peripheral_block_gallery.html", context)
+    return render (request, "administration/empresa/empresa_gallery.html", context)
 
 
 @login_required(login_url="/users/access")
-def peripheral_block_image_delete(request, image_id):
+def empresa_image_delete(request, image_id):
     """
-    Function to delete an existing peripheral block
+    Function to delete an existing empresa image
     """
     context = {}
     context['config'] = get_object_or_404(GeneralConfig, id=1)
     image = get_object_or_404(Image, id=image_id)
-    peripheral_block = get_object_or_404(PeripheralBlock, id=image.peripheral_block.id)
+    empresa = get_object_or_404(Empresa, id=image.empresa.id)
     log(request, "AdminsLog", {"action_type":"delete", "status":200, "details":f"Deleted '{image.title}'", "item":"Image"})
     image.delete()
-    messages.success(request, f"Peripheral block image '{image.title}' successfully deleted")
-    return redirect(reverse('administration_peripheral_block_gallery', kwargs={'peripheral_block_id': peripheral_block.id}))
+    messages.success(request, f"Empresa image '{image.title}' successfully deleted")
+    return redirect(reverse('administration_empresa_gallery', kwargs={'empresa_id': empresa.id}))
 
 ######################################################################################################################################################
 # CRUD+ADMIN USERS
