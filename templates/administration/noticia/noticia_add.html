@@ -1,0 +1,168 @@
+{% extends '../../base/base.html' %}
+{% block content %}
+
+<!-- page content -->
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Noticias</h3>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="row" style="display: block;">
+
+            <div class="clearfix"></div>
+
+            <div class="col-md-12 col-sm-12  ">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Add new noticia</h2>
+
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li>
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div class="x_content">
+
+                        <form action="" role="form" method="POST" class="text-start">
+                            {% csrf_token %}
+
+                            <div class="tab-content" id="myTabContent">
+
+                                <div class="tab-pane fade show active" id="general" role="tabpanel"
+                                    aria-labelledby="general-tab">
+                                    <div class="seccion bg-gray-100 border-radius-lg">
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12 title-in-tag">
+                                                <div class="font-weight-bold">Title</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <p class="p-class">{{ form.title }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12 title-in-tag">
+                                                <div class="font-weight-bold">Summary</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <p class="p-class">{{ form.summary }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12 title-in-tag">
+                                                <div class="font-weight-bold">Content</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <p class="p-class">{{ form.content }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12 title-in-tag">
+                                                <div class="font-weight-bold">Empresa</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <p class="p-class">{{ form.empresa }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12 title-in-tag">
+                                                <div class="font-weight-bold">Published Date</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <p class="p-class">{{ form.published_date }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12 title-in-tag">
+                                                <div class="font-weight-bold">Source Information</div>
+                                            </div>
+                                            <div class="col-md-6 col-sm-12">
+                                                <small class="form-text text-muted">Source name (Bloomberg, Reuters, etc.)</small>
+                                                <p class="p-class">{{ form.source }}</p>
+                                            </div>
+                                            <div class="col-md-6 col-sm-12">
+                                                <small class="form-text text-muted">Source URL</small>
+                                                <p class="p-class">{{ form.source_url }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12 title-in-tag">
+                                                <div class="font-weight-bold">Author</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <p class="p-class">{{ form.author }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12 title-in-tag">
+                                                <div class="font-weight-bold">Image URL</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <p class="p-class">{{ form.image_url }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-12 col-sm-12 title-in-tag">
+                                                <div class="font-weight-bold">Tags</div>
+                                            </div>
+                                            <div class="col-md-12 col-sm-12">
+                                                <small class="form-text text-muted">Comma separated tags</small>
+                                                <p class="p-class">{{ form.tags }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="campo-agrupado input-group input-group-outline">
+                                            <div class="col-md-6 col-sm-12">
+                                                <div class="font-weight-bold">Premium Content</div>
+                                                <small class="form-text text-muted">Requires subscription to view</small>
+                                                <div class="input-group input-group-outline mb-3">
+                                                    <p class="p-class">{{ form.is_premium }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-sm-12">
+                                                <div class="font-weight-bold">Published</div>
+                                                <small class="form-text text-muted">Is visible to users</small>
+                                                <div class="input-group input-group-outline mb-3">
+                                                    <p class="p-class">{{ form.public }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">
+                                    Save <i class="fa-solid fa-check"></i>
+                                </button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /page content -->
+
+{% endblock %}

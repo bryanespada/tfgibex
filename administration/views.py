@@ -3,12 +3,12 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.utils import timezone
 from datetime import date, timedelta
-from appmodels.models import GeneralConfig, Mercado, Bolsa, Empresa, Subscription, Product, Blog, Image
+from appmodels.models import GeneralConfig, Mercado, Bolsa, Empresa, Subscription, Product, Blog, Image, Noticia
 from users.models import CustomUser
 from logs.models import UserLog, AdminsLog, SubscriptionLog, TrackingLog
 from users.forms import CustomUserCreationByAdminForm, CustomUserEditByAdminForm
 from django.contrib import messages
-from appmodels.forms import GeneralConfigForm, MercadoForm, BolsaForm, EmpresaForm, SubscriptionForm, ProductForm, BlogForm, ProductAssignForm, ImageForm
+from appmodels.forms import GeneralConfigForm, MercadoForm, BolsaForm, EmpresaForm, SubscriptionForm, ProductForm, BlogForm, ProductAssignForm, ImageForm, NoticiaForm
 from django.contrib.auth.models import Group
 from logs.views import log
 from django.db.models import Count
@@ -1194,3 +1194,103 @@ def blog_delete(request, blog_id):
     post.delete()
     messages.success(request, f"Post #{post_id} successfully deleted")
     return redirect('/administration/posts')
+
+
+######################################################################################################################################################
+# CRUD NOTICIAS
+######################################################################################################################################################
+
+
+@login_required(login_url="/users/access")
+def noticias(request):
+    """
+    Function to get all noticias
+    """
+    context = {}
+    context['config'] = get_object_or_404(GeneralConfig, id=1)
+    context['noticias'] = Noticia.objects.all().order_by('-published_date')
+    log(request, "AdminsLog", {"action_type":"read", "status":200, "details":"Listing", "item":"Noticia"})
+    return render (request, "administration/noticia/noticias.html", context)
+
+@login_required(login_url="/users/access")
+def noticia_add(request):
+    """
+    Function to add a new noticia
+    """
+    context = {}
+    if request.method == 'POST':
+        form = NoticiaForm(request.POST)
+        if form.is_valid():
+            noticia = form.save(commit=False)
+            noticia.save()
+            messages.success(request, "Noticia successfully added")
+            log(request, "AdminsLog", {"action_type":"create", "status":200, "details":f"Created '{noticia.title}'", "item":"Noticia"})
+            return redirect('/administration/noticias')
+        else:
+            messages.error(request, "Error adding noticia. Please check the form.")
+            log(request, "AdminsLog", {"action_type":"create", "status":400, "details":f"Invalid form", "item":"Noticia"})
+
+    # Initialize the Form object
+    form = NoticiaForm()
+
+    # Setup form fields
+    form.fields['title'].widget.attrs.update({'class': 'form-control'})
+    form.fields['source'].widget.attrs.update({'class': 'form-control'})
+    form.fields['source_url'].widget.attrs.update({'class': 'form-control'})
+    form.fields['author'].widget.attrs.update({'class': 'form-control'})
+    form.fields['image_url'].widget.attrs.update({'class': 'form-control'})
+    form.fields['empresa'].widget.attrs.update({'class': 'form-control'})
+
+    # Attach fields configuration to the context
+    context['form'] = form
+    context['config'] = get_object_or_404(GeneralConfig, id=1)
+    log(request, "AdminsLog", {"action_type":"read", "status":200, "details":f"Creating form", "item":"Noticia"})
+    return render (request, "administration/noticia/noticia_add.html", context)
+
+@login_required(login_url="/users/access")
+def noticia_edit(request, noticia_id):
+    """
+    Function to edit an existing noticia
+    """
+    noticia = get_object_or_404(Noticia, id=noticia_id)
+    context = {}
+
+    if request.method == 'POST':
+        form = NoticiaForm(request.POST, instance=noticia)
+        if form.is_valid():
+            updated_noticia = form.save()
+            messages.success(request, "Noticia successfully updated")
+            log(request, "AdminsLog", {"action_type":"update", "status":200, "details":f"Updated '{updated_noticia.title}'", "item":"Noticia"})
+            return redirect('/administration/noticias')
+        else:
+            messages.error(request, "Error updating noticia. Please check the form.")
+            log(request, "AdminsLog", {"action_type":"update", "status":400, "details":f"Invalid form updating '{noticia.title}'", "item":"Noticia"})
+
+    # Initialize the Form object with the existing noticia data
+    form = NoticiaForm(instance=noticia)
+
+    # Setup form fields
+    form.fields['title'].widget.attrs.update({'class': 'form-control'})
+    form.fields['source'].widget.attrs.update({'class': 'form-control'})
+    form.fields['source_url'].widget.attrs.update({'class': 'form-control'})
+    form.fields['author'].widget.attrs.update({'class': 'form-control'})
+    form.fields['image_url'].widget.attrs.update({'class': 'form-control'})
+    form.fields['empresa'].widget.attrs.update({'class': 'form-control'})
+
+    # Attach fields configuration to the context
+    context['form'] = form
+    context['noticia'] = noticia
+    context['config'] = get_object_or_404(GeneralConfig, id=1)
+    log(request, "AdminsLog", {"action_type":"read", "status":200, "details":f"Update form of '{noticia.title}'", "item":"Noticia"})
+    return render (request, "administration/noticia/noticia_edit.html", context)
+
+@login_required(login_url="/users/access")
+def noticia_delete(request, noticia_id):
+    """
+    Function to delete an existing noticia
+    """
+    noticia = get_object_or_404(Noticia, id=noticia_id)
+    log(request, "AdminsLog", {"action_type":"delete", "status":200, "details":f"Deleted '{noticia.title}'", "item":"Noticia"})
+    noticia.delete()
+    messages.success(request, "Noticia successfully deleted")
+    return redirect('/administration/noticias')

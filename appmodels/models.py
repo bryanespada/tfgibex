@@ -232,3 +232,47 @@ class Blog(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Noticia(models.Model):
+    """
+    Model for financial news articles related to companies
+    """
+
+    # Basic fields
+    title = models.CharField(max_length=500, blank=False, null=False)
+    summary = models.TextField(max_length=1000, blank=True, null=True)
+    content = models.TextField(blank=True, null=True)
+
+    # Metadata
+    published_date = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    # Source information
+    source = models.CharField(max_length=200, blank=True, null=True)  # Bloomberg, Reuters, etc.
+    source_url = models.URLField(max_length=500, blank=True, null=True)
+    author = models.CharField(max_length=200, blank=True, null=True)
+
+    # Media
+    image_url = models.URLField(max_length=500, blank=True, null=True)
+
+    # Classification
+    empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='noticias')
+    tags = models.CharField(max_length=500, blank=True, null=True)  # Comma separated tags
+
+    # Access control
+    is_premium = models.BooleanField(default=False)  # Requires subscription to view
+    public = models.BooleanField(default=True)  # Is visible
+
+    # API tracking
+    api_id = models.CharField(max_length=200, blank=True, null=True, unique=True)  # ID from external API
+    api_source = models.CharField(max_length=100, blank=True, null=True)  # Which API it came from
+
+    class Meta:
+        ordering = ['-published_date']
+        verbose_name = 'Noticia'
+        verbose_name_plural = 'Noticias'
+
+    def __str__(self):
+        return f"{self.title} - {self.empresa.title}"

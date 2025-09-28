@@ -1,0 +1,96 @@
+{% extends '../../base/base.html' %}
+{% block content %}
+{% load custom_tags %}
+
+<!-- page content -->
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Noticias</h3>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="row" style="display: block;">
+
+            <div class="clearfix"></div>
+
+            <div class="col-md-12 col-sm-12  ">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Showing all noticias</h2>
+
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li>
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div class="x_content">
+                        <div class="table-responsive">
+                            <table class="table table-striped jambo_table bulk_action">
+                                <thead>
+                                    <tr class="headings">
+                                        <th class="column-title">#</th>
+                                        <th class="column-title">Title</th>
+                                        <th class="column-title">Empresa</th>
+                                        <th class="column-title">Source</th>
+                                        <th class="column-title">Published Date</th>
+                                        <th class="column-title">Premium</th>
+                                        <th class="column-title">Public</th>
+                                        <th class="column-title no-link last" style="text-align: right !important;"><span class="nobr">Actions</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {% for noticia in noticias %}
+                                        <tr class="even pointer">
+                                            <td>{{ noticia.pk }}</td>
+                                            <td>{{ noticia.title|truncatewords:10 }}</td>
+                                            <td>{{ noticia.empresa.title }}</td>
+                                            <td>{{ noticia.source|default:"—" }}</td>
+                                            <td>{{ noticia.published_date|date:"Y-m-d H:i" }}</td>
+                                            <td>
+                                                {% if noticia.is_premium %}
+                                                    <i class="fa-solid fa-crown" style="color:{{config.app_primary}}" title="Premium"></i>
+                                                {% else %}
+                                                    <i class="fa-solid fa-users" style="color:{{config.app_success}}" title="Free"></i>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if noticia.public %}
+                                                    <i class="fa-solid fa-circle-check" style="color:{{config.app_success}}"></i>
+                                                {% else %}
+                                                    <i class="fa-solid fa-circle-xmark" style="color:{{config.app_danger}}"></i>
+                                                {% endif %}
+                                            </td>
+                                            <td class="last" style="text-align: right !important;">
+                                                <a href="{% url 'administration_noticia_edit' noticia_id=noticia.id %}">
+                                                    <i class="fa-regular fa-pen-to-square" title="Edit"></i>
+                                                </a>
+
+                                                <a href="{% url 'administration_noticia_delete' noticia_id=noticia.id %}" onclick="return confirm('Are you sure?')">
+                                                    <i class="fa-solid fa-trash" title="Delete"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /page content -->
+
+{% endblock %}

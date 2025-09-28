@@ -50,5 +50,9 @@ urlpatterns = [
     path("logs/", views.logs, name="administration_logs"),
     path('get_log_details/<str:log_type>/<int:log_id>', views.get_log_details, name='administration_get_log_details'),
 
+    path("noticias/", views.noticias, name="administration_noticias"),
+    path("noticia_add/", views.noticia_add, name="administration_noticia_add"),
+    path("noticia_edit/<int:noticia_id>/", views.noticia_edit, name="administration_noticia_edit"),
+    path("noticia_delete/<int:noticia_id>/", views.noticia_delete, name="administration_noticia_delete"),
 
 ]

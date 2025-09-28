@@ -1,5 +1,5 @@
 from django import forms
-from .models import GeneralConfig, Mercado, Bolsa, Empresa, Subscription, Product, Blog, Image
+from .models import GeneralConfig, Mercado, Bolsa, Empresa, Subscription, Product, Blog, Image, Noticia
 from users.models import CustomUser
 
 class GeneralConfigForm(forms.ModelForm):
@@ -108,3 +108,20 @@ class BlogForm(forms.ModelForm):
 class ProductAssignForm(forms.Form):
     user = forms.ModelChoiceField(queryset=CustomUser.objects.all(), empty_label="Choose user")
     product = forms.ModelChoiceField(queryset=Product.objects.all(), empty_label="Choose product")
+
+
+class NoticiaForm(forms.ModelForm):
+
+    public = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={'class': ''}))
+    is_premium = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={'class': ''}))
+    summary = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'cols': '40', 'rows': '3'}))
+    content = forms.CharField(required=False, widget=forms.Textarea(attrs={'class': 'form-control', 'cols': '40', 'rows': '10'}))
+    tags = forms.CharField(required=False, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'earnings, merger, IPO'}))
+
+    class Meta:
+        model = Noticia
+        fields = ['title', 'summary', 'content', 'published_date', 'source', 'source_url', 'author',
+                  'image_url', 'empresa', 'tags', 'is_premium', 'public']
+        widgets = {
+            'published_date': forms.DateTimeInput(attrs={'type': 'datetime-local', 'class': 'form-control'})
+        }

@@ -21,6 +21,7 @@
                         <i class="fa fa-sort-desc"></i>
                         {{total_users_last_week}}
                     </i>
+                    {% endif %}
                     From last Week
             </div>
 
@@ -38,8 +39,8 @@
                         <i class="fa fa-sort-desc"></i>
                         {{total_admins_last_week}}
                     </i>
-                    From last Week
-                    <i class="green"><i class="fa fa-sort-asc"></i>{{total_admins_last_week}} </i> From last Week</span>
+                    {% endif %}
+                    From last Week</span>
             </div>
 
             <div class="col-md-2 col-sm-4  tile_stats_count">
@@ -56,6 +57,7 @@
                         <i class="fa fa-sort-desc"></i>
                         {{total_admin_increasement |stringformat:"d"}}%
                     </i>
+                    {% endif %}
                     Admins
                 </span>
             </div>
@@ -74,6 +76,7 @@
                         <i class="fa fa-sort-desc"></i>
                         {{total_active_subscriptions_last_week}}
                     </i>
+                    {% endif %}
                     From last week
                 </span>
             </div>
@@ -288,6 +291,7 @@
                         </script>
                         {% else %}
                             <div id="admin_chart_1_2" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">No data</div>
+                        {% endif %}
                 </div>
 
 
@@ -374,6 +378,7 @@
                             </script>
                         {% else %}
                             <div id="admin_chart_2_1" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">No data</div>
+                        {% endif %}
                     </div>
 
                 </div>
@@ -452,6 +457,7 @@
                             </script>
                         {% else %}
                             <div id="admin_chart_2_2" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">No data</div>
+                        {% endif %}
                     </div>
 
 
@@ -530,6 +536,7 @@
                             </script>
                         {% else %}
                             <div id="admin_chart_2_3" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">No data</div>
+                        {% endif %}
                     </div>
 
                 </div>
@@ -607,6 +614,7 @@
                             </script>
                         {% else %}
                             <div id="admin_chart_3_1" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">No data</div>
+                        {% endif %}
                     </div>
 
 
@@ -679,6 +687,7 @@
                         </script>
                         {% else %}
                             <div id="admin_chart_3_2" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">No data</div>
+                        {% endif %}
                     </div>
 
 
@@ -751,6 +760,7 @@
                             </script>
                         {% else %}
                             <div id="admin_chart_3_3" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">No data</div>
+                        {% endif %}
                     </div>
 
 
