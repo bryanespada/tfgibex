@@ -20,26 +20,10 @@
 
                 <div class="x_panel">
 
-
-                        {% if messages %}
-                            <script>
-                            function hide_message(){
-                                const message_label = document.querySelector("#message");
-                                message_label.style.display = "none";
-                            }
-                            </script>
-                            {% for message in messages %}
-                                <p id="message" {% if message.tags %} class="messages {{ message.tags }}"{% endif %} style="text-align: -webkit-center;color:{{config.app_color_1}};font-weight:800;margin-top:30px; margin-bottom:9px;">{{ message }} <i class="fa-solid fa-circle-xmark" onclick="hide_message()"></i></p>
-                            {% endfor %}
                         {% endif %}
-
-
-
 
                     <div class="x_content">
                         <div class="table-responsive">
-
-
 
                             <div class="row" style="display: inline-block;width:100%;">
                                 <div class="tile_count">
@@ -61,12 +45,6 @@
                                 </div>
                             </div>
                         </div>
-
-
-
-
-
-
 
                         <form action="" role="form" method="POST" class="text-start" enctype="multipart/form-data">
                             {% csrf_token %}
@@ -134,13 +112,6 @@
                                 </button>
                             </div>
                         </form>
-
-
-
-
-
-
-
 
                     </div>
                 </div>
