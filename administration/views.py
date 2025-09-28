@@ -62,10 +62,10 @@ def dashboard(request):
     context['total_active_subscriptions_last_week'] = Subscription.objects.filter(due_date__gte=timezone.now(), payment_datetime__gte=start_of_last_week).count()
 
     # Get the number of empresas
-    context['total_peripheral_blocks'] = Empresa.objects.all().count()
+    context['total_empresas'] = Empresa.objects.all().count()
 
     # Get the number of empresas in a free mode
-    context['total_peripheral_blocks_free'] = Empresa.objects.filter(public=True).count()
+    context['total_empresas_free'] = Empresa.objects.filter(public=True).count()
 
     # Get the number of products
     context['total_products'] = Product.objects.all().count()
@@ -165,7 +165,7 @@ def dashboard(request):
     ##########################################################################################
     # Chart R2_C1: Top products
 
-    # Get the top 8 mos viewed peripheral blocks
+    # Get the top 8 most viewed products by subscriptions
     top_products = SubscriptionLog.objects.exclude(product=None).values('product__title').annotate(block_count=Count('product')).order_by('-block_count')[:8]
 
     context['top_products'] = {}
@@ -178,7 +178,7 @@ def dashboard(request):
     ##########################################################################################
     # Chart R2_C2: Top blocks
 
-    # Get the top 8 mos viewed empresas
+    # Get the top 8 most viewed empresas
     top_blocks = TrackingLog.objects.exclude(empresa=None).values('empresa__title').annotate(block_count=Count('empresa')).order_by('-block_count')[:8]
 
     context['top_blocks'] = {}
