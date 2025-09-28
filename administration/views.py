@@ -545,8 +545,8 @@ def empresa_add(request):
 
     # Initialize empty the second select which depends on the first option chosen
     bolsas = Bolsa.objects.none()
-    form.fields['bolsa'].queryset = bolsas
-    form.fields['bolsa'].widget.attrs.update({'class': 'form-control'})
+    form.fields['bolsas'].queryset = bolsas
+    form.fields['bolsas'].widget.attrs.update({'class': 'form-control'})
 
     # Rest of empty fields to fill
     form.fields['title'].widget.attrs.update({'class': 'form-control'})
@@ -584,14 +584,20 @@ def empresa_edit(request, empresa_id):
     # Get every mercados available
     mercados = Mercado.objects.all()
     form.fields['mercado'].queryset = mercados
-    form.fields['mercado'].initial = empresa.bolsa.mercado.id
+    # Get the first mercado from the first bolsa if exists
+    first_bolsa = empresa.bolsas.first()
+    if first_bolsa:
+        form.fields['mercado'].initial = first_bolsa.mercado.id
+        # Initialize with bolsas from the first mercado
+        bolsas = Bolsa.objects.filter(mercado=first_bolsa.mercado.id)
+    else:
+        bolsas = Bolsa.objects.all()
     form.fields['mercado'].widget.attrs.update({'class': 'form-control'})
 
-    # Initialize empty the second select which depends on the first option chosen
-    bolsas = Bolsa.objects.filter(mercado=empresa.bolsa.mercado.id)
-    form.fields['bolsa'].queryset = bolsas
-    form.fields['bolsa'].initial = empresa.bolsa.id
-    form.fields['bolsa'].widget.attrs.update({'class': 'form-control'})
+    # Setup the bolsas field
+    form.fields['bolsas'].queryset = bolsas
+    form.fields['bolsas'].initial = empresa.bolsas.all()
+    form.fields['bolsas'].widget.attrs.update({'class': 'form-control'})
 
     # Rest of empty fields to fill
     form.fields['title'].widget.attrs.update({'class': 'form-control'})

@@ -30,13 +30,17 @@ class BolsaForm(forms.ModelForm):
 class EmpresaForm(forms.ModelForm):
 
     public = forms.BooleanField( required=False, widget=forms.CheckboxInput(attrs={'class': ''}), )
-    mercado = forms.ModelChoiceField( queryset = Mercado.objects.all(), required=True )
-    bolsa = forms.ModelChoiceField( queryset = Bolsa.objects.all(), required=True )
+    mercado = forms.ModelChoiceField( queryset = Mercado.objects.all(), required=False )  # Not required, only for filtering
+    bolsas = forms.ModelMultipleChoiceField(
+        queryset = Bolsa.objects.all(),
+        required=True,
+        widget=forms.SelectMultiple(attrs={'class': 'form-control', 'size': '8'})
+    )
     description = forms.CharField( widget=forms.Textarea(attrs={'class': 'form-control', 'cols': '40', 'rows': '5'}) )
 
     class Meta:
         model = Empresa
-        fields = ['title', 'description', 'video_link', 'public', 'bolsa']
+        fields = ['title', 'description', 'video_link', 'public', 'bolsas']
 
 
 class ImageForm(forms.ModelForm):
