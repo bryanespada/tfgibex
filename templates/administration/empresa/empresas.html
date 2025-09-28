@@ -21,18 +21,6 @@
                     <div class="x_title">
                         <h2>Mostrando todas las empresas</h2>
 
-                        {% if messages %}
-                            <script>
-                            function hide_message(){
-                                const message_label = document.querySelector("#message");
-                                message_label.style.display = "none";
-                            }
-                            </script>
-                            {% for message in messages %}
-                                <p id="message" {% if message.tags %} class="messages {{ message.tags }}"{% endif %} style="text-align: -webkit-center;color:{{config.app_color_1}};font-weight:800;margin-top:30px; margin-bottom:9px;">{{ message }} <i class="fa-solid fa-circle-xmark" onclick="hide_message()"></i></p>
-                            {% endfor %}
-                        {% endif %}
-
                         <ul class="nav navbar-right panel_toolbox">
                             <li>
                                 <a class="collapse-link">
@@ -71,8 +59,8 @@
                                         <tr class="even pointer">
                                             <td>#{{empresa.pk}} </td>
                                             <td>{{empresa.title}} </td>
-                                            <td>{{empresa.bolsa.title}}</td>
-                                            <td>{{empresa.bolsa.mercado.title}}</td>
+                                            <td>{% for bolsa in empresa.bolsas.all %}{{ bolsa.title }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+                                            <td>{{ empresa.mercado.title }}</td>
                                             <td>{% if empresa.public %} <i class="fa-solid fa-lock-open" style="color: {{config.app_danger}}"></i> {% else %} <i class="fa-solid fa-lock" style="color: {{config.app_success}}"></i> {% endif %}</td>
                                             <td class="last" style="text-align: right !important;"><a href="#">
                                                 <a href="{% url 'administration_empresa_gallery' empresa_id=empresa.id %}"><i class="fa-regular fa-images"></i></a>

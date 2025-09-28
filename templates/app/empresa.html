@@ -20,7 +20,7 @@
                         <div class="inbox-body">
                             <div class="mail_heading row">
                                 <div class="col-md-12">
-                                    <h4> {{ empresa.bolsa }}</h4>
+                                    <h4>{% for bolsa in empresa.bolsas.all %}{{ bolsa }}{% if not forloop.last %}, {% endif %}{% endfor %}</h4>
                                 </div>
                             </div>
                             <div class="view-mail">

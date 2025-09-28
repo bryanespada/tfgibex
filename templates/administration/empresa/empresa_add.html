@@ -21,20 +21,6 @@
                     <div class="x_title">
                         <h2>Añadir nueva empresa</h2>
 
-                        {% if messages %}
-                        <script>
-                            function hide_message() {
-                                const message_label = document.querySelector("#message");
-                                message_label.style.display = "none";
-                            }
-                        </script>
-                        {% for message in messages %}
-                        <p id="message" {% if message.tags %} class="messages {{ message.tags }}" {% endif %}
-                            style="text-align: -webkit-center;color:{{config.app_color_1}};font-weight:800;margin-top:30px; margin-bottom:9px;">
-                            {{ message }} <i class="fa-solid fa-circle-xmark" onclick="hide_message()"></i></p>
-                        {% endfor %}
-                        {% endif %}
-
                         <ul class="nav navbar-right panel_toolbox">
                             <li>
                                 <a class="collapse-link">
@@ -71,10 +57,11 @@
 
                                         <div class="campo-agrupado input-group input-group-outline">
                                             <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Bolsa</div>
+                                                <div class="font-weight-bold">Bolsas</div>
                                             </div>
                                             <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.bolsa }}</p>
+                                                <small class="form-text text-muted">Mantén presionado Ctrl (o Cmd en Mac) para seleccionar múltiples bolsas</small>
+                                                <p class="p-class">{{ form.bolsas }}</p>
                                             </div>
                                         </div>
 
@@ -149,22 +136,52 @@
                                             type: 'GET',
                                             dataType: 'json',
                                             success: function(data) {
-                                                // Drop every presetted option
-                                                $('#id_bolsa').empty();
+                                                // Get currently selected bolsas
+                                                var selectedBolsas = $('#id_bolsas').val() || [];
 
-                                                // Add each bolsa gotten from de API
+                                                // Clear the select options
+                                                $('#id_bolsas').empty();
+
+                                                // Add each bolsa as option
                                                 $.each(data, function(index, bolsa) {
-                                                    $('#id_bolsa').append($('<option>', {
+                                                    var option = $('<option>', {
                                                         value: bolsa.id,
                                                         text: bolsa.title
-                                                    }));
+                                                    });
+
+                                                    // Maintain selection if it was previously selected
+                                                    if (selectedBolsas.includes(bolsa.id.toString())) {
+                                                        option.prop('selected', true);
+                                                    }
+
+                                                    $('#id_bolsas').append(option);
                                                 });
                                             }
                                         });
                                     } else {
-                                        // If there are no mercado selected, clear the second select
-                                        $('#id_bolsa').empty();
+                                        // If there is no mercado selected, clear the select
+                                        $('#id_bolsas').empty();
+                                        $('#id_bolsas').append('<option value="">---------</option>');
                                     }
+                                });
+
+                                // Trigger change on page load to initialize the bolsas select
+                                if (!$('#id_mercado').val()) {
+                                    $('#id_bolsas').empty();
+                                    $('#id_bolsas').append('<option value="">Selecciona primero un mercado</option>');
+                                }
+
+                                // Validate form on submit
+                                $('form').submit(function() {
+                                    if (!$('#id_mercado').val()) {
+                                        alert('Por favor selecciona un mercado');
+                                        return false;
+                                    }
+                                    if (!$('#id_bolsas').val() || $('#id_bolsas').val().length === 0) {
+                                        alert('Por favor selecciona al menos una bolsa');
+                                        return false;
+                                    }
+                                    return true;
                                 });
                             });
                             </script>
