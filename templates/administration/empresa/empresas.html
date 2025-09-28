@@ -72,7 +72,7 @@
                                             <td>#{{empresa.pk}} </td>
                                             <td>{{empresa.title}} </td>
                                             <td>{% for bolsa in empresa.bolsas.all %}{{ bolsa.title }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
-                                            <td>{% for bolsa in empresa.bolsas.all %}{{ bolsa.mercado.title }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+                                            <td>{{ empresa.mercado.title }}</td>
                                             <td>{% if empresa.public %} <i class="fa-solid fa-lock-open" style="color: {{config.app_danger}}"></i> {% else %} <i class="fa-solid fa-lock" style="color: {{config.app_success}}"></i> {% endif %}</td>
                                             <td class="last" style="text-align: right !important;"><a href="#">
                                                 <a href="{% url 'administration_empresa_gallery' empresa_id=empresa.id %}"><i class="fa-regular fa-images"></i></a>

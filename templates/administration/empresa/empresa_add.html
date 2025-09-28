@@ -184,6 +184,19 @@
                                     $('#id_bolsas').empty();
                                     $('#id_bolsas').append('<option value="">Selecciona primero un mercado</option>');
                                 }
+
+                                // Validate form on submit
+                                $('form').submit(function() {
+                                    if (!$('#id_mercado').val()) {
+                                        alert('Por favor selecciona un mercado');
+                                        return false;
+                                    }
+                                    if (!$('#id_bolsas').val() || $('#id_bolsas').val().length === 0) {
+                                        alert('Por favor selecciona al menos una bolsa');
+                                        return false;
+                                    }
+                                    return true;
+                                });
                             });
                             </script>
 

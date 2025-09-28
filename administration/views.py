@@ -527,25 +527,23 @@ def empresa_add(request):
     if request.method == 'POST':
         form = EmpresaForm(request.POST, request.FILES)
         if form.is_valid():
-            empresa = form.save(commit=False)
-            empresa.save()
+            # Save the empresa and its ManyToMany relationships
+            empresa = form.save()
             messages.success(request, "Empresa successfully added")
             log(request, "AdminsLog", {"action_type":"create", "status":200, "details":f"Created '{empresa.title}'", "item":"Empresa"})
             return redirect('/administration/empresas')
         else:
+            messages.error(request, "Error adding empresa. Please check the form.")
             log(request, "AdminsLog", {"action_type":"create", "status":400, "details":f"Invalid form", "item":"Empresa"})
 
     # Initialize the Form object
     form = EmpresaForm()
 
-    # Get every mercados available
-    mercados = Mercado.objects.all()
-    form.fields['mercado'].queryset = mercados
+    # Setup mercado field
     form.fields['mercado'].widget.attrs.update({'class': 'form-control'})
 
-    # Initialize empty the second select which depends on the first option chosen
-    bolsas = Bolsa.objects.none()
-    form.fields['bolsas'].queryset = bolsas
+    # Initialize empty the bolsas select which depends on mercado selection
+    form.fields['bolsas'].queryset = Bolsa.objects.none()
     form.fields['bolsas'].widget.attrs.update({'class': 'form-control'})
 
     # Rest of empty fields to fill
@@ -568,35 +566,32 @@ def empresa_edit(request, empresa_id):
     """
     empresa = get_object_or_404(Empresa, id=empresa_id)
     context = {}
+
     if request.method == 'POST':
         form = EmpresaForm(request.POST, request.FILES, instance=empresa)
         if form.is_valid():
-            empresa.save()
+            # Save the form
+            updated_empresa = form.save()
             messages.success(request, "Empresa successfully updated")
-            log(request, "AdminsLog", {"action_type":"update", "status":200, "details":f"Updated '{empresa.title}'", "item":"Empresa"})
+            log(request, "AdminsLog", {"action_type":"update", "status":200, "details":f"Updated '{updated_empresa.title}'", "item":"Empresa"})
             return redirect('/administration/empresas')
         else:
+            messages.error(request, "Error updating empresa. Please check the form.")
             log(request, "AdminsLog", {"action_type":"update", "status":400, "details":f"Invalid form updating '{empresa.title}'", "item":"Empresa"})
 
-    # Initialize the Form object
+    # Initialize the Form object with the existing empresa data
+    # This will automatically preselect mercado and bolsas
     form = EmpresaForm(instance=empresa)
 
-    # Get every mercados available
-    mercados = Mercado.objects.all()
-    form.fields['mercado'].queryset = mercados
-    # Get the first mercado from the first bolsa if exists
-    first_bolsa = empresa.bolsas.first()
-    if first_bolsa:
-        form.fields['mercado'].initial = first_bolsa.mercado.id
-        # Initialize with bolsas from the first mercado
-        bolsas = Bolsa.objects.filter(mercado=first_bolsa.mercado.id)
-    else:
-        bolsas = Bolsa.objects.all()
+    # Setup mercado field
     form.fields['mercado'].widget.attrs.update({'class': 'form-control'})
 
-    # Setup the bolsas field
-    form.fields['bolsas'].queryset = bolsas
-    form.fields['bolsas'].initial = empresa.bolsas.all()
+    # Setup bolsas field to show only bolsas from the empresa's mercado
+    if empresa.mercado:
+        form.fields['bolsas'].queryset = Bolsa.objects.filter(mercado=empresa.mercado)
+    else:
+        form.fields['bolsas'].queryset = Bolsa.objects.all()
+
     form.fields['bolsas'].widget.attrs.update({'class': 'form-control'})
 
     # Rest of empty fields to fill
@@ -607,6 +602,7 @@ def empresa_edit(request, empresa_id):
 
     # Attach fields configuration to the context
     context['form'] = form
+    context['empresa'] = empresa
 
     context['config'] = get_object_or_404(GeneralConfig, id=1)
     log(request, "AdminsLog", {"action_type":"read", "status":200, "details":f"Update form of '{empresa.title}'", "item":"Empresa"})

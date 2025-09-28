@@ -143,6 +143,9 @@
 
                         <script>
                             $(document).ready(function() {
+                                // Store the initially selected bolsas (from the server)
+                                var initialBolsas = $('#id_bolsas').val() || [];
+
                                 $('#id_mercado').change(function() {
                                     var id_mercado = $(this).val();  // Get mercado id
                                     if (id_mercado) {
@@ -151,8 +154,11 @@
                                             type: 'GET',
                                             dataType: 'json',
                                             success: function(data) {
-                                                // Get currently selected bolsas
+                                                // Get currently selected bolsas before clearing
                                                 var selectedBolsas = $('#id_bolsas').val() || [];
+
+                                                // Convert to strings for comparison
+                                                selectedBolsas = selectedBolsas.map(function(id) { return id.toString(); });
 
                                                 // Clear the select options
                                                 $('#id_bolsas').empty();
@@ -164,20 +170,39 @@
                                                         text: bolsa.title
                                                     });
 
-                                                    // Maintain selection if it was previously selected
+                                                    // Check if this bolsa was selected
                                                     if (selectedBolsas.includes(bolsa.id.toString())) {
                                                         option.prop('selected', true);
                                                     }
 
                                                     $('#id_bolsas').append(option);
                                                 });
+
+                                                // If this is the first load (initialBolsas exists), restore the initial selection
+                                                if (initialBolsas.length > 0) {
+                                                    $('#id_bolsas').val(initialBolsas);
+                                                    initialBolsas = []; // Clear after first use
+                                                }
                                             }
                                         });
                                     } else {
                                         // If there is no mercado selected, clear the select
                                         $('#id_bolsas').empty();
-                                        $('#id_bolsas').append('<option value="">---------</option>');
+                                        $('#id_bolsas').append('<option value="">Selecciona un mercado primero</option>');
                                     }
+                                });
+
+                                // Validate form on submit
+                                $('form').submit(function() {
+                                    if (!$('#id_mercado').val()) {
+                                        alert('Por favor selecciona un mercado');
+                                        return false;
+                                    }
+                                    if (!$('#id_bolsas').val() || $('#id_bolsas').val().length === 0) {
+                                        alert('Por favor selecciona al menos una bolsa');
+                                        return false;
+                                    }
+                                    return true;
                                 });
                             });
                             </script>

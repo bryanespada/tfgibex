@@ -5,7 +5,7 @@ function redirect(object) {
     window.location.href = url;
 }
 
-// Funcion para filtrar los elementos de surgical areas y surgery types 
+// Funcion para filtrar los elementos de mercados y bolsas 
 function filterTable() {
     var input, filter, table, tr, td, i, txtValue, noResultsMessage;
     input = document.getElementById("filterInput");
@@ -44,7 +44,7 @@ function filterTable() {
     }
 }
 
-// Funcion para filtrar los elementos de peripheral blocks
+// Funcion para filtrar los elementos de empresas
 function filterBlock() {
     console.log("Cargado Filter Block")
     var filterValue = $('#filterInputBlock').val().toLowerCase();

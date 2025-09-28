@@ -89,6 +89,7 @@ class Empresa(models.Model):
     description = models.CharField(max_length=10000, blank=True, null=True, default='')
     video_link = models.CharField(max_length=2000, blank=True, null=True, default='')
     public = models.BooleanField(default=False)
+    mercado = models.ForeignKey(Mercado, on_delete=models.CASCADE, related_name='empresas', null=True, blank=False)
     bolsas = models.ManyToManyField(Bolsa, related_name='empresas')
 
     def __str__(self):

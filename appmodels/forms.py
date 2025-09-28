@@ -30,17 +30,32 @@ class BolsaForm(forms.ModelForm):
 class EmpresaForm(forms.ModelForm):
 
     public = forms.BooleanField( required=False, widget=forms.CheckboxInput(attrs={'class': ''}), )
-    mercado = forms.ModelChoiceField( queryset = Mercado.objects.all(), required=False )  # Not required, only for filtering
     bolsas = forms.ModelMultipleChoiceField(
         queryset = Bolsa.objects.all(),
         required=True,
-        widget=forms.SelectMultiple(attrs={'class': 'form-control', 'size': '8'})
+        widget=forms.SelectMultiple(attrs={'class': 'form-control', 'size': '8'}),
+        error_messages={'required': 'Por favor selecciona al menos una bolsa'}
     )
     description = forms.CharField( widget=forms.Textarea(attrs={'class': 'form-control', 'cols': '40', 'rows': '5'}) )
 
     class Meta:
         model = Empresa
-        fields = ['title', 'description', 'video_link', 'public', 'bolsas']
+        fields = ['title', 'description', 'video_link', 'public', 'mercado', 'bolsas']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        mercado = cleaned_data.get('mercado')
+        bolsas = cleaned_data.get('bolsas')
+
+        if mercado and bolsas:
+            # Verificar que todas las bolsas pertenezcan al mercado seleccionado
+            for bolsa in bolsas:
+                if bolsa.mercado != mercado:
+                    raise forms.ValidationError(
+                        f"La bolsa '{bolsa}' no pertenece al mercado '{mercado}'"
+                    )
+
+        return cleaned_data
 
 
 class ImageForm(forms.ModelForm):
