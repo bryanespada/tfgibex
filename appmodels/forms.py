@@ -121,7 +121,7 @@ class NoticiaForm(forms.ModelForm):
     class Meta:
         model = Noticia
         fields = ['title', 'summary', 'content', 'published_date', 'source', 'source_url', 'author',
-                  'image_url', 'empresa', 'tags', 'is_premium', 'public']
+                  'image', 'empresa', 'tags', 'is_premium', 'public']
         widgets = {
             'published_date': forms.DateTimeInput(attrs={'type': 'datetime-local', 'class': 'form-control'})
         }

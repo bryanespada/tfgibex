@@ -1219,7 +1219,7 @@ def noticia_add(request):
     """
     context = {}
     if request.method == 'POST':
-        form = NoticiaForm(request.POST)
+        form = NoticiaForm(request.POST, request.FILES)
         if form.is_valid():
             noticia = form.save(commit=False)
             noticia.save()
@@ -1238,7 +1238,7 @@ def noticia_add(request):
     form.fields['source'].widget.attrs.update({'class': 'form-control'})
     form.fields['source_url'].widget.attrs.update({'class': 'form-control'})
     form.fields['author'].widget.attrs.update({'class': 'form-control'})
-    form.fields['image_url'].widget.attrs.update({'class': 'form-control'})
+    form.fields['image'].widget.attrs.update({'class': 'form-control'})
     form.fields['empresa'].widget.attrs.update({'class': 'form-control'})
 
     # Attach fields configuration to the context
@@ -1256,7 +1256,7 @@ def noticia_edit(request, noticia_id):
     context = {}
 
     if request.method == 'POST':
-        form = NoticiaForm(request.POST, instance=noticia)
+        form = NoticiaForm(request.POST, request.FILES, instance=noticia)
         if form.is_valid():
             updated_noticia = form.save()
             messages.success(request, "Noticia successfully updated")
@@ -1274,7 +1274,7 @@ def noticia_edit(request, noticia_id):
     form.fields['source'].widget.attrs.update({'class': 'form-control'})
     form.fields['source_url'].widget.attrs.update({'class': 'form-control'})
     form.fields['author'].widget.attrs.update({'class': 'form-control'})
-    form.fields['image_url'].widget.attrs.update({'class': 'form-control'})
+    form.fields['image'].widget.attrs.update({'class': 'form-control'})
     form.fields['empresa'].widget.attrs.update({'class': 'form-control'})
 
     # Attach fields configuration to the context

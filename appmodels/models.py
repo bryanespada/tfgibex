@@ -220,6 +220,15 @@ def upload_to_blog_pics(instance, filename):
     return f"blog_pics/{filename}" # Return file path with name
 
 
+def upload_to_noticia_pics(instance, filename):
+    """
+    Generate a filename based on a UUID for news images.
+    """
+    ext = filename.split('.')[-1] # Get file extension
+    filename = f"{uuid4().hex}.{ext}" # Generate unique file name using UUID
+    return f"noticia_pics/{filename}" # Return file path with name
+
+
 
 class Blog(models.Model):
 
@@ -255,7 +264,7 @@ class Noticia(models.Model):
     author = models.CharField(max_length=200, blank=True, null=True)
 
     # Media
-    image_url = models.URLField(max_length=500, blank=True, null=True)
+    image = models.ImageField(upload_to=upload_to_noticia_pics, null=True, blank=True)
 
     # Classification
     empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='noticias')

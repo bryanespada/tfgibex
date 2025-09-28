@@ -33,7 +33,7 @@
 
                     <div class="x_content">
 
-                        <form action="" role="form" method="POST" class="text-start">
+                        <form action="" role="form" method="POST" class="text-start" enctype="multipart/form-data">
                             {% csrf_token %}
 
                             <div class="tab-content" id="myTabContent">
@@ -112,15 +112,17 @@
 
                                         <div class="campo-agrupado input-group input-group-outline">
                                             <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Image URL</div>
+                                                <div class="font-weight-bold">Image</div>
                                             </div>
                                             <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.image_url }}</p>
+                                                <small class="form-text text-muted">Upload a new image (leave blank to keep current)</small>
+                                                <p class="p-class">{{ form.image }}</p>
                                             </div>
-                                            {% if noticia.image_url %}
+                                            {% if noticia.image %}
                                             <div class="col-md-12 col-sm-12">
                                                 <p class="p-class">
-                                                    <img src="{{ noticia.image_url }}" alt="Noticia image" style="max-width: 400px; width: 100%; margin-top: 10px;">
+                                                    <strong>Current image:</strong><br>
+                                                    <img src="/media/{{ noticia.image }}" alt="Noticia image" style="max-width: 400px; width: 100%; margin-top: 10px;">
                                                 </p>
                                             </div>
                                             {% endif %}
