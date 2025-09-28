@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import GeneralConfig, Mercado, SurgeryType, PeripheralBlock, Subscription, Product, Blog, Image
+from .models import GeneralConfig, Mercado, Bolsa, PeripheralBlock, Subscription, Product, Blog, Image
 
 class GeneralConfigAdmin(admin.ModelAdmin):
     list_display = ('app_name', 'app_syncopation', 'app_url',)  # Campos a mostrar en la lista
@@ -9,9 +9,9 @@ class MercadoAdmin(admin.ModelAdmin):
     list_display = ('title',)
 admin.site.register(Mercado, MercadoAdmin)
 
-class SurgeryTypeAdmin(admin.ModelAdmin):
+class BolsaAdmin(admin.ModelAdmin):
     list_display = ('title',)
-admin.site.register(SurgeryType, SurgeryTypeAdmin)
+admin.site.register(Bolsa, BolsaAdmin)
 
 class PeripheralBlockAdmin(admin.ModelAdmin):
     list_display = ('title', 'public')

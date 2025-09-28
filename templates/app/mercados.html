@@ -43,10 +43,10 @@
                                     {% for mercado in mercados %}
                                     {# apps/ urls.py #}
                                     <tr>
-                                        <td style="width: 50px;" data-url="{% url 'user_surgery_types' mercado_id=mercado.id %}" onclick="redirect(this)">
+                                        <td style="width: 50px;" data-url="{% url 'user_bolsas' mercado_id=mercado.id %}" onclick="redirect(this)">
                                             <i class="fa-solid fa-circle-arrow-right"></i>
                                         </td>
-                                        <td data-url="{% url 'user_surgery_types' mercado_id=mercado.id %}" onclick="redirect(this)">
+                                        <td data-url="{% url 'user_bolsas' mercado_id=mercado.id %}" onclick="redirect(this)">
                                                 <b>{{mercado.title}}</b>
                                             <p>
                                                 {{mercado.description|linebreaksbr}}

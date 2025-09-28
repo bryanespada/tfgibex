@@ -78,7 +78,7 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='SurgeryType',
+            name='Bolsa',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(default='', max_length=200)),
@@ -86,7 +86,7 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='SurgicalArea',
+            name='Mercado',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(default='', max_length=200)),
@@ -116,12 +116,12 @@ class Migration(migrations.Migration):
                 ('description', models.CharField(blank=True, default='', max_length=2000, null=True)),
                 ('video_link', models.CharField(blank=True, default='', max_length=2000, null=True)),
                 ('public', models.BooleanField(default=False)),
-                ('surgery_type', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='appmodels.surgerytype')),
+                ('bolsa', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='appmodels.bolsa')),
             ],
         ),
         migrations.AddField(
-            model_name='surgerytype',
-            name='surgical_area',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='appmodels.surgicalarea'),
+            model_name='bolsa',
+            name='mercado',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='appmodels.mercado'),
         ),
     ]

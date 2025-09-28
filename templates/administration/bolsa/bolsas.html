@@ -6,7 +6,7 @@
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>Surgery types</h3>
+                <h3>Bolsas</h3>
             </div>
         </div>
 
@@ -19,7 +19,7 @@
             <div class="col-md-12 col-sm-12  ">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Showing all surgery types</h2>
+                        <h2>Showing all bolsas</h2>
 
                         {% if messages %}
                             <script>
@@ -66,15 +66,15 @@
                                 </thead>
 
                                 <tbody>
-                                    {% for surgery_type in surgery_types %}
+                                    {% for bolsa in bolsas %}
                                         <tr class="even pointer">
-                                            <td>#{{surgery_type.pk}} </td>
-                                            <td>{{surgery_type.title}} </td>
-                                            <td>{{surgery_type.description}}</td>
-                                            <td>{{surgery_type.surgical_area.title}}</td>
+                                            <td>#{{bolsa.pk}} </td>
+                                            <td>{{bolsa.title}} </td>
+                                            <td>{{bolsa.description}}</td>
+                                            <td>{{bolsa.mercado.title}}</td>
                                             <td class="last" style="text-align: right !important;"><a href="#">
-                                                <a href="{% url 'administration_surgery_type_edit' surgery_type_id=surgery_type.id %}"><i class="fa-regular fa-pen-to-square"></i></a>
-                                                <a href="{% url 'administration_surgery_type_delete' surgery_type_id=surgery_type.id %}" onclick="return confirm('Area you sure?')"><i class="fa-solid fa-trash"></i></a>
+                                                <a href="{% url 'administration_bolsa_edit' bolsa_id=bolsa.id %}"><i class="fa-regular fa-pen-to-square"></i></a>
+                                                <a href="{% url 'administration_bolsa_delete' bolsa_id=bolsa.id %}" onclick="return confirm('Are you sure?')"><i class="fa-solid fa-trash"></i></a>
                                             </a>
                                             </td>
                                         </tr>

@@ -81,8 +81,8 @@ class Migration(migrations.Migration):
                 ('lng', models.CharField(default='', max_length=20)),
                 ('has_active_subscription', models.BooleanField(default=False)),
                 ('peripheral_block', models.ForeignKey(blank=True, default=None, null=True, on_delete=django.db.models.deletion.CASCADE, to='appmodels.peripheralblock')),
-                ('surgery_type', models.ForeignKey(blank=True, default=None, null=True, on_delete=django.db.models.deletion.CASCADE, to='appmodels.surgerytype')),
-                ('surgical_area', models.ForeignKey(blank=True, default=None, null=True, on_delete=django.db.models.deletion.CASCADE, to='appmodels.surgicalarea')),
+                ('bolsa', models.ForeignKey(blank=True, default=None, null=True, on_delete=django.db.models.deletion.CASCADE, to='appmodels.bolsa')),
+                ('mercado', models.ForeignKey(blank=True, default=None, null=True, on_delete=django.db.models.deletion.CASCADE, to='appmodels.mercado')),
                 ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='%(class)s_logs', to=settings.AUTH_USER_MODEL)),
             ],
             options={

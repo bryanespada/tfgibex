@@ -68,12 +68,12 @@ class Migration(migrations.Migration):
             field=models.CharField(blank=True, max_length=255, null=True, unique=True),
         ),
         migrations.AlterField(
-            model_name='surgerytype',
+            model_name='bolsa',
             name='description',
             field=models.CharField(blank=True, default='', max_length=6000, null=True),
         ),
         migrations.AlterField(
-            model_name='surgicalarea',
+            model_name='mercado',
             name='description',
             field=models.CharField(blank=True, default='', max_length=6000, null=True),
         ),

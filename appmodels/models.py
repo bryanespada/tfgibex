@@ -74,7 +74,7 @@ class Mercado(models.Model):
 
 
 
-class SurgeryType(models.Model):
+class Bolsa(models.Model):
     title = models.CharField(max_length=200, blank=False, null=False, default='')
     description = models.CharField(max_length=6000, blank=True, null=True, default='')
     mercado = models.ForeignKey(Mercado, on_delete=models.CASCADE)
@@ -89,7 +89,7 @@ class PeripheralBlock(models.Model):
     description = models.CharField(max_length=10000, blank=True, null=True, default='')
     video_link = models.CharField(max_length=2000, blank=True, null=True, default='')
     public = models.BooleanField(default=False)
-    surgery_type = models.ForeignKey(SurgeryType, on_delete=models.CASCADE)
+    bolsa = models.ForeignKey(Bolsa, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title

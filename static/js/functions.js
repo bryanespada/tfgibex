@@ -5,7 +5,7 @@ function redirect(object) {
     window.location.href = url;
 }
 
-// Funcion para filtrar los elementos de mercados y surgery types 
+// Funcion para filtrar los elementos de mercados y bolsas 
 function filterTable() {
     var input, filter, table, tr, td, i, txtValue, noResultsMessage;
     input = document.getElementById("filterInput");

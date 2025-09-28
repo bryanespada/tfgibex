@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from appmodels.models import GeneralConfig, Product, Mercado, SurgeryType, PeripheralBlock, Blog, Image
+from appmodels.models import GeneralConfig, Product, Mercado, Bolsa, PeripheralBlock, Blog, Image
 from logs.models import TrackingLog
 from django.db.models import Count
 from logs.views import log
@@ -26,16 +26,16 @@ def dashboard(request):
         context['top_10']['mercados']['labels'].append(mercado.title)
         context['top_10']['mercados']['values'].append(block['total'])
     
-    # Get Top10 Surgery Types
-    context['top_10']['surgery_types'] = {}
-    context['top_10']['surgery_types']['labels'] = []
-    context['top_10']['surgery_types']['values'] = []
-    top_10_surgery_Types = TrackingLog.objects.filter(surgery_type__isnull=False).values('surgery_type').annotate(total=Count('surgery_type')).order_by('-total')[:10]
-    context['top_10']['surgery_types']['show'] = True if top_10_surgery_Types else False # Decide to show or not 
-    for index, block in enumerate(top_10_surgery_Types): # Prepare two lists with de labels and values
-        surgery_type = SurgeryType.objects.get(pk=block['surgery_type'])
-        context['top_10']['surgery_types']['labels'].append(surgery_type.title)
-        context['top_10']['surgery_types']['values'].append(block['total'])
+    # Get Top10 Bolsas
+    context['top_10']['bolsas'] = {}
+    context['top_10']['bolsas']['labels'] = []
+    context['top_10']['bolsas']['values'] = []
+    top_10_bolsas = TrackingLog.objects.filter(bolsa__isnull=False).values('bolsa').annotate(total=Count('bolsa')).order_by('-total')[:10]
+    context['top_10']['bolsas']['show'] = True if top_10_bolsas else False # Decide to show or not
+    for index, block in enumerate(top_10_bolsas): # Prepare two lists with de labels and values
+        bolsa = Bolsa.objects.get(pk=block['bolsa'])
+        context['top_10']['bolsas']['labels'].append(bolsa.title)
+        context['top_10']['bolsas']['values'].append(block['total'])
     
     # Get Top10 Peripheral Blocks
     context['top_10']['peripheral_blocks'] = {}
@@ -61,40 +61,40 @@ def mercados(request):
     return render (request, "app/mercados.html", context=context)
 
 @login_required(login_url="/users/access")
-def surgery_types(request, mercado_id=None):
+def bolsas(request, mercado_id=None):
     context = {}
     context['config'] = get_object_or_404(GeneralConfig, id=1)
 
     # In case of selected mercado
     if mercado_id is not None:
         selected_mercado = get_object_or_404(Mercado, id=mercado_id) # Search the object to save it in the log
-        context['surgery_types'] = SurgeryType.objects.filter(mercado=mercado_id)
+        context['bolsas'] = Bolsa.objects.filter(mercado=mercado_id)
         context['mercado_title']= selected_mercado.title
-        log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"List", "item":"SurgeryType", "has_active_subscription":False, "peripheral_block":None, "surgery_type":None, "mercado":selected_mercado})
+        log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"List", "item":"Bolsa", "has_active_subscription":False, "peripheral_block":None, "bolsa":None, "mercado":selected_mercado})
 
-    # Listing every surgery type
+    # Listing every bolsa
     else:
-        context['surgery_types'] = SurgeryType.objects.all()
-        log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"List every item", "item":"SurgeryType", "has_active_subscription":False, "peripheral_block":None, "surgery_type":None, "mercado":None})
-    
-    return render (request, "app/surgery_types.html", context=context)
+        context['bolsas'] = Bolsa.objects.all()
+        log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"List every item", "item":"Bolsa", "has_active_subscription":False, "peripheral_block":None, "bolsa":None, "mercado":None})
+
+    return render (request, "app/bolsas.html", context=context)
 
 @login_required(login_url="/users/access")
-def peripheral_blocks(request, surgery_type_id=None):
+def peripheral_blocks(request, bolsa_id=None):
     context = {}
     context['config'] = get_object_or_404(GeneralConfig, id=1)
 
-    # In case of selected surgery_type
-    if surgery_type_id:
-        selected_surgery_type = get_object_or_404(SurgeryType, id=surgery_type_id)
-        context['peripheral_blocks'] = PeripheralBlock.objects.filter(surgery_type=surgery_type_id)
-        log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"List", "item":"PeripheralBlock", "has_active_subscription":False, "peripheral_block":None, "surgery_type":selected_surgery_type, "mercado":selected_surgery_type.mercado})
-    
-    # Listing every surgery type
+    # In case of selected bolsa
+    if bolsa_id:
+        selected_bolsa = get_object_or_404(Bolsa, id=bolsa_id)
+        context['peripheral_blocks'] = PeripheralBlock.objects.filter(bolsa=bolsa_id)
+        log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"List", "item":"PeripheralBlock", "has_active_subscription":False, "peripheral_block":None, "bolsa":selected_bolsa, "mercado":selected_bolsa.mercado})
+
+    # Listing every peripheral block
     else:
         context['peripheral_blocks'] = PeripheralBlock.objects.all()
-        log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"List", "item":"PeripheralBlock", "has_active_subscription":False, "peripheral_block":None, "surgery_type":None, "mercado":None})
-    
+        log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"List", "item":"PeripheralBlock", "has_active_subscription":False, "peripheral_block":None, "bolsa":None, "mercado":None})
+
     return render (request, "app/peripheral_blocks.html", context=context)
 
 @login_required(login_url="/users/access")
@@ -106,7 +106,7 @@ def peripheral_block(request, peripheral_block_id):
     
     context['images'] = selected_peripheral_block.images.all()
 
-    log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"Element", "item":"PeripheralBlock", "has_active_subscription":False, "peripheral_block":selected_peripheral_block, "surgery_type":selected_peripheral_block.surgery_type, "mercado":selected_peripheral_block.surgery_type.mercado})
+    log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"Element", "item":"PeripheralBlock", "has_active_subscription":False, "peripheral_block":selected_peripheral_block, "bolsa":selected_peripheral_block.bolsa, "mercado":selected_peripheral_block.bolsa.mercado})
     return render (request, "app/peripheral_block.html", context=context)
 
 

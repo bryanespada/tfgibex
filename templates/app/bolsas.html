@@ -7,10 +7,10 @@
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                {% if surgery_area_title is not None %}
-                    <h3>{{ surgery_area_title }}</h3>
+                {% if mercado_title is not None %}
+                    <h3>{{ mercado_title }}</h3>
                 {% else %}
-                    <h3>Surgical types</h3>
+                    <h3>Bolsas</h3>
                 {% endif %}
             </div>
             
@@ -39,22 +39,22 @@
                     {% endfor %}
                     {% endif %}
 
-                        <h2>Search surgery types</h2>
+                        <h2>Search bolsas</h2>
                         <input type="text" class="form-control" id="filterInput" oninput="filterTable()"
-                            placeholder="Search surgery type..">
+                            placeholder="Search bolsa..">
                         <div class="table-responsive mt-4">
                             <table id="mytable" class="table table-hover main-table">
                                 <tbody>
-                                    {% for surgery_type in surgery_types %}
+                                    {% for bolsa in bolsas %}
                                     {# apps/ urls.py #}
                                     <tr>
-                                        <td style="width: 50px;" data-url="{% url 'user_peripheral_blocks' surgery_type_id=surgery_type.id %}" onclick="redirect(this)">
-                                            <i class="fa-solid fa-circle-arrow-right"></i> 
+                                        <td style="width: 50px;" data-url="{% url 'user_peripheral_blocks' bolsa_id=bolsa.id %}" onclick="redirect(this)">
+                                            <i class="fa-solid fa-circle-arrow-right"></i>
                                         </td>
-                                        <td data-url="{% url 'user_peripheral_blocks' surgery_type_id=surgery_type.id %}" onclick="redirect(this)"> 
-                                                <b>{{surgery_type.title}}</b>
+                                        <td data-url="{% url 'user_peripheral_blocks' bolsa_id=bolsa.id %}" onclick="redirect(this)">
+                                                <b>{{bolsa.title}}</b>
                                             <p>
-                                                {{surgery_type.description|linebreaksbr}}
+                                                {{bolsa.description|linebreaksbr}}
                                             </p>
                                         </td>      
                                     </tr>

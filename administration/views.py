@@ -3,12 +3,12 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.utils import timezone
 from datetime import date, timedelta
-from appmodels.models import GeneralConfig, Mercado, SurgeryType, PeripheralBlock, Subscription, Product, Blog, Image
+from appmodels.models import GeneralConfig, Mercado, Bolsa, PeripheralBlock, Subscription, Product, Blog, Image
 from users.models import CustomUser
 from logs.models import UserLog, AdminsLog, SubscriptionLog, TrackingLog
 from users.forms import CustomUserCreationByAdminForm, CustomUserEditByAdminForm
 from django.contrib import messages
-from appmodels.forms import GeneralConfigForm, MercadoForm, SurgeryTypeForm, PeripheralBlockForm, SubscriptionForm, ProductForm, BlogForm, ProductAssignForm, ImageForm
+from appmodels.forms import GeneralConfigForm, MercadoForm, BolsaForm, PeripheralBlockForm, SubscriptionForm, ProductForm, BlogForm, ProductAssignForm, ImageForm
 from django.contrib.auth.models import Group
 from logs.views import log
 from django.db.models import Count
@@ -411,96 +411,96 @@ def mercado_delete(request, mercado_id):
 
 
 ######################################################################################################################################################
-# CRUD SURGERY TYPES
+# CRUD BOLSAS
 ######################################################################################################################################################
 
 
 @login_required(login_url="/users/access")
-def surgery_types(request):
+def bolsas(request):
     """
-    Function to get all surgery types
+    Function to get all bolsas
     """
     context = {}
-    context['surgery_types'] = SurgeryType.objects.all().order_by('title')
+    context['bolsas'] = Bolsa.objects.all().order_by('title')
     context['config'] = get_object_or_404(GeneralConfig, id=1)
-    log(request, "AdminsLog", {"action_type":"read", "status":200, "details":"Listing", "item":"SurgeryType"})
-    return render (request, "administration/surgery_type/surgery_types.html", context)
+    log(request, "AdminsLog", {"action_type":"read", "status":200, "details":"Listing", "item":"Bolsa"})
+    return render (request, "administration/bolsa/bolsas.html", context)
 
 @login_required(login_url="/users/access")
-def surgery_type_add(request):
+def bolsa_add(request):
     """
-    Function to add a new surgery type
+    Function to add a new bolsa
     """
     context = {}
     if request.method == 'POST':
-        form = SurgeryTypeForm(request.POST)
+        form = BolsaForm(request.POST)
         if form.is_valid():
-            surgery_type = form.save(commit=False)
-            surgery_type.save()
-            messages.success(request, "Surgery type successfully added")
-            log(request, "AdminsLog", {"action_type":"create", "status":200, "details":f"Created '{surgery_type.title}'", "item":"SurgeryType"})
-            return redirect('/administration/surgery_types')
+            bolsa = form.save(commit=False)
+            bolsa.save()
+            messages.success(request, "Bolsa successfully added")
+            log(request, "AdminsLog", {"action_type":"create", "status":200, "details":f"Created '{bolsa.title}'", "item":"Bolsa"})
+            return redirect('/administration/bolsas')
         else:
-            log(request, "AdminsLog", {"action_type":"create", "status":400, "details":f"Invalid form", "item":"SurgeryType"})
+            log(request, "AdminsLog", {"action_type":"create", "status":400, "details":f"Invalid form", "item":"Bolsa"})
 
     mercados = Mercado.objects.all()
-    form = SurgeryTypeForm()
+    form = BolsaForm()
     form.fields['title'].widget.attrs.update({'class': 'form-control'})
     form.fields['description'].widget.attrs.update({'class': 'form-control'})
     form.fields['mercado'].queryset = mercados # Populate the select options
     form.fields['mercado'].widget.attrs.update({'class': 'form-control'})
     context['form'] = form
     context['config'] = get_object_or_404(GeneralConfig, id=1)
-    log(request, "AdminsLog", {"action_type":"read", "status":200, "details":f"Creating form", "item":"SurgeryType"})
-    return render (request, "administration/surgery_type/surgery_type_add.html", context)
+    log(request, "AdminsLog", {"action_type":"read", "status":200, "details":f"Creating form", "item":"Bolsa"})
+    return render (request, "administration/bolsa/bolsa_add.html", context)
 
 @login_required(login_url="/users/access")
-def surgery_type_edit(request, surgery_type_id):
+def bolsa_edit(request, bolsa_id):
     """
-    Function to edit an existing surgery type
+    Function to edit an existing bolsa
     """
     context = {}
-    surgery_type = get_object_or_404(SurgeryType, id=surgery_type_id)
+    bolsa = get_object_or_404(Bolsa, id=bolsa_id)
     if request.method == 'POST':
-        form = SurgeryTypeForm(request.POST, instance=surgery_type)
+        form = BolsaForm(request.POST, instance=bolsa)
         if form.is_valid():
-            surgery_type = form.save(commit=False)
-            surgery_type.save()
-            messages.success(request, "Surgery type successfully updated")
-            log(request, "AdminsLog", {"action_type":"update", "status":200, "details":f"Updated '{surgery_type.title}'", "item":"SurgeryType"})
-            return redirect('/administration/surgery_types')
+            bolsa = form.save(commit=False)
+            bolsa.save()
+            messages.success(request, "Bolsa successfully updated")
+            log(request, "AdminsLog", {"action_type":"update", "status":200, "details":f"Updated '{bolsa.title}'", "item":"Bolsa"})
+            return redirect('/administration/bolsas')
         else:
-            log(request, "AdminsLog", {"action_type":"update", "status":400, "details":f"Invalid form updating '{surgery_type.title}'", "item":"SurgeryType"})
+            log(request, "AdminsLog", {"action_type":"update", "status":400, "details":f"Invalid form updating '{bolsa.title}'", "item":"Bolsa"})
 
-    form = SurgeryTypeForm(instance=surgery_type)
+    form = BolsaForm(instance=bolsa)
     form.fields['title'].widget.attrs.update({'class': 'form-control'})
     form.fields['description'].widget.attrs.update({'class': 'form-control'})
     form.fields['mercado'].queryset = Mercado.objects.all() # Populate the select options
     form.fields['mercado'].widget.attrs.update({'class': 'form-control'})
     context['form'] = form
     context['config'] = get_object_or_404(GeneralConfig, id=1)
-    log(request, "AdminsLog", {"action_type":"read", "status":200, "details":f"Update form of '{surgery_type.title}'", "item":"SurgeryType"})
-    return render (request, "administration/surgery_type/surgery_type_edit.html", context)
+    log(request, "AdminsLog", {"action_type":"read", "status":200, "details":f"Update form of '{bolsa.title}'", "item":"Bolsa"})
+    return render (request, "administration/bolsa/bolsa_edit.html", context)
 
 @login_required(login_url="/users/access")
-def surgery_type_delete(request, surgery_type_id):
+def bolsa_delete(request, bolsa_id):
     """
-    Function to delete an existing surgery type
+    Function to delete an existing bolsa
     """
-    surgery_type = get_object_or_404(SurgeryType, id=surgery_type_id)
-    log(request, "AdminsLog", {"action_type":"delete", "status":200, "details":f"Deleted '{surgery_type.title}'", "item":"SurgeryType"})
-    surgery_type.delete()
-    messages.success(request, "Surgery type successfully deleted")
+    bolsa = get_object_or_404(Bolsa, id=bolsa_id)
+    log(request, "AdminsLog", {"action_type":"delete", "status":200, "details":f"Deleted '{bolsa.title}'", "item":"Bolsa"})
+    bolsa.delete()
+    messages.success(request, "Bolsa successfully deleted")
     context = {}
     context['config'] = get_object_or_404(GeneralConfig, id=1)
-    return redirect('/administration/surgery_types')
+    return redirect('/administration/bolsas')
 
 @login_required(login_url="/users/access")
-def get_surgery_types_by_mercado(request, mercado_id):
-    log(request, "AdminsLog", {"action_type":"read", "status":200, "details":"Listing by Mercado", "item":"SurgeryType"})
-    surgery_types = SurgeryType.objects.filter(mercado=mercado_id)
-    surgery_types_list = list(surgery_types.values('id', 'title')) # Change surgery types into a list of dicts
-    return JsonResponse(surgery_types_list, safe=False)
+def get_bolsas_by_mercado(request, mercado_id):
+    log(request, "AdminsLog", {"action_type":"read", "status":200, "details":"Listing by Mercado", "item":"Bolsa"})
+    bolsas = Bolsa.objects.filter(mercado=mercado_id)
+    bolsas_list = list(bolsas.values('id', 'title')) # Change bolsas into a list of dicts
+    return JsonResponse(bolsas_list, safe=False)
 
 ######################################################################################################################################################
 # CRUD PERIPHERAL BLOCKS
@@ -544,9 +544,9 @@ def peripheral_block_add(request):
     form.fields['mercado'].widget.attrs.update({'class': 'form-control'})
 
     # Initialize empty the second select which depends on the first option chosen
-    surgery_types = SurgeryType.objects.none()
-    form.fields['surgery_type'].queryset = surgery_types
-    form.fields['surgery_type'].widget.attrs.update({'class': 'form-control'})
+    bolsas = Bolsa.objects.none()
+    form.fields['bolsa'].queryset = bolsas
+    form.fields['bolsa'].widget.attrs.update({'class': 'form-control'})
 
     # Rest of empty fields to fill
     form.fields['title'].widget.attrs.update({'class': 'form-control'})
@@ -584,14 +584,14 @@ def peripheral_block_edit(request, peripheral_block_id):
     # Get every mercados available
     mercados = Mercado.objects.all()
     form.fields['mercado'].queryset = mercados
-    form.fields['mercado'].initial = peripheral_block.surgery_type.mercado.id
+    form.fields['mercado'].initial = peripheral_block.bolsa.mercado.id
     form.fields['mercado'].widget.attrs.update({'class': 'form-control'})
 
     # Initialize empty the second select which depends on the first option chosen
-    surgery_types = SurgeryType.objects.filter(mercado=peripheral_block.surgery_type.mercado.id)
-    form.fields['surgery_type'].queryset = surgery_types
-    form.fields['surgery_type'].initial = peripheral_block.surgery_type.id
-    form.fields['surgery_type'].widget.attrs.update({'class': 'form-control'})
+    bolsas = Bolsa.objects.filter(mercado=peripheral_block.bolsa.mercado.id)
+    form.fields['bolsa'].queryset = bolsas
+    form.fields['bolsa'].initial = peripheral_block.bolsa.id
+    form.fields['bolsa'].widget.attrs.update({'class': 'form-control'})
 
     # Rest of empty fields to fill
     form.fields['title'].widget.attrs.update({'class': 'form-control'})

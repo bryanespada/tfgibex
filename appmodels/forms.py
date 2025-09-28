@@ -1,5 +1,5 @@
 from django import forms
-from .models import GeneralConfig, Mercado, SurgeryType, PeripheralBlock, Subscription, Product, Blog, Image
+from .models import GeneralConfig, Mercado, Bolsa, PeripheralBlock, Subscription, Product, Blog, Image
 from users.models import CustomUser
 
 class GeneralConfigForm(forms.ModelForm):
@@ -18,12 +18,12 @@ class MercadoForm(forms.ModelForm):
         fields = ['title', 'description']
 
 
-class SurgeryTypeForm(forms.ModelForm):
+class BolsaForm(forms.ModelForm):
 
     description = forms.CharField( widget=forms.Textarea(attrs={'class': 'form-control', 'cols': '40', 'rows': '5'}) )
-    
+
     class Meta:
-        model = SurgeryType
+        model = Bolsa
         fields = ['title', 'description', 'mercado']
 
 
@@ -31,12 +31,12 @@ class PeripheralBlockForm(forms.ModelForm):
 
     public = forms.BooleanField( required=False, widget=forms.CheckboxInput(attrs={'class': ''}), )
     mercado = forms.ModelChoiceField( queryset = Mercado.objects.all(), required=True )
-    surgery_type = forms.ModelChoiceField( queryset = SurgeryType.objects.all(), required=True )
+    bolsa = forms.ModelChoiceField( queryset = Bolsa.objects.all(), required=True )
     description = forms.CharField( widget=forms.Textarea(attrs={'class': 'form-control', 'cols': '40', 'rows': '5'}) )
 
     class Meta:
         model = PeripheralBlock
-        fields = ['title', 'description', 'video_link', 'public', 'surgery_type']
+        fields = ['title', 'description', 'video_link', 'public', 'bolsa']
 
 
 class ImageForm(forms.ModelForm):

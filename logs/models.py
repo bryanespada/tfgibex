@@ -1,6 +1,6 @@
 from django.db import models
 from users.models import CustomUser
-from appmodels.models import Subscription, Mercado, SurgeryType, PeripheralBlock, Product
+from appmodels.models import Subscription, Mercado, Bolsa, PeripheralBlock, Product
 
 class GeneralLog(models.Model):
     """
@@ -36,7 +36,7 @@ class AdminsLog(GeneralLog):
     Class to register admin events
     Action options: create, read, list, update, delete
     """
-    item = models.CharField(max_length=100) # Options: Mercado, SurgeryType, PeripheralBlock, Parameters, Subscription, Product
+    item = models.CharField(max_length=100) # Options: Mercado, Bolsa, PeripheralBlock, Parameters, Subscription, Product
     
 class SubscriptionLog(GeneralLog):
     """
@@ -57,5 +57,5 @@ class TrackingLog(GeneralLog):
     """
     has_active_subscription = models.BooleanField(default=False)
     mercado = models.ForeignKey(Mercado, on_delete=models.CASCADE, null=True, blank=True, default=None)
-    surgery_type = models.ForeignKey(SurgeryType, on_delete=models.CASCADE, null=True, blank=True, default=None)
+    bolsa = models.ForeignKey(Bolsa, on_delete=models.CASCADE, null=True, blank=True, default=None)
     peripheral_block = models.ForeignKey(PeripheralBlock, on_delete=models.CASCADE, null=True, blank=True, default=None)

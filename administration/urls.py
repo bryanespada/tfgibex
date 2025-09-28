@@ -34,11 +34,11 @@ urlpatterns = [
     path("mercado_edit/<int:mercado_id>/", views.mercado_edit, name="administration_mercado_edit"),
     path("mercado_delete/<int:mercado_id>/", views.mercado_delete, name="administration_mercado_delete"),
     
-    path("surgery_types/", views.surgery_types, name="administration_surgery_types"),
-    path("surgery_type_add/", views.surgery_type_add, name="administration_surgery_type_add"),
-    path("surgery_type_edit/<int:surgery_type_id>/", views.surgery_type_edit, name="administration_surgery_type_edit"),
-    path("surgery_type_delete/<int:surgery_type_id>/", views.surgery_type_delete, name="administration_surgery_type_delete"),
-    path("get_surgery_types_by_mercado/<int:mercado_id>/", views.get_surgery_types_by_mercado, name="administration_get_surgery_types_by_mercado"),
+    path("bolsas/", views.bolsas, name="administration_bolsas"),
+    path("bolsa_add/", views.bolsa_add, name="administration_bolsa_add"),
+    path("bolsa_edit/<int:bolsa_id>/", views.bolsa_edit, name="administration_bolsa_edit"),
+    path("bolsa_delete/<int:bolsa_id>/", views.bolsa_delete, name="administration_bolsa_delete"),
+    path("get_bolsas_by_mercado/<int:mercado_id>/", views.get_bolsas_by_mercado, name="administration_get_bolsas_by_mercado"),
 
     path("peripheral_blocks/", views.peripheral_blocks, name="administration_peripheral_blocks"),
     path("peripheral_block_add/", views.peripheral_block_add, name="administration_peripheral_block_add"),
