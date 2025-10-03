@@ -45,29 +45,6 @@
                                     {% endif %}
                                 {% endfor %}
                             </div>
-                            <!-- Additional images thumbnails -->
-                            {% if images|length > 1 %}
-                            <div class="row mt-2">
-                                {% for image in images %}
-                                    {% if not forloop.first and forloop.counter <= 4 %}
-                                    <div class="col-3 gallery-item" style="padding: 2px;">
-                                        <img src="{{ image.image.url }}" alt="image"
-                                             style="width: 100%; height: 60px; object-fit: cover; cursor: pointer; border-radius: 4px;"
-                                             data-title="{{ image.title }}"
-                                             data-description="{{ image.description }}">
-                                    </div>
-                                    {% endif %}
-                                {% endfor %}
-                                {% if images|length > 4 %}
-                                <div class="col-3" style="padding: 2px;">
-                                    <div style="width: 100%; height: 60px; background: #E7E7E7; display: flex; align-items: center; justify-content: center; border-radius: 4px; cursor: pointer;"
-                                         data-toggle="modal" data-target="#allImagesModal">
-                                        <span style="color: #73879C;">+{{ images|length|add:"-4" }}</span>
-                                    </div>
-                                </div>
-                                {% endif %}
-                            </div>
-                            {% endif %}
                         </div>
                         <div class="col-md-8">
                         {% else %}
@@ -75,12 +52,9 @@
                         {% endif %}
                             <!-- Company Info -->
                             <div class="x_content" style="padding: 20px;">
-                                <!-- Title and Bolsa in single line -->
-                                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+                                <!-- Title -->
+                                <div style="margin-bottom: 20px;">
                                     <h2 style="margin: 0; color: #2A3F54; font-weight: bold;">{{ empresa.title }}</h2>
-                                    <span style="background: #E7E7E7; padding: 5px 15px; border-radius: 20px; color: #5A738E; font-size: 14px;">
-                                        {% for bolsa in empresa.bolsas.all %}{{ bolsa }}{% if not forloop.last %}, {% endif %}{% endfor %}
-                                    </span>
                                 </div>
 
                                 <!-- Description -->
@@ -99,9 +73,9 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div style="padding: 15px; background: #F7F7F7; border-radius: 8px; text-align: center;">
-                                            <i class="fa-solid fa-images" style="font-size: 24px; color: #3498DB;"></i>
-                                            <h4 style="margin: 10px 0 5px 0; color: #2A3F54;">{{ images|length }}</h4>
-                                            <small style="color: #73879C;">Imágenes</small>
+                                            <i class="fa-solid fa-building-columns" style="font-size: 24px; color: #3498DB;"></i>
+                                            <h4 style="margin: 10px 0 5px 0; color: #2A3F54;">{% for bolsa in empresa.bolsas.all %}{{ bolsa.title }}{% if not forloop.last %}, {% endif %}{% endfor %}</h4>
+                                            <small style="color: #73879C;">Bolsa</small>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
