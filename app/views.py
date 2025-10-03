@@ -87,7 +87,7 @@ def empresas(request, bolsa_id=None):
     # In case of selected bolsa
     if bolsa_id:
         selected_bolsa = get_object_or_404(Bolsa, id=bolsa_id)
-        context['empresas'] = Empresa.objects.filter(bolsa=bolsa_id)
+        context['empresas'] = Empresa.objects.filter(bolsas=bolsa_id)
         log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"List", "item":"Empresa", "has_active_subscription":False, "empresa":None, "bolsa":selected_bolsa, "mercado":selected_bolsa.mercado})
 
     # Listing every empresa
