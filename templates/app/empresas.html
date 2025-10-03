@@ -44,22 +44,74 @@
                     <div class="mt-4">
                         <div class="row">
                             {% for empresa in empresas %}
-                                <div class="col-4 blog" style="cursor: pointer" data-url="{% url 'user_empresa' empresa_id=empresa.id %}" onclick="redirect(this)">
-                                    <div style="height: 200px; background-color: var(--app-color-1);" class="image view view-first">
-                                        
-                                        {% for image in empresa.images.all %}
-                                            {% if forloop.first %} 
-                                                <img style="width: 100%; display: block;" src="{{ image.image.url }}" alt="{{ image.title }}">
+                            <div class="col-md-6 col-lg-4 blog" style="margin-bottom: 30px;">
+                                <div style="cursor: pointer; height: 100%;" data-url="{% url 'user_empresa' empresa_id=empresa.id %}" onclick="redirect(this)">
+                                    <div class="x_panel" style="height: 100%; transition: all 0.3s ease; border-radius: 10px; overflow: hidden;">
+                                        <!-- Company Image or gradient header -->
+                                        <div style="height: 180px; overflow: hidden; position: relative;">
+                                            {% if empresa.images.all %}
+                                                {% for image in empresa.images.all %}
+                                                    {% if forloop.first %}
+                                                    <img src="{{ image.image.url }}" alt="{{ empresa.title }}"
+                                                         style="width: 100%; height: 100%; object-fit: cover;">
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% else %}
+                                                <!-- Default gradient if no image -->
+                                                <div style="height: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center;">
+                                                    <i class="fa-solid fa-building" style="font-size: 50px; color: white; opacity: 0.9;"></i>
+                                                </div>
                                             {% endif %}
-                                        {% endfor %}
 
+                                            <!-- Company logo overlay (optional) -->
+                                            <div style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.9); padding: 5px 10px; border-radius: 15px;">
+                                                <small style="color: #2A3F54; font-weight: bold;">
+                                                    {% for bolsa in empresa.bolsas.all|slice:":1" %}
+                                                        {{ bolsa.title }}
+                                                    {% endfor %}
+                                                </small>
+                                            </div>
+                                        </div>
+
+                                        <div class="x_content" style="padding: 20px;">
+                                            <h4 style="margin: 0 0 8px 0; color: #2A3F54; font-weight: bold; font-size: 1.1em;">
+                                                {{ empresa.title }}
+                                            </h4>
+
+                                            <!-- Market Badge -->
+                                            {% if empresa.mercado %}
+                                            <span style="display: inline-block; background: #E7E7E7; padding: 3px 10px; border-radius: 12px; color: #5A738E; font-size: 11px; margin-bottom: 10px;">
+                                                <i class="fa-solid fa-globe" style="font-size: 10px;"></i> {{ empresa.mercado.title }}
+                                            </span>
+                                            {% endif %}
+
+                                            <p style="color: #73879C; line-height: 1.4; margin-bottom: 15px; min-height: 45px; font-size: 0.9em;">
+                                                {{ empresa.description|truncatewords:12 }}
+                                            </p>
+
+                                            <!-- Stats -->
+                                            <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid #E7E7E7;">
+                                                <div style="flex: 1;"></div>
+                                                <div style="text-align: center;">
+                                                    <strong style="color: #2A3F54; font-size: 1.1em;">{{ empresa.noticias.count }}</strong><br>
+                                                    <small style="color: #73879C; font-size: 0.85em;">Noticias</small>
+                                                </div>
+                                                <div style="flex: 1; text-align: right;">
+                                                    <button class="btn btn-round btn-primary btn-xs" style="padding: 4px 12px;">
+                                                        Ver <i class="fa fa-arrow-right"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    
-                                    <div class="caption text-center">
-                                        <b>{{ empresa.title }}</b>
-                                        <p>{{ empresa.description|truncatechars:25 }}</p>
-                                    </div>  
-                                </div>     
+                                </div>
+                            </div>
+                            {% empty %}
+                            <div class="col-md-12">
+                                <div class="alert alert-info">
+                                    <i class="fa-solid fa-info-circle"></i> No hay empresas disponibles.
+                                </div>
+                            </div>
                             {% endfor %}
                         </div>
                     </div>
@@ -75,5 +127,21 @@
 </div>
 
 <!-- /page content -->
+
+<script>
+function redirect(element) {
+    var url = element.getAttribute('data-url');
+    if (url) {
+        window.location.href = url;
+    }
+}
+</script>
+
+<style>
+.x_panel:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15) !important;
+}
+</style>
 
 {% endblock %}
