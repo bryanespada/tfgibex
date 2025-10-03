@@ -2,6 +2,7 @@
 {% block content %}
 {% load static %}
 {% load custom_tags %}
+{% load video_filters %}
 
 <!-- page content -->
 <div class="right_col" role="main">
@@ -173,6 +174,64 @@
                                 </div>
                             {% endif %}
                         </div>
+
+                        <!-- Video section -->
+                        {% if noticia.video_link %}
+                        <div style="margin-top: 40px; padding-top: 30px; border-top: 1px solid #E7E7E7;">
+                            <div style="text-align: center;">
+                                <h4 style="color: #2A3F54; margin-bottom: 20px; font-size: 1.1em;">
+                                    <i class="fa-solid fa-play-circle" style="color: #E74C3C;"></i> Video relacionado
+                                </h4>
+
+                                <!-- Try to embed the video -->
+                                {% with embed_url=noticia.video_link|get_embed_url %}
+                                {% if 'youtube.com/embed' in embed_url or 'player.vimeo.com' in embed_url %}
+                                    <!-- Embedded video player with elegant frame -->
+                                    <div style="display: flex; justify-content: center;">
+                                        <div style="width: 100%; max-width: 500px;">
+                                            <div style="padding: 2px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.12);">
+                                                <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 10px; background: #000;">
+                                                    <iframe id="video-iframe"
+                                                            src="{{ embed_url }}"
+                                                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+                                                            frameborder="0"
+                                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                                            allowfullscreen>
+                                                    </iframe>
+                                                </div>
+                                            </div>
+
+                                            <!-- Subtle alternative link -->
+                                            <div style="margin-top: 10px; text-align: center;">
+                                                <a href="{{ noticia.video_link }}" target="_blank" style="color: #73879C; font-size: 0.8em; text-decoration: none;">
+                                                    <i class="fa-solid fa-external-link" style="font-size: 0.85em;"></i> Ver en pantalla completa
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <!-- Compact card for non-embeddable videos -->
+                                    <div style="display: flex; justify-content: center;">
+                                        <div style="width: 100%; max-width: 500px; padding: 25px; background: linear-gradient(135deg, #f5f3ff 0%, #e8e5ff 100%); border-radius: 12px; border: 1px solid #d4cfe8; box-shadow: 0 4px 12px rgba(0,0,0,0.06);">
+                                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                                <div style="display: flex; align-items: center;">
+                                                    <i class="fa-brands fa-youtube" style="font-size: 35px; color: #E74C3C; margin-right: 15px;"></i>
+                                                    <div>
+                                                        <h5 style="margin: 0; color: #2A3F54; font-size: 1em;">Video disponible</h5>
+                                                        <small style="color: #73879C; font-size: 0.85em;">Ver en plataforma externa</small>
+                                                    </div>
+                                                </div>
+                                                <a href="{{ noticia.video_link }}" target="_blank" class="btn btn-round btn-primary btn-sm">
+                                                    <i class="fa-solid fa-play"></i> Ver
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                {% endwith %}
+                            </div>
+                        </div>
+                        {% endif %}
 
                         <!-- Source link -->
                         {% if noticia.source_url %}

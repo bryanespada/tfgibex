@@ -87,7 +87,6 @@ class Bolsa(models.Model):
 class Empresa(models.Model):
     title = models.CharField(max_length=200, blank=False, null=False, default='')
     description = models.CharField(max_length=10000, blank=True, null=True, default='')
-    video_link = models.CharField(max_length=2000, blank=True, null=True, default='')
     public = models.BooleanField(default=False)
     mercado = models.ForeignKey(Mercado, on_delete=models.CASCADE, related_name='empresas', null=True, blank=False)
     bolsas = models.ManyToManyField(Bolsa, related_name='empresas')
@@ -265,6 +264,7 @@ class Noticia(models.Model):
 
     # Media
     image = models.ImageField(upload_to=upload_to_noticia_pics, null=True, blank=True)
+    video_link = models.CharField(max_length=2000, blank=True, null=True, default='')  # Video URL (YouTube, Vimeo, etc.)
 
     # Classification
     empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, related_name='noticias')

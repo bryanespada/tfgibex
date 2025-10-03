@@ -40,7 +40,7 @@ class EmpresaForm(forms.ModelForm):
 
     class Meta:
         model = Empresa
-        fields = ['title', 'description', 'video_link', 'public', 'mercado', 'bolsas']
+        fields = ['title', 'description', 'public', 'mercado', 'bolsas']
 
     def clean(self):
         cleaned_data = super().clean()
@@ -121,7 +121,7 @@ class NoticiaForm(forms.ModelForm):
     class Meta:
         model = Noticia
         fields = ['title', 'summary', 'content', 'published_date', 'source', 'source_url', 'author',
-                  'image', 'empresa', 'tags', 'is_premium', 'public']
+                  'image', 'video_link', 'empresa', 'tags', 'is_premium', 'public']
         widgets = {
             'published_date': forms.DateTimeInput(attrs={'type': 'datetime-local', 'class': 'form-control'})
         }
