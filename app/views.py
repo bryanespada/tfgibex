@@ -70,11 +70,13 @@ def bolsas(request, mercado_id=None):
         selected_mercado = get_object_or_404(Mercado, id=mercado_id) # Search the object to save it in the log
         context['bolsas'] = Bolsa.objects.filter(mercado=mercado_id)
         context['mercado_title']= selected_mercado.title
+        context['mercado'] = selected_mercado
         log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"List", "item":"Bolsa", "has_active_subscription":False, "empresa":None, "bolsa":None, "mercado":selected_mercado})
 
     # Listing every bolsa
     else:
         context['bolsas'] = Bolsa.objects.all()
+        context['mercado'] = None
         log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"List every item", "item":"Bolsa", "has_active_subscription":False, "empresa":None, "bolsa":None, "mercado":None})
 
     return render (request, "app/bolsas.html", context=context)
@@ -88,11 +90,16 @@ def empresas(request, bolsa_id=None):
     if bolsa_id:
         selected_bolsa = get_object_or_404(Bolsa, id=bolsa_id)
         context['empresas'] = Empresa.objects.filter(bolsas=bolsa_id)
+        context['bolsa'] = selected_bolsa
+        context['mercado'] = selected_bolsa.mercado
+        context['bolsa_title'] = selected_bolsa.title
         log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"List", "item":"Empresa", "has_active_subscription":False, "empresa":None, "bolsa":selected_bolsa, "mercado":selected_bolsa.mercado})
 
     # Listing every empresa
     else:
         context['empresas'] = Empresa.objects.all()
+        context['bolsa'] = None
+        context['mercado'] = None
         log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"List", "item":"Empresa", "has_active_subscription":False, "empresa":None, "bolsa":None, "mercado":None})
 
     return render (request, "app/empresas.html", context=context)
@@ -106,8 +113,14 @@ def empresa(request, empresa_id):
 
     context['images'] = selected_empresa.images.all()
 
+    # Get related news for this company
+    context['noticias'] = selected_empresa.noticias.filter(public=True).order_by('-published_date')
+
     # Como una empresa puede tener múltiples bolsas, tomamos la primera si existe
     first_bolsa = selected_empresa.bolsas.first() if selected_empresa.bolsas.exists() else None
+    context['bolsa'] = first_bolsa
+    context['mercado'] = selected_empresa.mercado
+
     log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"Element", "item":"Empresa", "has_active_subscription":False, "empresa":selected_empresa, "bolsa":first_bolsa, "mercado":selected_empresa.mercado})
     return render (request, "app/empresa.html", context=context)
 

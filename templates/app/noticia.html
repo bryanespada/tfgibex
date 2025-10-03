@@ -6,11 +6,27 @@
 <!-- page content -->
 <div class="right_col" role="main">
     <div class="">
-        <!-- Back button -->
+        <!-- Breadcrumb Navigation -->
         <div class="page-title" style="margin-bottom: 30px;">
             <div class="title_left">
-                <a href="/app/noticias" class="btn btn-round btn-primary">
-                    <i class="fa fa-arrow-left"></i> Volver a noticias
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb" style="background: none; padding: 5px 0; margin: 0 0 15px 0; font-size: 14px; display: flex; flex-wrap: nowrap;">
+                        {% if noticia.empresa and noticia.empresa.mercado %}
+                        <li class="breadcrumb-item"><a href="/app/mercados" style="color: #5A738E;">Mercados</a></li>
+                        <li class="breadcrumb-item"><a href="/app/bolsas/{{ noticia.empresa.mercado.id }}" style="color: #5A738E;">{{ noticia.empresa.mercado.title }}</a></li>
+                        {% if noticia.empresa.bolsas.first %}
+                        <li class="breadcrumb-item"><a href="/app/empresas/{{ noticia.empresa.bolsas.first.id }}" style="color: #5A738E;">{{ noticia.empresa.bolsas.first.title }}</a></li>
+                        {% endif %}
+                        <li class="breadcrumb-item"><a href="/app/empresa/{{ noticia.empresa.id }}" style="color: #5A738E;">{{ noticia.empresa.title }}</a></li>
+                        <li class="breadcrumb-item active" aria-current="page" style="color: #2A3F54; font-weight: 500;">Noticia</li>
+                        {% else %}
+                        <li class="breadcrumb-item"><a href="/app/noticias" style="color: #5A738E;">Noticias</a></li>
+                        <li class="breadcrumb-item active" aria-current="page" style="color: #2A3F54; font-weight: 500;">{{ noticia.title|truncatewords:5 }}</li>
+                        {% endif %}
+                    </ol>
+                </nav>
+                <a href="javascript:history.back()" class="btn btn-round btn-primary">
+                    <i class="fa fa-arrow-left"></i> Volver
                 </a>
             </div>
         </div>

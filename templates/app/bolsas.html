@@ -4,15 +4,25 @@
 <!-- page content -->
 <div class="right_col" role="main">
     <div class="">
+        <!-- Breadcrumb Navigation -->
         <div class="page-title">
             <div class="title_left">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb" style="background: none; padding: 5px 0; margin: 0; font-size: 14px; display: flex; flex-wrap: nowrap;">
+                        <li class="breadcrumb-item"><a href="/app/mercados" style="color: #5A738E;">Mercados</a></li>
+                        {% if mercado %}
+                        <li class="breadcrumb-item active" aria-current="page" style="color: #2A3F54; font-weight: 500;">{{ mercado.title }}</li>
+                        {% else %}
+                        <li class="breadcrumb-item active" aria-current="page" style="color: #2A3F54; font-weight: 500;">Todas las Bolsas</li>
+                        {% endif %}
+                    </ol>
+                </nav>
                 {% if mercado_title is not None %}
-                    <h3>{{ mercado_title }}</h3>
+                    <h3 style="margin-top: 10px;">{{ mercado_title }}</h3>
                 {% else %}
-                    <h3>Bolsas</h3>
+                    <h3 style="margin-top: 10px;">Bolsas</h3>
                 {% endif %}
             </div>
-            
         </div>
 
         <div class="clearfix"></div>
