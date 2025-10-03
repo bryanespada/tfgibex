@@ -6,98 +6,140 @@
 <!-- page content -->
 <div class="right_col" role="main">
     <div class="">
-        <div class="page-title">
+        <!-- Back button -->
+        <div class="page-title" style="margin-bottom: 30px;">
             <div class="title_left">
-                <h3>
-                    <a href="/app/noticias" class="btn btn-default btn-sm">
-                        <i class="fa fa-arrow-left"></i> Volver
-                    </a>
-                </h3>
+                <a href="/app/noticias" class="btn btn-round btn-primary">
+                    <i class="fa fa-arrow-left"></i> Volver a noticias
+                </a>
             </div>
         </div>
 
         <div class="clearfix"></div>
 
-        <div class="row">
-            <div class="col-md-12">
-                <div class="x_panel">
-                    <div class="x_title">
-                        <h2>
-                            {{ noticia.title }}
-                            {% if noticia.is_premium %}
-                            <span class="pull-right">
-                                <i class="fa-solid fa-crown" style="color:{{config.app_primary}}" title="Premium content"></i>
-                            </span>
-                            {% endif %}
-                        </h2>
-                        <div class="clearfix"></div>
+        <div class="row" style="margin-top: 20px;">
+            <div class="col-md-10 col-md-offset-1">
+                <!-- Main article panel -->
+                <div class="x_panel" style="border-radius: 10px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+
+                    <!-- Hero image section -->
+                    {% if noticia.image %}
+                    <div style="position: relative; height: 450px; overflow: hidden; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <img src="/media/{{ noticia.image }}" alt="{{ noticia.title }}"
+                             style="width: 100%; height: 100%; object-fit: cover; opacity: 0.9;">
+
+                        <!-- Premium badge overlay -->
+                        {% if noticia.is_premium %}
+                        <div style="position: absolute; top: 20px; right: 20px; background: rgba(255,215,0,0.9); padding: 10px 20px; border-radius: 25px;">
+                            <i class="fa-solid fa-crown" style="color: #333;"></i> Premium
+                        </div>
+                        {% endif %}
                     </div>
+                    {% else %}
+                    <div style="height: 350px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center;">
+                        <i class="fa-solid fa-newspaper" style="font-size: 80px; color: rgba(255,255,255,0.3);"></i>
+                    </div>
+                    {% endif %}
 
-                    <div class="x_content">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p class="text-muted">
-                                    <i class="fa-solid fa-building"></i> <strong>{{ noticia.empresa.title }}</strong>
-                                    &nbsp;&nbsp;|&nbsp;&nbsp;
-                                    <i class="fa-solid fa-calendar"></i> {{ noticia.published_date|date:"d M Y H:i" }}
-                                    {% if noticia.source %}
-                                    &nbsp;&nbsp;|&nbsp;&nbsp;
-                                    <i class="fa-solid fa-globe"></i> {{ noticia.source }}
-                                    {% endif %}
-                                    {% if noticia.author %}
-                                    &nbsp;&nbsp;|&nbsp;&nbsp;
-                                    <i class="fa-solid fa-user"></i> {{ noticia.author }}
-                                    {% endif %}
-                                </p>
+                    <!-- Article content -->
+                    <div class="x_content" style="padding: 40px;">
 
-                                {% if noticia.tags %}
-                                <p>
-                                    <i class="fa-solid fa-tags"></i>
-                                    {% for tag in noticia.tags|split:"," %}
-                                    <span class="label label-default">{{ tag|trim }}</span>
-                                    {% endfor %}
-                                </p>
+                        <!-- Title and metadata -->
+                        <div style="border-bottom: 3px solid #E7E7E7; padding-bottom: 20px; margin-bottom: 30px;">
+                            <h1 style="font-size: 2.5em; font-weight: bold; color: #2A3F54; margin-bottom: 20px; line-height: 1.3;">
+                                {{ noticia.title }}
+                            </h1>
+
+                            <!-- Summary -->
+                            {% if noticia.summary %}
+                            <p style="font-size: 1.3em; color: #73879C; font-style: italic; margin-bottom: 20px;">
+                                {{ noticia.summary }}
+                            </p>
+                            {% endif %}
+
+                            <!-- Metadata row -->
+                            <div style="display: flex; flex-wrap: wrap; gap: 20px; color: #73879C; font-size: 0.95em;">
+                                <span>
+                                    <i class="fa-solid fa-building" style="color: {{config.app_primary}};"></i>
+                                    <strong>{{ noticia.empresa.title }}</strong>
+                                </span>
+                                <span>
+                                    <i class="fa-solid fa-calendar" style="color: {{config.app_primary}};"></i>
+                                    {{ noticia.published_date|date:"d M Y H:i" }}
+                                </span>
+                                {% if noticia.author %}
+                                <span>
+                                    <i class="fa-solid fa-user" style="color: {{config.app_primary}};"></i>
+                                    {{ noticia.author }}
+                                </span>
                                 {% endif %}
-
-                                <hr>
-
-                                {% if noticia.image %}
-                                <div class="text-center" style="margin-bottom: 30px;">
-                                    <img src="/media/{{ noticia.image }}" alt="{{ noticia.title }}" style="max-width: 100%; max-height: 400px; object-fit: contain;">
-                                </div>
-                                {% endif %}
-
-                                {% if noticia.summary %}
-                                <div class="lead">
-                                    {{ noticia.summary|linebreaks }}
-                                </div>
-                                <hr>
-                                {% endif %}
-
-                                {% if noticia.is_premium %}
-                                    <!-- TODO: Check if user has active subscription -->
-                                    <div class="alert alert-warning">
-                                        <i class="fa-solid fa-crown"></i> <strong>Contenido Premium</strong>
-                                        <p>Esta noticia requiere una suscripción activa para ver el contenido completo.</p>
-                                        <a href="/users/subscription" class="btn btn-warning">Ver planes de suscripción</a>
-                                    </div>
-                                {% else %}
-                                    {% if noticia.content %}
-                                    <div class="content">
-                                        {{ noticia.content|linebreaks }}
-                                    </div>
-                                    {% endif %}
-                                {% endif %}
-
-                                {% if noticia.source_url %}
-                                <hr>
-                                <p>
-                                    <a href="{{ noticia.source_url }}" target="_blank" class="btn btn-info">
-                                        <i class="fa-solid fa-external-link"></i> Ver fuente original
-                                    </a>
-                                </p>
+                                {% if noticia.source %}
+                                <span>
+                                    <i class="fa-solid fa-globe" style="color: {{config.app_primary}};"></i>
+                                    {{ noticia.source }}
+                                </span>
                                 {% endif %}
                             </div>
+
+                            <!-- Tags -->
+                            {% if noticia.tags %}
+                            <div style="margin-top: 15px;">
+                                {% for tag in noticia.tags|split:"," %}
+                                <span style="display: inline-block; background: #E7E7E7; color: #5A738E; padding: 5px 15px; border-radius: 20px; margin: 5px 5px 5px 0; font-size: 0.9em;">
+                                    {{ tag|trim }}
+                                </span>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Main content -->
+                        <div style="min-height: 200px;">
+                            {% if noticia.is_premium %}
+                                {% if user|is_premium %}
+                                    <!-- Premium content for subscribed users -->
+                                    <div style="font-size: 1.1em; line-height: 1.8; color: #2A3F54;">
+                                        {{ noticia.content|linebreaks }}
+                                    </div>
+                                {% else %}
+                                    <!-- Premium paywall -->
+                                    <div style="background: linear-gradient(135deg, #FFF8DC 0%, #FAFAD2 100%); border: 2px solid #FFD700; border-radius: 10px; padding: 40px; text-align: center; margin: 40px 0;">
+                                        <i class="fa-solid fa-crown" style="font-size: 60px; color: #FFD700; margin-bottom: 20px;"></i>
+                                        <h3 style="color: #2A3F54; margin-bottom: 15px;">Contenido Premium</h3>
+                                        <p style="color: #73879C; margin-bottom: 25px; font-size: 1.1em;">
+                                            Esta noticia requiere una suscripción activa para ver el contenido completo.
+                                        </p>
+                                        <a href="/users/subscription" class="btn btn-round btn-warning btn-lg" style="padding: 12px 30px;">
+                                            <i class="fa-solid fa-rocket"></i> Ver planes de suscripción
+                                        </a>
+                                    </div>
+                                {% endif %}
+                            {% else %}
+                                <!-- Free content -->
+                                <div style="font-size: 1.1em; line-height: 1.8; color: #2A3F54;">
+                                    {{ noticia.content|linebreaks }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Source link -->
+                        {% if noticia.source_url %}
+                        <div style="margin-top: 40px; padding-top: 30px; border-top: 1px solid #E7E7E7; text-align: center;">
+                            <a href="{{ noticia.source_url }}" target="_blank" class="btn btn-round btn-info btn-sm" style="padding: 8px 20px;">
+                                <i class="fa-solid fa-external-link"></i> Ver fuente original
+                            </a>
+                        </div>
+                        {% endif %}
+
+                        <!-- Related company section -->
+                        <div style="margin-top: 50px; padding: 30px; background: #F7F7F7; border-radius: 10px;">
+                            <h3 style="color: #2A3F54; margin-bottom: 20px;">
+                                <i class="fa-solid fa-building"></i> Sobre {{ noticia.empresa.title }}
+                            </h3>
+                            <p style="color: #73879C;">{{ noticia.empresa.description|truncatewords:50 }}</p>
+                            <a href="/app/empresa/{{ noticia.empresa.id }}" class="btn btn-round btn-default" style="margin-top: 15px;">
+                                Ver perfil de la empresa <i class="fa fa-arrow-right"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
