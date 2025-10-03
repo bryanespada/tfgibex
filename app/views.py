@@ -1,9 +1,23 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from appmodels.models import GeneralConfig, Product, Mercado, Bolsa, Empresa, Blog, Image, Noticia
+from django.contrib import messages
+from appmodels.models import GeneralConfig, Product, Mercado, Bolsa, Empresa, Blog, Image, Noticia, Subscription
 from logs.models import TrackingLog
 from django.db.models import Count
 from logs.views import log
+from django.utils import timezone
+
+
+def user_is_premium(user):
+    """
+    Helper function to check if user has an active subscription
+    Uses the same logic as the is_premium template tag
+    """
+    today = timezone.now().date()
+    return Subscription.objects.filter(
+        user=user,
+        due_date__gte=today
+    ).exists()
 
 
 @login_required(login_url="/users/access")
@@ -113,15 +127,21 @@ def empresa(request, empresa_id):
 
     context['images'] = selected_empresa.images.all()
 
-    # Get related news for this company
-    context['noticias'] = selected_empresa.noticias.filter(public=True).order_by('-published_date')
+    # Check if user has active subscription
+    is_premium = user_is_premium(request.user)
+
+    # Get related news for this company (filter premium if user is free)
+    if is_premium:
+        context['noticias'] = selected_empresa.noticias.filter(public=True).order_by('-published_date')
+    else:
+        context['noticias'] = selected_empresa.noticias.filter(public=True, is_premium=False).order_by('-published_date')
 
     # Como una empresa puede tener múltiples bolsas, tomamos la primera si existe
     first_bolsa = selected_empresa.bolsas.first() if selected_empresa.bolsas.exists() else None
     context['bolsa'] = first_bolsa
     context['mercado'] = selected_empresa.mercado
 
-    log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"Element", "item":"Empresa", "has_active_subscription":False, "empresa":selected_empresa, "bolsa":first_bolsa, "mercado":selected_empresa.mercado})
+    log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"Element", "item":"Empresa", "has_active_subscription":is_premium, "empresa":selected_empresa, "bolsa":first_bolsa, "mercado":selected_empresa.mercado})
     return render (request, "app/empresa.html", context=context)
 
 
@@ -133,10 +153,18 @@ def noticias(request):
     context = {}
     context['config'] = get_object_or_404(GeneralConfig, id=1)
 
-    # Get all public news ordered by date
-    context['noticias'] = Noticia.objects.filter(public=True).order_by('-published_date')
+    # Check if user has active subscription
+    is_premium = user_is_premium(request.user)
 
-    log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"List", "item":"Noticia", "has_active_subscription":False, "mercado":None, "bolsa":None, "empresa":None})
+    # Filter news based on subscription status
+    if is_premium:
+        # Premium users see all public news
+        context['noticias'] = Noticia.objects.filter(public=True).order_by('-published_date')
+    else:
+        # Free users only see non-premium news
+        context['noticias'] = Noticia.objects.filter(public=True, is_premium=False).order_by('-published_date')
+
+    log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"List", "item":"Noticia", "has_active_subscription":is_premium, "mercado":None, "bolsa":None, "empresa":None})
     return render(request, "app/noticias.html", context=context)
 
 
@@ -149,12 +177,17 @@ def noticia(request, noticia_id):
     context['config'] = get_object_or_404(GeneralConfig, id=1)
     selected_noticia = get_object_or_404(Noticia, id=noticia_id, public=True)
 
-    # Check if news is premium and user has subscription
-    # TODO: Add subscription check logic here
+    # Check if user has active subscription
+    is_premium = user_is_premium(request.user)
+
+    # If news is premium and user doesn't have subscription, deny access
+    if selected_noticia.is_premium and not is_premium:
+        messages.error(request, "Esta noticia requiere una suscripción activa para poder acceder.")
+        return redirect('user_noticias')
 
     context['noticia'] = selected_noticia
 
-    log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"Element", "item":"Noticia", "has_active_subscription":False, "empresa":selected_noticia.empresa, "bolsa":None, "mercado":selected_noticia.empresa.mercado if selected_noticia.empresa else None})
+    log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"Element", "item":"Noticia", "has_active_subscription":is_premium, "empresa":selected_noticia.empresa, "bolsa":None, "mercado":selected_noticia.empresa.mercado if selected_noticia.empresa else None})
     return render(request, "app/noticia.html", context=context)
 
 

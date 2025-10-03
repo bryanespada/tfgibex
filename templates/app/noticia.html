@@ -80,13 +80,6 @@
                     <div style="position: relative; height: 450px; overflow: hidden; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
                         <img src="/media/{{ noticia.image }}" alt="{{ noticia.title }}"
                              style="width: 100%; height: 100%; object-fit: cover; opacity: 0.9;">
-
-                        <!-- Premium badge overlay -->
-                        {% if noticia.is_premium %}
-                        <div style="position: absolute; top: 20px; right: 20px; background: rgba(255,215,0,0.9); padding: 10px 20px; border-radius: 25px;">
-                            <i class="fa-solid fa-crown" style="color: #333;"></i> Premium
-                        </div>
-                        {% endif %}
                     </div>
                     {% else %}
                     <div style="height: 350px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center;">
@@ -148,31 +141,10 @@
 
                         <!-- Main content -->
                         <div style="min-height: 200px;">
-                            {% if noticia.is_premium %}
-                                {% if user|is_premium %}
-                                    <!-- Premium content for subscribed users -->
-                                    <div style="font-size: 1.1em; line-height: 1.8; color: #2A3F54;">
-                                        {{ noticia.content|linebreaks }}
-                                    </div>
-                                {% else %}
-                                    <!-- Premium paywall -->
-                                    <div style="background: linear-gradient(135deg, #FFF8DC 0%, #FAFAD2 100%); border: 2px solid #FFD700; border-radius: 10px; padding: 40px; text-align: center; margin: 40px 0;">
-                                        <i class="fa-solid fa-crown" style="font-size: 60px; color: #FFD700; margin-bottom: 20px;"></i>
-                                        <h3 style="color: #2A3F54; margin-bottom: 15px;">Contenido Premium</h3>
-                                        <p style="color: #73879C; margin-bottom: 25px; font-size: 1.1em;">
-                                            Esta noticia requiere una suscripción activa para ver el contenido completo.
-                                        </p>
-                                        <a href="/users/subscription" class="btn btn-round btn-warning btn-lg" style="padding: 12px 30px;">
-                                            <i class="fa-solid fa-rocket"></i> Ver planes de suscripción
-                                        </a>
-                                    </div>
-                                {% endif %}
-                            {% else %}
-                                <!-- Free content -->
-                                <div style="font-size: 1.1em; line-height: 1.8; color: #2A3F54;">
-                                    {{ noticia.content|linebreaks }}
-                                </div>
-                            {% endif %}
+                            <!-- Since access is controlled in the view, we can show content directly -->
+                            <div style="font-size: 1.1em; line-height: 1.8; color: #2A3F54;">
+                                {{ noticia.content|linebreaks }}
+                            </div>
                         </div>
 
                         <!-- Video section -->

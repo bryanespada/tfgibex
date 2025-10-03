@@ -116,15 +116,6 @@
                                                     {% else %}
                                                         <img style="width: 100%; display: block; height: 100%; object-fit: cover;" src="{% static 'img/no-image.png' %}" alt="No image">
                                                     {% endif %}
-
-                                                    {% if noticia.is_premium %}
-                                                    <div class="mask">
-                                                        <p style="margin-top: 80px;">
-                                                            <i class="fa-solid fa-crown" style="color: gold; font-size: 30px;"></i><br>
-                                                            <span style="color: white;">Premium</span>
-                                                        </p>
-                                                    </div>
-                                                    {% endif %}
                                                 </div>
 
                                                 <div class="caption text-center" style="padding: 10px;">
