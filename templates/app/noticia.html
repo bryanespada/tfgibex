@@ -1,0 +1,110 @@
+{% extends '../base/base.html' %}
+{% block content %}
+{% load static %}
+{% load custom_tags %}
+
+<!-- page content -->
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>
+                    <a href="/app/noticias" class="btn btn-default btn-sm">
+                        <i class="fa fa-arrow-left"></i> Volver
+                    </a>
+                </h3>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>
+                            {{ noticia.title }}
+                            {% if noticia.is_premium %}
+                            <span class="pull-right">
+                                <i class="fa-solid fa-crown" style="color:{{config.app_primary}}" title="Premium content"></i>
+                            </span>
+                            {% endif %}
+                        </h2>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div class="x_content">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p class="text-muted">
+                                    <i class="fa-solid fa-building"></i> <strong>{{ noticia.empresa.title }}</strong>
+                                    &nbsp;&nbsp;|&nbsp;&nbsp;
+                                    <i class="fa-solid fa-calendar"></i> {{ noticia.published_date|date:"d M Y H:i" }}
+                                    {% if noticia.source %}
+                                    &nbsp;&nbsp;|&nbsp;&nbsp;
+                                    <i class="fa-solid fa-globe"></i> {{ noticia.source }}
+                                    {% endif %}
+                                    {% if noticia.author %}
+                                    &nbsp;&nbsp;|&nbsp;&nbsp;
+                                    <i class="fa-solid fa-user"></i> {{ noticia.author }}
+                                    {% endif %}
+                                </p>
+
+                                {% if noticia.tags %}
+                                <p>
+                                    <i class="fa-solid fa-tags"></i>
+                                    {% for tag in noticia.tags|split:"," %}
+                                    <span class="label label-default">{{ tag|trim }}</span>
+                                    {% endfor %}
+                                </p>
+                                {% endif %}
+
+                                <hr>
+
+                                {% if noticia.image %}
+                                <div class="text-center" style="margin-bottom: 30px;">
+                                    <img src="/media/{{ noticia.image }}" alt="{{ noticia.title }}" style="max-width: 100%; max-height: 400px; object-fit: contain;">
+                                </div>
+                                {% endif %}
+
+                                {% if noticia.summary %}
+                                <div class="lead">
+                                    {{ noticia.summary|linebreaks }}
+                                </div>
+                                <hr>
+                                {% endif %}
+
+                                {% if noticia.is_premium %}
+                                    <!-- TODO: Check if user has active subscription -->
+                                    <div class="alert alert-warning">
+                                        <i class="fa-solid fa-crown"></i> <strong>Contenido Premium</strong>
+                                        <p>Esta noticia requiere una suscripción activa para ver el contenido completo.</p>
+                                        <a href="/users/subscription" class="btn btn-warning">Ver planes de suscripción</a>
+                                    </div>
+                                {% else %}
+                                    {% if noticia.content %}
+                                    <div class="content">
+                                        {{ noticia.content|linebreaks }}
+                                    </div>
+                                    {% endif %}
+                                {% endif %}
+
+                                {% if noticia.source_url %}
+                                <hr>
+                                <p>
+                                    <a href="{{ noticia.source_url }}" target="_blank" class="btn btn-info">
+                                        <i class="fa-solid fa-external-link"></i> Ver fuente original
+                                    </a>
+                                </p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /page content -->
+
+{% endblock %}

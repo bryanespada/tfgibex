@@ -20,3 +20,23 @@ def is_premium(user):
     today = timezone.now().date()
     has_active_subscription = Subscription.objects.filter(user=user, due_date__gte=today).exists()
     return has_active_subscription
+
+
+@register.filter(name='split')
+def split(value, delimiter=','):
+    """
+    Returns a list of strings by splitting the input on the delimiter
+    """
+    if value:
+        return value.split(delimiter)
+    return []
+
+
+@register.filter(name='trim')
+def trim(value):
+    """
+    Removes leading and trailing whitespace
+    """
+    if value:
+        return value.strip()
+    return value

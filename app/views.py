@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from appmodels.models import GeneralConfig, Product, Mercado, Bolsa, Empresa, Blog, Image
+from appmodels.models import GeneralConfig, Product, Mercado, Bolsa, Empresa, Blog, Image, Noticia
 from logs.models import TrackingLog
 from django.db.models import Count
 from logs.views import log
@@ -106,7 +106,42 @@ def empresa(request, empresa_id):
 
     context['images'] = selected_empresa.images.all()
 
-    log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"Element", "item":"Empresa", "has_active_subscription":False, "empresa":selected_empresa, "bolsa":selected_empresa.bolsa, "mercado":selected_empresa.bolsa.mercado})
+    # Como una empresa puede tener múltiples bolsas, tomamos la primera si existe
+    first_bolsa = selected_empresa.bolsas.first() if selected_empresa.bolsas.exists() else None
+    log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"Element", "item":"Empresa", "has_active_subscription":False, "empresa":selected_empresa, "bolsa":first_bolsa, "mercado":selected_empresa.mercado})
     return render (request, "app/empresa.html", context=context)
+
+
+@login_required(login_url="/users/access")
+def noticias(request):
+    """
+    Function to display all news to users
+    """
+    context = {}
+    context['config'] = get_object_or_404(GeneralConfig, id=1)
+
+    # Get all public news ordered by date
+    context['noticias'] = Noticia.objects.filter(public=True).order_by('-published_date')
+
+    log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"List", "item":"Noticia", "has_active_subscription":False, "mercado":None, "bolsa":None, "empresa":None})
+    return render(request, "app/noticias.html", context=context)
+
+
+@login_required(login_url="/users/access")
+def noticia(request, noticia_id):
+    """
+    Function to display a specific news article
+    """
+    context = {}
+    context['config'] = get_object_or_404(GeneralConfig, id=1)
+    selected_noticia = get_object_or_404(Noticia, id=noticia_id, public=True)
+
+    # Check if news is premium and user has subscription
+    # TODO: Add subscription check logic here
+
+    context['noticia'] = selected_noticia
+
+    log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"Element", "item":"Noticia", "has_active_subscription":False, "empresa":selected_noticia.empresa, "bolsa":None, "mercado":selected_noticia.empresa.mercado if selected_noticia.empresa else None})
+    return render(request, "app/noticia.html", context=context)
 
 
