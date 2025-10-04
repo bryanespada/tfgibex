@@ -6,10 +6,9 @@
 <!-- page content -->
 <div class="right_col" role="main">
     <div class="">
-        <!-- Modern Profile Header -->
-        <div class="page-title" style="margin-bottom: 30px;">
+        <div class="page-title">
             <div class="title_left">
-                <h3 style="color: #2A3F54; font-weight: bold;">Mi Perfil</h3>
+                <h3>Mi Perfil</h3>
             </div>
         </div>
 
@@ -118,6 +117,19 @@
                                 </p>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Password Change Section -->
+                <div class="x_panel" style="border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); margin-top: 20px;">
+                    <div class="x_content" style="padding: 20px;">
+                        <h5 style="color: #2A3F54; margin-bottom: 15px;">
+                            <i class="fa-solid fa-key" style="color: #E74C3C;"></i> Seguridad
+                        </h5>
+                        <p style="color: #73879C; margin-bottom: 15px;">Para cambiar tu contraseña, utiliza el enlace seguro de recuperación</p>
+                        <a href="{% url 'password_change' %}" class="btn" style="background: linear-gradient(135deg, #3498DB 0%, #2980B9 100%); border: none; border-radius: 25px; padding: 8px 20px; color: white;">
+                            <i class="fa-solid fa-lock"></i> Cambiar Contraseña
+                        </a>
                     </div>
                 </div>
             </div>

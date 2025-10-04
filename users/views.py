@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.views import PasswordResetView
-from django.contrib.auth.decorators import login_required 
+from django.contrib.auth.views import PasswordResetView, PasswordChangeView, PasswordChangeDoneView
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.decorators.csrf import csrf_exempt
 from google.oauth2 import id_token
 from google.auth.transport import requests as google_auth_requests
@@ -451,3 +452,43 @@ def stripe_webhook(request):
     }
 
     return stripe_handle_event(request, event_actions)
+
+
+class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
+    """
+    Vista personalizada para cambio de contraseña que incluye el objeto config
+    Validaciones incluidas:
+    - Usuario debe estar autenticado (LoginRequiredMixin)
+    - Contraseña actual debe ser correcta
+    - Nueva contraseña debe cumplir validadores de Django (mín 8 caracteres, no común, etc)
+    - Las dos contraseñas nuevas deben coincidir
+    """
+    template_name = 'users/logged/password_change.html'
+    success_url = '/users/password-change-done/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['config'] = GeneralConfig.objects.all().first()
+        return context
+
+    def form_valid(self, form):
+        """
+        Llamado cuando el formulario es válido
+        La contraseña ya fue validada por Django
+        """
+        # Log the password change
+        log(self.request, 'Change', 'Contraseña cambiada exitosamente')
+        messages.success(self.request, 'Tu contraseña ha sido actualizada exitosamente.')
+        return super().form_valid(form)
+
+
+class CustomPasswordChangeDoneView(LoginRequiredMixin, PasswordChangeDoneView):
+    """
+    Vista personalizada para confirmación de cambio de contraseña
+    """
+    template_name = 'users/logged/password_change_done.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['config'] = GeneralConfig.objects.all().first()
+        return context

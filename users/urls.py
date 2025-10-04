@@ -19,6 +19,8 @@ urlpatterns = [
     path("exit/", views.exit, name="exit"),
     path("profile/", views.profile, name="profile"),
     path("subscription/", views.subscription, name="user_subscription"),
+    path('password-change/', views.CustomPasswordChangeView.as_view(), name='password_change'),
+    path('password-change-done/', views.CustomPasswordChangeDoneView.as_view(), name='password_change_done'),
 
     # Paths of Payments use
     path("stripe_webhook/", views.stripe_webhook, name="stripe_webhook"),
