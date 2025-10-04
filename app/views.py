@@ -191,3 +191,103 @@ def noticia(request, noticia_id):
     return render(request, "app/noticia.html", context=context)
 
 
+@login_required
+def faq(request):
+    config = GeneralConfig.objects.all().first()
+
+    # FAQ data structure
+    faqs = [
+        {
+            'category': 'General',
+            'questions': [
+                {
+                    'question': '¿Qué es TFG IBEX?',
+                    'answer': 'TFG IBEX es una plataforma de información financiera que proporciona noticias actualizadas, análisis y datos sobre empresas cotizadas en diferentes mercados bursátiles, con especial enfoque en el IBEX 35 y otros índices europeos y americanos.'
+                },
+                {
+                    'question': '¿Necesito una cuenta para acceder al contenido?',
+                    'answer': 'Sí, necesitas registrarte para acceder al contenido de la plataforma. Ofrecemos tanto cuentas gratuitas con acceso básico como suscripciones premium con acceso completo a todas las noticias y análisis.'
+                },
+                {
+                    'question': '¿Cómo puedo registrarme?',
+                    'answer': 'Puedes registrarte haciendo clic en el botón "Registrarse" en la página de inicio. Solo necesitas proporcionar tu correo electrónico, nombre y crear una contraseña.'
+                }
+            ]
+        },
+        {
+            'category': 'Suscripción Premium',
+            'questions': [
+                {
+                    'question': '¿Qué ventajas tiene la suscripción Premium?',
+                    'answer': 'La suscripción Premium te da acceso ilimitado a todas las noticias, incluyendo contenido exclusivo, análisis en profundidad, informes especiales y acceso prioritario a nuevas funcionalidades.'
+                },
+                {
+                    'question': '¿Cuánto cuesta la suscripción Premium?',
+                    'answer': 'Ofrecemos diferentes planes de suscripción con precios competitivos. Puedes ver todos los detalles y precios actualizados en la sección de suscripción de tu perfil.'
+                },
+                {
+                    'question': '¿Cómo puedo cancelar mi suscripción?',
+                    'answer': 'Puedes cancelar tu suscripción en cualquier momento desde tu perfil de usuario en la sección "Suscripción". La cancelación será efectiva al final del período de facturación actual.'
+                }
+            ]
+        },
+        {
+            'category': 'Contenido y Noticias',
+            'questions': [
+                {
+                    'question': '¿Con qué frecuencia se actualiza el contenido?',
+                    'answer': 'Nuestro contenido se actualiza continuamente a lo largo del día. Las noticias importantes se publican en tiempo real, mientras que los análisis y reportes especiales se publican regularmente.'
+                },
+                {
+                    'question': '¿Puedo filtrar las noticias por empresa o mercado?',
+                    'answer': 'Sí, puedes navegar por mercados específicos (Europeo, Americano, etc.), bolsas (IBEX, DAX, NYSE, NASDAQ) y empresas individuales para ver solo las noticias que te interesan.'
+                },
+                {
+                    'question': '¿Las noticias incluyen análisis técnico?',
+                    'answer': 'Las noticias premium pueden incluir análisis técnico, gráficos y proyecciones. El nivel de detalle depende del tipo de noticia y la fuente de información.'
+                }
+            ]
+        },
+        {
+            'category': 'Navegación y Uso',
+            'questions': [
+                {
+                    'question': '¿Cómo busco una empresa específica?',
+                    'answer': 'Puedes usar la barra de búsqueda en las páginas de listado de empresas, o navegar a través de Mercados > Bolsas > Empresas para encontrar la empresa que buscas.'
+                },
+                {
+                    'question': '¿Puedo guardar noticias para leer más tarde?',
+                    'answer': 'Actualmente estamos trabajando en esta funcionalidad. Pronto podrás guardar tus noticias favoritas en tu perfil.'
+                },
+                {
+                    'question': '¿La plataforma está disponible en dispositivos móviles?',
+                    'answer': 'Sí, nuestra plataforma es totalmente responsive y se adapta a cualquier dispositivo. Puedes acceder desde tu móvil, tablet o computadora con la misma experiencia de usuario.'
+                }
+            ]
+        },
+        {
+            'category': 'Cuenta y Perfil',
+            'questions': [
+                {
+                    'question': '¿Cómo cambio mi contraseña?',
+                    'answer': 'Puedes cambiar tu contraseña desde la página de tu perfil. Si olvidaste tu contraseña, puedes usar la opción "¿Olvidaste tu contraseña?" en la página de inicio de sesión.'
+                },
+                {
+                    'question': '¿Puedo cambiar mi dirección de correo electrónico?',
+                    'answer': 'No, actualmente no es posible cambiar la dirección de correo electrónico asociada a tu cuenta. El correo electrónico se usa como identificador único para el inicio de sesión y no puede ser modificado una vez creada la cuenta.'
+                },
+                {
+                    'question': '¿Cómo elimino mi cuenta?',
+                    'answer': 'Si deseas eliminar tu cuenta, por favor contacta con nuestro equipo de soporte. Ten en cuenta que esta acción es irreversible y perderás todo tu historial y configuración.'
+                }
+            ]
+        }
+    ]
+
+    context = {
+        "config": config,
+        "faqs": faqs,
+    }
+    return render(request, "app/faq.html", context)
+
+

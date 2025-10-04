@@ -214,15 +214,22 @@
                         </div>
                         {% endif %}
 
-                        <!-- Related company section -->
-                        <div style="margin-top: 40px; padding: 30px; background: linear-gradient(135deg, #F7F7F7 0%, #EFEFEF 100%); border-radius: 10px; border: 1px solid #E7E7E7;">
-                            <h3 style="color: #2A3F54; margin-bottom: 20px;">
-                                <i class="fa-solid fa-info-circle"></i> Sobre {{ noticia.empresa.title }}
-                            </h3>
-                            <p style="color: #73879C; line-height: 1.7;">{{ noticia.empresa.description|truncatewords:50 }}</p>
-                            <a href="/app/empresa/{{ noticia.empresa.id }}" class="btn btn-round btn-primary" style="margin-top: 20px;">
-                                Ver perfil completo de la empresa <i class="fa fa-arrow-right"></i>
-                            </a>
+                        <!-- Related company section - subtle design -->
+                        <div style="margin-top: 30px; padding: 15px 20px; background: #FAFAFA; border-left: 3px solid #E7E7E7; border-radius: 5px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <div style="flex: 1;">
+                                    <h5 style="color: #73879C; margin: 0 0 5px 0; font-size: 0.9em; font-weight: normal;">
+                                        <i class="fa-solid fa-building" style="margin-right: 5px; font-size: 0.9em;"></i>
+                                        Empresa relacionada
+                                    </h5>
+                                    <p style="margin: 0; color: #2A3F54; font-weight: 500;">
+                                        {{ noticia.empresa.title }}
+                                    </p>
+                                </div>
+                                <a href="/app/empresa/{{ noticia.empresa.id }}" class="btn btn-default btn-xs" style="border: 1px solid #D4D4D4; color: #73879C;">
+                                    Ver más <i class="fa fa-arrow-right" style="font-size: 0.85em;"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

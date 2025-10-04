@@ -1,0 +1,124 @@
+{% extends '../base/base.html' %}
+{% block content %}
+
+<!-- page content -->
+<div class="right_col" role="main">
+    <div class="">
+        <!-- Page Header -->
+        <div class="page-title" style="margin-bottom: 30px;">
+            <div class="title_left">
+                <h3 style="color: #2A3F54; font-weight: bold;">
+                    <i class="fa-solid fa-circle-question" style="color: #3498DB;"></i>
+                    Preguntas Frecuentes
+                </h3>
+                <p style="color: #73879C; margin-top: 10px;">
+                    Encuentra respuestas a las preguntas más comunes sobre nuestra plataforma
+                </p>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <!-- FAQ Categories -->
+                <div class="row" style="margin-top: 20px;">
+                    {% for faq_category in faqs %}
+                    <div class="col-md-12 faq-category" style="margin-bottom: 30px;">
+                        <div class="x_panel" style="border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.08);">
+                            <!-- Category Header -->
+                            <div class="x_title" style="border-bottom: 2px solid #E7E7E7;">
+                                <h2 style="color: #2A3F54; font-weight: 600; font-size: 1.3em;">
+                                    {% if faq_category.category == 'General' %}
+                                        <i class="fa-solid fa-info-circle" style="color: #3498DB;"></i>
+                                    {% elif faq_category.category == 'Suscripción Premium' %}
+                                        <i class="fa-solid fa-crown" style="color: #F39C12;"></i>
+                                    {% elif faq_category.category == 'Contenido y Noticias' %}
+                                        <i class="fa-solid fa-newspaper" style="color: #26B99A;"></i>
+                                    {% elif faq_category.category == 'Navegación y Uso' %}
+                                        <i class="fa-solid fa-compass" style="color: #9B59B6;"></i>
+                                    {% elif faq_category.category == 'Cuenta y Perfil' %}
+                                        <i class="fa-solid fa-user-circle" style="color: #E74C3C;"></i>
+                                    {% else %}
+                                        <i class="fa-solid fa-folder" style="color: #73879C;"></i>
+                                    {% endif %}
+                                    {{ faq_category.category }}
+                                </h2>
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <!-- Questions in this category -->
+                            <div class="x_content" style="padding: 20px;">
+                                <div class="accordion" id="accordion{{ forloop.counter }}">
+                                    {% for item in faq_category.questions %}
+                                    <div class="faq-item" style="margin-bottom: 15px;">
+                                        <div style="background: #F8F9FA; border-radius: 8px; overflow: hidden; border: 1px solid #E7E7E7;">
+                                            <!-- Question -->
+                                            <div class="faq-question"
+                                                 data-toggle="collapse"
+                                                 data-target="#collapse{{ forloop.parentloop.counter }}_{{ forloop.counter }}"
+                                                 aria-expanded="false"
+                                                 aria-controls="collapse{{ forloop.parentloop.counter }}_{{ forloop.counter }}"
+                                                 style="padding: 15px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+                                                <h5 style="margin: 0; color: #2A3F54; font-size: 1em; font-weight: 500;">
+                                                    {{ item.question }}
+                                                </h5>
+                                                <i class="fa fa-chevron-down" style="color: #73879C; transition: transform 0.3s;"></i>
+                                            </div>
+
+                                            <!-- Answer -->
+                                            <div id="collapse{{ forloop.parentloop.counter }}_{{ forloop.counter }}"
+                                                 class="collapse"
+                                                 data-parent="#accordion{{ forloop.parentloop.counter }}">
+                                                <div class="faq-answer" style="padding: 0 20px 15px 20px; color: #73879C; line-height: 1.6;">
+                                                    {{ item.answer }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /page content -->
+
+<script>
+// Rotate chevron icon on collapse/expand
+document.querySelectorAll('[data-toggle="collapse"]').forEach(function(element) {
+    element.addEventListener('click', function() {
+        var chevron = this.querySelector('.fa-chevron-down');
+        var target = document.querySelector(this.getAttribute('data-target'));
+
+        setTimeout(function() {
+            if (target.classList.contains('show')) {
+                chevron.style.transform = 'rotate(180deg)';
+            } else {
+                chevron.style.transform = 'rotate(0)';
+            }
+        }, 10);
+    });
+});
+</script>
+
+<style>
+.faq-question:hover {
+    background: #F0F0F0 !important;
+}
+
+.faq-item {
+    transition: all 0.3s ease;
+}
+
+.collapse.show {
+    border-top: 1px solid #E7E7E7;
+}
+</style>
+
+{% endblock %}

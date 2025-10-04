@@ -12,4 +12,5 @@ urlpatterns = [
     path("empresa/<int:empresa_id>/", views.empresa, name="user_empresa"),
     path("noticias/", views.noticias, name="user_noticias"),
     path("noticia/<int:noticia_id>/", views.noticia, name="user_noticia"),
+    path("faq/", views.faq, name="user_faq"),
 ]
