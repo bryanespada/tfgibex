@@ -4,11 +4,11 @@
 
 <div class="right_col" role="main">
     <!-- top tiles -->
-    <div class="row" style="display: inline-block;">
+    <div class="row" style="display: inline-block; width: 100%;">
         <div class="tile_count">
 
-            <div class="col-md-2 col-sm-4  tile_stats_count">
-                <span class="count_top"><i class="fa-solid fa-user"></i> Total Users</span>
+            <div class="col-md-2 col-sm-4  tile_stats_count" style="min-width: 200px;">
+                <span class="count_top"><i class="fa-solid fa-user"></i> Total Usuarios</span>
                 <div class="count">{{total_users}}</div>
                 <span class="count_bottom">
                     {% if total_users_last_week %}
@@ -22,11 +22,11 @@
                         {{total_users_last_week}}
                     </i>
                     {% endif %}
-                    From last Week
+                    Desde la última semana</span>
             </div>
 
-            <div class="col-md-2 col-sm-4  tile_stats_count">
-                <span class="count_top"><i class="fa-solid fa-user-shield"></i> Total Admins</span>
+            <div class="col-md-2 col-sm-4  tile_stats_count" style="min-width: 200px;">
+                <span class="count_top"><i class="fa-solid fa-user-shield"></i> Total Administradores</span>
                 <div class="count">{{total_admins}}</div>
                 <span class="count_bottom">
                     {% if total_admins_last_week %}
@@ -40,11 +40,11 @@
                         {{total_admins_last_week}}
                     </i>
                     {% endif %}
-                    From last Week</span>
+                    Desde la última semana</span>
             </div>
 
-            <div class="col-md-2 col-sm-4  tile_stats_count">
-                <span class="count_top"><i class="fa-solid fa-user-plus"></i> User increasement</span>
+            <div class="col-md-2 col-sm-4  tile_stats_count" style="min-width: 200px;">
+                <span class="count_top"><i class="fa-solid fa-user-plus"></i> Incremento de usuarios</span>
                 <div class="count">{{total_users_increasement |stringformat:"d"}}%</div>
                 <span class="count_bottom">
                     {% if total_users_last_week %}
@@ -58,12 +58,12 @@
                         {{total_admin_increasement |stringformat:"d"}}%
                     </i>
                     {% endif %}
-                    Admins
+                    Administradores
                 </span>
             </div>
 
-            <div class="col-md-2 col-sm-4  tile_stats_count">
-                <span class="count_top"><i class="fa-brands fa-stripe-s"></i> Subscriptions</span>
+            <div class="col-md-2 col-sm-4  tile_stats_count" style="min-width: 200px;">
+                <span class="count_top"><i class="fa-brands fa-stripe-s"></i> Suscripciones</span>
                 <div class="count">{{total_active_subscriptions}}</div>
                 <span class="count_bottom">
                     {% if total_active_subscriptions_last_week %}
@@ -77,11 +77,11 @@
                         {{total_active_subscriptions_last_week}}
                     </i>
                     {% endif %}
-                    From last week
+                    Desde la última semana
                 </span>
             </div>
 
-            <div class="col-md-2 col-sm-4  tile_stats_count">
+            <div class="col-md-2 col-sm-4  tile_stats_count" style="min-width: 200px;">
                 <span class="count_top"><i class="fa-solid fa-square"></i> Empresas</span>
                 <div class="count">{{total_empresas}}</div>
                 <span class="count_bottom">
@@ -89,11 +89,11 @@
                 </span>
             </div>
 
-            <div class="col-md-2 col-sm-4  tile_stats_count">
-                <span class="count_top"><i class="fa-solid fa-square-check"></i> Products</span>
+            <div class="col-md-2 col-sm-4  tile_stats_count" style="min-width: 200px;">
+                <span class="count_top"><i class="fa-solid fa-square-check"></i> Productos</span>
                 <div class="count">{{total_products}}</div>
                 <span class="count_bottom">
-                    {{total_products_published}} Available
+                    {{total_products_published}} Disponibles
                 </span>
             </div>
 
@@ -132,7 +132,7 @@
                 <!-- Title -->
                 <div class="row x_title">
                     <div class="col-md-6">
-                        <h3>Visitors and new users</h3>
+                        <h3>Visitantes y nuevos usuarios</h3>
                     </div>
                 </div>
 
@@ -153,7 +153,7 @@
                                 {
                                     data: {{visitors.count | safe}},
                                     cubicInterpolationMode: 'monotone',
-                                    label: "Visitors",
+                                    label: "Visitantes",
                                     borderColor: "{{config.app_color_1}}", // Border color
                                     fill: true, // Area color
                                     backgroundColor: '{{config.app_color_1}}{{config.app_transparency_factor}}', // Border color with transparency
@@ -164,7 +164,7 @@
                                 {
                                     data: {{new_users.count | safe}},
                                     cubicInterpolationMode: 'monotone',
-                                    label: "New users",
+                                    label: "Nuevos usuarios",
                                     borderColor: "{{config.app_color_4}}", // Border color
                                     fill: true, // Area color
                                     backgroundColor: '{{config.app_color_4}}{{config.app_transparency_factor}}', // Border color with transparency
@@ -224,7 +224,7 @@
                 <!-- Title -->
                 <div class="row x_title">
                     <div class="col-md-6">
-                        <h3>Earning</h3>
+                        <h3>Ganancias</h3>
                     </div>
                 </div>
 
@@ -245,7 +245,7 @@
                                         {
                                             data: {{total_earned.amount}},
                                             cubicInterpolationMode: 'monotone',
-                                            label: "Total earned",
+                                            label: "Total ganado",
                                             borderColor: "#03586a",
                                             fill: true,
                                             backgroundColor: '#03586a{{config.app_transparency_factor}}',
@@ -290,7 +290,7 @@
                             });
                         </script>
                         {% else %}
-                            <div id="admin_chart_1_2" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">No data</div>
+                            <div id="admin_chart_1_2" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">Sin datos</div>
                         {% endif %}
                 </div>
 
@@ -312,7 +312,7 @@
 
                 <!-- Title -->
                 <div class="x_title">
-                    <h2>Top products</h2>
+                    <h2>Productos destacados</h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
                         <li><a class="close-link"><i class="fa fa-close"></i></a>
@@ -339,7 +339,7 @@
                                     data: {
                                         labels: labels_2_1,
                                         datasets: [{
-                                            label: "Total access",
+                                            label: "Total accesos",
                                             data: {{top_products.values}},
                                             borderColor: colours_array_2_1[0],
                                             backgroundColor: colours_array_2_1[1],
@@ -377,7 +377,7 @@
                                 });
                             </script>
                         {% else %}
-                            <div id="admin_chart_2_1" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">No data</div>
+                            <div id="admin_chart_2_1" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">Sin datos</div>
                         {% endif %}
                     </div>
 
@@ -391,7 +391,7 @@
 
                 <!-- Title -->
                 <div class="x_title">
-                    <h2>Top empresas</h2>
+                    <h2>Empresas destacadas</h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
                         <li><a class="close-link"><i class="fa fa-close"></i></a>
@@ -418,7 +418,7 @@
                                     data: {
                                         labels: labels_2_2,
                                         datasets: [{
-                                            label: "Total access",
+                                            label: "Total accesos",
                                             data: {{top_empresas.values}},
                                             borderColor: colours_array_2_2[0],
                                             backgroundColor: colours_array_2_2[1],
@@ -456,7 +456,7 @@
                                 });
                             </script>
                         {% else %}
-                            <div id="admin_chart_2_2" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">No data</div>
+                            <div id="admin_chart_2_2" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">Sin datos</div>
                         {% endif %}
                     </div>
 
@@ -471,7 +471,7 @@
 
                 <!-- Title -->
                 <div class="x_title">
-                    <h2>Top countries</h2>
+                    <h2>Países principales</h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
                         <li><a class="close-link"><i class="fa fa-close"></i></a>
@@ -497,7 +497,7 @@
                                     data: {
                                         labels: labels_2_3,
                                         datasets: [{
-                                            label: "Total access",
+                                            label: "Total accesos",
                                             data: {{top_countries.values}},
                                             borderColor: colours_array_2_3[0],
                                             backgroundColor: colours_array_2_3[1],
@@ -535,7 +535,7 @@
                                 });
                             </script>
                         {% else %}
-                            <div id="admin_chart_2_3" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">No data</div>
+                            <div id="admin_chart_2_3" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">Sin datos</div>
                         {% endif %}
                     </div>
 
@@ -554,7 +554,7 @@
 
                 <!-- Title -->
                 <div class="x_title">
-                    <h2>Requests by continent</h2>
+                    <h2>Solicitudes por continente</h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
                         <li><a class="close-link"><i class="fa fa-close"></i></a>
@@ -581,7 +581,7 @@
                                     data: {
                                         labels: labels_3_1,
                                         datasets: [{
-                                            label: "Total requests",
+                                            label: "Total solicitudes",
                                             data: {{total_loads_continent.values}},
                                             borderColor: colours_array_3_1[0],
                                             backgroundColor: colours_array_3_1[1],
@@ -613,7 +613,7 @@
                                 });
                             </script>
                         {% else %}
-                            <div id="admin_chart_3_1" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">No data</div>
+                            <div id="admin_chart_3_1" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">Sin datos</div>
                         {% endif %}
                     </div>
 
@@ -628,7 +628,7 @@
 
                 <!-- Title -->
                 <div class="x_title">
-                    <h2>Users by country</h2>
+                    <h2>Usuarios por país</h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
                         <li><a class="close-link"><i class="fa fa-close"></i></a>
@@ -654,7 +654,7 @@
                                 data: {
                                     labels: labels_3_2,
                                     datasets: [{
-                                        label: "Total registers",
+                                        label: "Total registros",
                                         data: {{total_registered_country.values}},
                                         borderColor: colours_array_3_2[0],
                                         backgroundColor: colours_array_3_2[1],
@@ -686,7 +686,7 @@
                             });
                         </script>
                         {% else %}
-                            <div id="admin_chart_3_2" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">No data</div>
+                            <div id="admin_chart_3_2" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">Sin datos</div>
                         {% endif %}
                     </div>
 
@@ -701,7 +701,7 @@
 
                 <!-- Title -->
                 <div class="x_title">
-                    <h2>Subscriptions by country</h2>
+                    <h2>Suscripciones por país</h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
                         <li><a class="close-link"><i class="fa fa-close"></i></a>
@@ -727,7 +727,7 @@
                                     data: {
                                         labels: labels_3_3,
                                         datasets: [{
-                                            label: "Total subscriptions",
+                                            label: "Total suscripciones",
                                             data: {{total_subscriptions_country.values}},
                                             borderColor: colours_array_3_3[0],
                                             backgroundColor: colours_array_3_3[1],
@@ -759,7 +759,7 @@
                                 });
                             </script>
                         {% else %}
-                            <div id="admin_chart_3_3" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">No data</div>
+                            <div id="admin_chart_3_3" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">Sin datos</div>
                         {% endif %}
                     </div>
 
