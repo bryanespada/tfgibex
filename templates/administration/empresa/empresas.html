@@ -1,87 +1,350 @@
 {% extends '../../base/base.html' %}
 {% block content %}
 
+<style>
+    .empresas-card {
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+
+    .empresas-card:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+
+    .empresas-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px 20px;
+        font-weight: 600;
+    }
+
+    .empresas-body {
+        padding: 25px;
+        background: #f8f9fa;
+    }
+
+    .table-container {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .table {
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .table thead th {
+        background: var(--app-primary) !important;
+        color: white !important;
+        border: none !important;
+        padding: 12px 15px !important;
+        font-weight: 600;
+        font-size: 0.9em;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .table thead th:first-child {
+        border-radius: 8px 0 0 0;
+    }
+
+    .table thead th:last-child {
+        border-radius: 0 8px 0 0;
+    }
+
+    .table tbody tr {
+        transition: all 0.2s ease;
+    }
+
+    .table tbody tr:hover {
+        background-color: #f5f5ff !important;
+        transform: translateX(2px);
+        box-shadow: 0 2px 4px rgba(102, 126, 234, 0.1);
+    }
+
+    .table tbody td {
+        padding: 12px 15px;
+        vertical-align: middle;
+        border-top: 1px solid #e0e0e0;
+    }
+
+    .btn-action {
+        padding: 6px 12px;
+        margin: 0 2px;
+        border-radius: 6px;
+        transition: all 0.3s;
+        display: inline-block;
+        text-decoration: none;
+    }
+
+    .btn-gallery {
+        background: #ffc107;
+        color: white;
+    }
+
+    .btn-gallery:hover {
+        background: #e0a800;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+        color: white;
+    }
+
+    .btn-edit {
+        background: #17a2b8;
+        color: white;
+    }
+
+    .btn-edit:hover {
+        background: #138496;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(23, 162, 184, 0.3);
+        color: white;
+    }
+
+    .btn-delete {
+        background: #dc3545;
+        color: white;
+    }
+
+    .btn-delete:hover {
+        background: #c82333;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+        color: white;
+    }
+
+    .btn-add-new {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 25px;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-add-new:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #73879C;
+    }
+
+    .empty-state i {
+        font-size: 48px;
+        color: #E7E7E7;
+        margin-bottom: 15px;
+    }
+
+    .empty-state p {
+        font-size: 1.1em;
+        margin: 0;
+    }
+
+    .header-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .search-box {
+        display: flex;
+        align-items: center;
+        background: white;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        padding: 8px 15px;
+        width: 300px;
+        transition: all 0.3s;
+    }
+
+    .search-box:focus-within {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+
+    .search-box i {
+        color: #999;
+        margin-right: 10px;
+    }
+
+    .search-box input {
+        border: none;
+        outline: none;
+        width: 100%;
+        background: transparent;
+    }
+
+    .id-badge {
+        font-weight: 600;
+        color: #667eea;
+        background: #f0f4ff;
+        padding: 4px 8px;
+        border-radius: 4px;
+    }
+
+    .bolsa-badge {
+        background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+        color: white;
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 0.85em;
+        font-weight: 600;
+        display: inline-block;
+        margin: 2px;
+    }
+
+    .mercado-badge {
+        background: linear-gradient(135deg, #00d084 0%, #00a046 100%);
+        color: white;
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 0.85em;
+        font-weight: 600;
+        display: inline-block;
+    }
+
+    .status-badge {
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 0.85em;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .status-public {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+    .status-private {
+        background: #d4edda;
+        color: #155724;
+    }
+</style>
+
 <!-- page content -->
 <div class="right_col" role="main">
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>Empresas</h3>
+                <h3><i class="fa-solid fa-building"></i> Gestión de Empresas</h3>
             </div>
         </div>
 
         <div class="clearfix"></div>
 
-        <div class="row" style="display: block;">
-
-            <div class="clearfix"></div>
-
-            <div class="col-md-12 col-sm-12  ">
-                <div class="x_panel">
-                    <div class="x_title">
-                        <h2>Mostrando todas las empresas</h2>
-
-                        <ul class="nav navbar-right panel_toolbox">
-                            <li>
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <div class="empresas-card">
+                    <div class="empresas-header">
+                        <i class="fa-solid fa-list"></i> Listado de Empresas
                     </div>
+                    <div class="empresas-body">
+                        <div class="header-actions">
+                            <div class="search-box">
+                                <i class="fa-solid fa-search"></i>
+                                <input type="text" id="searchInput" placeholder="Buscar empresas...">
+                            </div>
+                            <a href="{% url 'administration_empresa_add' %}" class="btn-add-new">
+                                <i class="fa-solid fa-plus"></i> Añadir Nueva Empresa
+                            </a>
+                        </div>
 
-                    <div class="x_content">
-
-
-
-
-
-
-
-
-                        <div class="table-responsive">
-                            <table class="table table-striped jambo_table bulk_action">
+                        <div class="table-container">
+                            {% if empresas %}
+                            <table class="table table-striped" id="empresasTable">
                                 <thead>
-                                    <tr class="headings">
-                                        <th class="column-title" style="width: 0%;">ID </th>
-                                        <th class="column-title">Title </th>
-                                        <th class="column-title">Bolsa </th>
-                                        <th class="column-title">Mercado </th>
-                                        <th class="column-title" style="width: 0%;">Public </th>
-                                        <th class="column-title no-link last" style="width: 0%; text-align: right !important;"><span class="nobr">Actions</span>
-                                        </th>
+                                    <tr>
+                                        <th style="width: 8%;">ID</th>
+                                        <th style="width: 25%;">Título</th>
+                                        <th style="width: 22%;">Bolsa(s)</th>
+                                        <th style="width: 18%;">Mercado</th>
+                                        <th style="width: 12%;">Estado</th>
+                                        <th style="width: 15%; text-align: center;">Acciones</th>
                                     </tr>
                                 </thead>
-
                                 <tbody>
                                     {% for empresa in empresas %}
-                                        <tr class="even pointer">
-                                            <td>#{{empresa.pk}} </td>
-                                            <td>{{empresa.title}} </td>
-                                            <td>{% for bolsa in empresa.bolsas.all %}{{ bolsa.title }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
-                                            <td>{{ empresa.mercado.title }}</td>
-                                            <td>{% if empresa.public %} <i class="fa-solid fa-lock-open" style="color: {{config.app_danger}}"></i> {% else %} <i class="fa-solid fa-lock" style="color: {{config.app_success}}"></i> {% endif %}</td>
-                                            <td class="last" style="text-align: right !important;"><a href="#">
-                                                <a href="{% url 'administration_empresa_gallery' empresa_id=empresa.id %}"><i class="fa-regular fa-images"></i></a>
-                                                <a href="{% url 'administration_empresa_edit' empresa_id=empresa.id %}"><i class="fa-regular fa-pen-to-square"></i></a>
-                                                <a href="{% url 'administration_empresa_delete' empresa_id=empresa.id %}" onclick="return confirm('Area you sure?')"><i class="fa-solid fa-trash"></i></a>
+                                    <tr>
+                                        <td>
+                                            <span class="id-badge">#{{empresa.pk}}</span>
+                                        </td>
+                                        <td>
+                                            <strong>{{empresa.title}}</strong>
+                                        </td>
+                                        <td>
+                                            {% for bolsa in empresa.bolsas.all %}
+                                                <span class="bolsa-badge">
+                                                    <i class="fa-solid fa-building-columns"></i> {{ bolsa.title }}
+                                                </span>
+                                            {% empty %}
+                                                <span style="color: #999; font-style: italic;">Sin bolsa asignada</span>
+                                            {% endfor %}
+                                        </td>
+                                        <td>
+                                            <span class="mercado-badge">
+                                                <i class="fa-solid fa-globe"></i> {{ empresa.mercado.title }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {% if empresa.public %}
+                                                <span class="status-badge status-public">
+                                                    <i class="fa-solid fa-lock-open"></i> Pública
+                                                </span>
+                                            {% else %}
+                                                <span class="status-badge status-private">
+                                                    <i class="fa-solid fa-lock"></i> Privada
+                                                </span>
+                                            {% endif %}
+                                        </td>
+                                        <td style="text-align: center;">
+                                            <a href="{% url 'administration_empresa_gallery' empresa_id=empresa.id %}"
+                                               class="btn-action btn-gallery"
+                                               title="Galería">
+                                                <i class="fa-solid fa-images"></i>
                                             </a>
-                                            </td>
-                                        </tr>
+                                            <a href="{% url 'administration_empresa_edit' empresa_id=empresa.id %}"
+                                               class="btn-action btn-edit"
+                                               title="Editar">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+                                            <a href="{% url 'administration_empresa_delete' empresa_id=empresa.id %}"
+                                               class="btn-action btn-delete"
+                                               onclick="return confirm('¿Estás seguro de que deseas eliminar esta empresa?')"
+                                               title="Eliminar">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
                                     {% endfor %}
                                 </tbody>
                             </table>
+                            {% else %}
+                            <div class="empty-state">
+                                <i class="fa-solid fa-inbox"></i>
+                                <p>No hay empresas registradas</p>
+                                <a href="{% url 'administration_empresa_add' %}" class="btn-add-new" style="margin-top: 20px;">
+                                    <i class="fa-solid fa-plus"></i> Añadir Primera Empresa
+                                </a>
+                            </div>
+                            {% endif %}
                         </div>
-
-
-
-
-
-
-
-                        
-
                     </div>
                 </div>
             </div>
@@ -89,5 +352,67 @@
     </div>
 </div>
 <!-- /page content -->
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Función de búsqueda
+    function filterTable() {
+        const input = document.getElementById("searchInput");
+        const filter = input.value.toLowerCase();
+        const table = document.getElementById("empresasTable");
+
+        if (!table) {
+            console.log("Tabla no encontrada");
+            return;
+        }
+
+        const tbody = table.getElementsByTagName("tbody")[0];
+        if (!tbody) {
+            console.log("Tbody no encontrado");
+            return;
+        }
+
+        const rows = tbody.getElementsByTagName("tr");
+
+        // Si no hay texto de búsqueda, mostrar todas las filas
+        if (filter === "") {
+            for (let i = 0; i < rows.length; i++) {
+                rows[i].style.display = "";
+            }
+            return;
+        }
+
+        // Filtrar filas
+        for (let i = 0; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName("td");
+            let found = false;
+
+            // Buscar en todas las columnas excepto la última (acciones)
+            for (let j = 0; j < cells.length - 1; j++) {
+                if (cells[j]) {
+                    const txtValue = cells[j].textContent || cells[j].innerText;
+                    if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+
+            // Mostrar u ocultar la fila
+            rows[i].style.display = found ? "" : "none";
+        }
+    }
+
+    // Conectar el evento al input
+    const searchInput = document.getElementById("searchInput");
+    if (searchInput) {
+        searchInput.addEventListener('keyup', filterTable);
+        searchInput.addEventListener('input', filterTable);
+        searchInput.addEventListener('paste', function() {
+            setTimeout(filterTable, 100);
+        });
+    }
+});
+</script>
 
 {% endblock %}

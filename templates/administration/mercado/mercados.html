@@ -211,7 +211,7 @@
                         <div class="header-actions">
                             <div class="search-box">
                                 <i class="fa-solid fa-search"></i>
-                                <input type="text" id="searchInput" placeholder="Buscar mercados..." onkeyup="filterTable()">
+                                <input type="text" id="searchInput" placeholder="Buscar mercados...">
                             </div>
                             <a href="{% url 'administration_mercado_add' %}" class="btn-add-new">
                                 <i class="fa-solid fa-plus"></i> Añadir Nuevo Mercado
@@ -277,34 +277,65 @@
 <!-- /page content -->
 
 <script>
-function filterTable() {
-    var input, filter, table, tr, td, i, txtValue;
-    input = document.getElementById("searchInput");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("mercadosTable");
+document.addEventListener('DOMContentLoaded', function() {
+    // Función de búsqueda
+    function filterTable() {
+        const input = document.getElementById("searchInput");
+        const filter = input.value.toLowerCase();
+        const table = document.getElementById("mercadosTable");
 
-    if (table) {
-        tr = table.getElementsByTagName("tr");
+        if (!table) {
+            console.log("Tabla no encontrada");
+            return;
+        }
 
-        for (i = 1; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td");
-            var found = false;
+        const tbody = table.getElementsByTagName("tbody")[0];
+        if (!tbody) {
+            console.log("Tbody no encontrado");
+            return;
+        }
 
-            // Buscar en todas las columnas excepto la de acciones
-            for (var j = 0; j < td.length - 1; j++) {
-                if (td[j]) {
-                    txtValue = td[j].textContent || td[j].innerText;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        const rows = tbody.getElementsByTagName("tr");
+
+        // Si no hay texto de búsqueda, mostrar todas las filas
+        if (filter === "") {
+            for (let i = 0; i < rows.length; i++) {
+                rows[i].style.display = "";
+            }
+            return;
+        }
+
+        // Filtrar filas
+        for (let i = 0; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName("td");
+            let found = false;
+
+            // Buscar en todas las columnas excepto la última (acciones)
+            for (let j = 0; j < cells.length - 1; j++) {
+                if (cells[j]) {
+                    const txtValue = cells[j].textContent || cells[j].innerText;
+                    if (txtValue.toLowerCase().indexOf(filter) > -1) {
                         found = true;
                         break;
                     }
                 }
             }
 
-            tr[i].style.display = found ? "" : "none";
+            // Mostrar u ocultar la fila
+            rows[i].style.display = found ? "" : "none";
         }
     }
-}
+
+    // Conectar el evento al input
+    const searchInput = document.getElementById("searchInput");
+    if (searchInput) {
+        searchInput.addEventListener('keyup', filterTable);
+        searchInput.addEventListener('input', filterTable);
+        searchInput.addEventListener('paste', function() {
+            setTimeout(filterTable, 100);
+        });
+    }
+});
 </script>
 
 {% endblock %}

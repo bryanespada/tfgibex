@@ -162,19 +162,47 @@
 
     .dataTables_wrapper .dataTables_filter {
         margin-bottom: 20px;
+        float: none !important;
+    }
+
+    .search-box {
+        display: flex;
+        align-items: center;
+        background: white;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        padding: 8px 15px;
+        width: 300px;
+        transition: all 0.3s;
+        margin-bottom: 20px;
+    }
+
+    .search-box:focus-within {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+
+    .search-box i {
+        color: #999;
+        margin-right: 10px;
+    }
+
+    .search-box input {
+        border: none;
+        outline: none;
+        width: 100%;
+        background: transparent;
     }
 
     .dataTables_wrapper .dataTables_filter input {
-        border: 2px solid #e0e0e0;
-        border-radius: 6px;
-        padding: 8px 12px;
-        transition: all 0.3s;
+        display: none;
     }
 
-    .dataTables_wrapper .dataTables_filter input:focus {
-        border-color: #667eea;
-        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
-        outline: none;
+    .header-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
     }
 </style>
 
@@ -196,6 +224,14 @@
                         <i class="fa-solid fa-database"></i> Registro de Actividades
                     </div>
                     <div class="logs-body">
+
+                        <div class="header-actions">
+                            <div class="search-box">
+                                <i class="fa-solid fa-search"></i>
+                                <input type="text" id="customSearchInput" placeholder="Buscar en registros...">
+                            </div>
+                            <div></div>
+                        </div>
 
                         <ul class="nav nav-tabs nav-tabs-logs" id="myTab" role="tablist">
                             <li class="nav-item">
@@ -285,7 +321,7 @@
             },
             "lengthChange": false,
             "pageLength": 50,
-            "dom": '<"row"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"p>>rt<"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+            "dom": '<"row"<"col-sm-12 col-md-6"><"col-sm-12 col-md-6"p>>rt<"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
             "drawCallback": function() {
                 // Aplicar estilos a los badges de status
                 $('.tables tbody td').each(function() {
@@ -299,6 +335,11 @@
                     }
                 });
             }
+        });
+
+        // Conectar el search box personalizado con DataTables
+        $('#customSearchInput').on('keyup input', function() {
+            table_logs.search(this.value).draw();
         });
 
         // Event listener for opening modal on row click con efecto visual

@@ -1,69 +1,289 @@
 {% extends '../../base/base.html' %}
 {% block content %}
 
+<style>
+    .bolsas-card {
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+
+    .bolsas-card:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+
+    .bolsas-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px 20px;
+        font-weight: 600;
+    }
+
+    .bolsas-body {
+        padding: 25px;
+        background: #f8f9fa;
+    }
+
+    .table-container {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .table {
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .table thead th {
+        background: var(--app-primary) !important;
+        color: white !important;
+        border: none !important;
+        padding: 12px 15px !important;
+        font-weight: 600;
+        font-size: 0.9em;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .table thead th:first-child {
+        border-radius: 8px 0 0 0;
+    }
+
+    .table thead th:last-child {
+        border-radius: 0 8px 0 0;
+    }
+
+    .table tbody tr {
+        transition: all 0.2s ease;
+    }
+
+    .table tbody tr:hover {
+        background-color: #f5f5ff !important;
+        transform: translateX(2px);
+        box-shadow: 0 2px 4px rgba(102, 126, 234, 0.1);
+    }
+
+    .table tbody td {
+        padding: 12px 15px;
+        vertical-align: middle;
+        border-top: 1px solid #e0e0e0;
+    }
+
+    .btn-action {
+        padding: 6px 12px;
+        margin: 0 2px;
+        border-radius: 6px;
+        transition: all 0.3s;
+        display: inline-block;
+        text-decoration: none;
+    }
+
+    .btn-edit {
+        background: #17a2b8;
+        color: white;
+    }
+
+    .btn-edit:hover {
+        background: #138496;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(23, 162, 184, 0.3);
+        color: white;
+    }
+
+    .btn-delete {
+        background: #dc3545;
+        color: white;
+    }
+
+    .btn-delete:hover {
+        background: #c82333;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+        color: white;
+    }
+
+    .btn-add-new {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 25px;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-add-new:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #73879C;
+    }
+
+    .empty-state i {
+        font-size: 48px;
+        color: #E7E7E7;
+        margin-bottom: 15px;
+    }
+
+    .empty-state p {
+        font-size: 1.1em;
+        margin: 0;
+    }
+
+    .header-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .search-box {
+        display: flex;
+        align-items: center;
+        background: white;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        padding: 8px 15px;
+        width: 300px;
+        transition: all 0.3s;
+    }
+
+    .search-box:focus-within {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+
+    .search-box i {
+        color: #999;
+        margin-right: 10px;
+    }
+
+    .search-box input {
+        border: none;
+        outline: none;
+        width: 100%;
+        background: transparent;
+    }
+
+    .id-badge {
+        font-weight: 600;
+        color: #667eea;
+        background: #f0f4ff;
+        padding: 4px 8px;
+        border-radius: 4px;
+    }
+
+    .description-text {
+        color: #73879C;
+        line-height: 1.4;
+    }
+
+    .mercado-badge {
+        background: linear-gradient(135deg, #00d084 0%, #00a046 100%);
+        color: white;
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 0.85em;
+        font-weight: 600;
+        display: inline-block;
+    }
+</style>
+
 <!-- page content -->
 <div class="right_col" role="main">
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>Bolsas</h3>
+                <h3><i class="fa-solid fa-building-columns"></i> Gestión de Bolsas</h3>
             </div>
         </div>
 
         <div class="clearfix"></div>
 
-        <div class="row" style="display: block;">
-
-            <div class="clearfix"></div>
-
-            <div class="col-md-12 col-sm-12  ">
-                <div class="x_panel">
-                    <div class="x_title">
-                        <h2>Showing all bolsas</h2>
-
-                        <ul class="nav navbar-right panel_toolbox">
-                            <li>
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <div class="bolsas-card">
+                    <div class="bolsas-header">
+                        <i class="fa-solid fa-list"></i> Listado de Bolsas
                     </div>
+                    <div class="bolsas-body">
+                        <div class="header-actions">
+                            <div class="search-box">
+                                <i class="fa-solid fa-search"></i>
+                                <input type="text" id="searchInput" placeholder="Buscar bolsas...">
+                            </div>
+                            <a href="{% url 'administration_bolsa_add' %}" class="btn-add-new">
+                                <i class="fa-solid fa-plus"></i> Añadir Nueva Bolsa
+                            </a>
+                        </div>
 
-                    <div class="x_content">
-
-                        <div class="table-responsive">
-                            <table class="table table-striped jambo_table bulk_action">
+                        <div class="table-container">
+                            {% if bolsas %}
+                            <table class="table table-striped" id="bolsasTable">
                                 <thead>
-                                    <tr class="headings">
-                                        <th class="column-title" style="width: 0%;">ID </th>
-                                        <th class="column-title">Title </th>
-                                        <th class="column-title">Description </th>
-                                        <th class="column-title">Mercado </th>
-                                        <th class="column-title no-link last" style="text-align: right !important;"><span class="nobr">Actions</span>
-                                        </th>
+                                    <tr>
+                                        <th style="width: 8%;">ID</th>
+                                        <th style="width: 25%;">Título</th>
+                                        <th style="width: 35%;">Descripción</th>
+                                        <th style="width: 20%;">Mercado</th>
+                                        <th style="width: 12%; text-align: center;">Acciones</th>
                                     </tr>
                                 </thead>
-
                                 <tbody>
                                     {% for bolsa in bolsas %}
-                                        <tr class="even pointer">
-                                            <td>#{{bolsa.pk}} </td>
-                                            <td>{{bolsa.title}} </td>
-                                            <td>{{bolsa.description}}</td>
-                                            <td>{{bolsa.mercado.title}}</td>
-                                            <td class="last" style="text-align: right !important;"><a href="#">
-                                                <a href="{% url 'administration_bolsa_edit' bolsa_id=bolsa.id %}"><i class="fa-regular fa-pen-to-square"></i></a>
-                                                <a href="{% url 'administration_bolsa_delete' bolsa_id=bolsa.id %}" onclick="return confirm('Are you sure?')"><i class="fa-solid fa-trash"></i></a>
+                                    <tr>
+                                        <td>
+                                            <span class="id-badge">#{{bolsa.pk}}</span>
+                                        </td>
+                                        <td>
+                                            <strong>{{bolsa.title}}</strong>
+                                        </td>
+                                        <td>
+                                            <span class="description-text">{{bolsa.description|default:"Sin descripción"}}</span>
+                                        </td>
+                                        <td>
+                                            <span class="mercado-badge">
+                                                <i class="fa-solid fa-globe"></i> {{bolsa.mercado.title}}
+                                            </span>
+                                        </td>
+                                        <td style="text-align: center;">
+                                            <a href="{% url 'administration_bolsa_edit' bolsa_id=bolsa.id %}"
+                                               class="btn-action btn-edit"
+                                               title="Editar">
+                                                <i class="fa-solid fa-pen-to-square"></i>
                                             </a>
-                                            </td>
-                                        </tr>
+                                            <a href="{% url 'administration_bolsa_delete' bolsa_id=bolsa.id %}"
+                                               class="btn-action btn-delete"
+                                               onclick="return confirm('¿Estás seguro de que deseas eliminar esta bolsa?')"
+                                               title="Eliminar">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
                                     {% endfor %}
                                 </tbody>
                             </table>
+                            {% else %}
+                            <div class="empty-state">
+                                <i class="fa-solid fa-inbox"></i>
+                                <p>No hay bolsas registradas</p>
+                                <a href="{% url 'administration_bolsa_add' %}" class="btn-add-new" style="margin-top: 20px;">
+                                    <i class="fa-solid fa-plus"></i> Añadir Primera Bolsa
+                                </a>
+                            </div>
+                            {% endif %}
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -71,5 +291,67 @@
     </div>
 </div>
 <!-- /page content -->
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Función de búsqueda
+    function filterTable() {
+        const input = document.getElementById("searchInput");
+        const filter = input.value.toLowerCase();
+        const table = document.getElementById("bolsasTable");
+
+        if (!table) {
+            console.log("Tabla no encontrada");
+            return;
+        }
+
+        const tbody = table.getElementsByTagName("tbody")[0];
+        if (!tbody) {
+            console.log("Tbody no encontrado");
+            return;
+        }
+
+        const rows = tbody.getElementsByTagName("tr");
+
+        // Si no hay texto de búsqueda, mostrar todas las filas
+        if (filter === "") {
+            for (let i = 0; i < rows.length; i++) {
+                rows[i].style.display = "";
+            }
+            return;
+        }
+
+        // Filtrar filas
+        for (let i = 0; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName("td");
+            let found = false;
+
+            // Buscar en todas las columnas excepto la última (acciones)
+            for (let j = 0; j < cells.length - 1; j++) {
+                if (cells[j]) {
+                    const txtValue = cells[j].textContent || cells[j].innerText;
+                    if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+
+            // Mostrar u ocultar la fila
+            rows[i].style.display = found ? "" : "none";
+        }
+    }
+
+    // Conectar el evento al input
+    const searchInput = document.getElementById("searchInput");
+    if (searchInput) {
+        searchInput.addEventListener('keyup', filterTable);
+        searchInput.addEventListener('input', filterTable);
+        searchInput.addEventListener('paste', function() {
+            setTimeout(filterTable, 100);
+        });
+    }
+});
+</script>
 
 {% endblock %}
