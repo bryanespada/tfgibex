@@ -69,27 +69,64 @@ def get_client_geolocation(request):
     """
     Obtiene la dirección IP del cliente desde la solicitud.
     """
+    # Intentar obtener la IP del cliente
     xff = request.META.get('HTTP_X_FORWARDED_FOR')
     if xff:
-        ip = xff.split(',')[0] # Get ip
-        response = requests.get(f"https://ipapi.co/{ip}/json/") # Geolocation
+        ip = xff.split(',')[0].strip()  # Get first IP and remove spaces
+    else:
+        ip = request.META.get('REMOTE_ADDR', '127.0.0.1')
+
+    # Valores por defecto
+    default_data = {
+        "ip": ip,
+        "continent": "No-data",
+        "country": "No-data",
+        "region": "No-data",
+        "city": "No-data",
+        "postal": "No-data",
+        "lat": "No-data",
+        "lng": "No-data"
+    }
+
+    # Si es una IP local, devolver localhost como país
+    if ip in ['127.0.0.1', 'localhost', '::1']:
+        default_data['country'] = 'Localhost'
+        default_data['city'] = 'Desarrollo'
+        return default_data
+
+    # Intentar obtener geolocalización
+    try:
+        response = requests.get(f"https://ipapi.co/{ip}/json/", timeout=5)
 
         if response.status_code == 200:
-            data = response.json() # Get json rom response
+            data = response.json()
 
-            continent = data.get('continent_code', 'No-data')
-            country = data.get('country', 'No-data')
-            region_code = data.get('region', 'No-data')
-            city = data.get('city', 'No-data')
-            postal = data.get('postal', 'No-data')
-            lat = data.get('latitude', 'No-data')
-            lng = data.get('longitude', 'No-data')
+            # Verificar si hay error en la respuesta
+            if 'error' in data and data.get('error') == True:
+                write_in_log_file(f"Error en geolocalización para IP {ip}: {data.get('reason', 'Unknown')}")
+                return default_data
 
-            return {"ip": ip, "continent": continent, "country": country, "region": region_code, "city": city, "postal": postal, "lat": lat, "lng": lng}
+            return {
+                "ip": ip,
+                "continent": data.get('continent_code', 'No-data'),
+                "country": data.get('country_name', 'No-data'),  # Usar country_name en vez de country
+                "region": data.get('region', 'No-data'),
+                "city": data.get('city', 'No-data'),
+                "postal": data.get('postal', 'No-data'),
+                "lat": str(data.get('latitude', 'No-data')),
+                "lng": str(data.get('longitude', 'No-data'))
+            }
+        else:
+            write_in_log_file(f"Error HTTP {response.status_code} al obtener geolocalización para IP {ip}")
 
-    ip = request.META.get('REMOTE_ADDR', None)
-    continent, country, region_code, city, postal, lat, lng = "No-data", "No-data", "No-data", "No-data", "No-data", "No-data", "No-data"
-    return {"ip": ip, "continent": continent, "country": country, "region": region_code, "city": city, "postal": postal, "lat": lat, "lng": lng}
+    except requests.exceptions.Timeout:
+        write_in_log_file(f"Timeout al obtener geolocalización para IP {ip}")
+    except requests.exceptions.RequestException as e:
+        write_in_log_file(f"Error al obtener geolocalización para IP {ip}: {str(e)}")
+    except Exception as e:
+        write_in_log_file(f"Error inesperado en geolocalización para IP {ip}: {str(e)}")
+
+    return default_data
 
 
 def get_dates_from_date(start_date):

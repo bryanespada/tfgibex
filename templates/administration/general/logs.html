@@ -6,7 +6,7 @@
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>Logs</h3>
+                <h3>Registros</h3>
             </div>
         </div>
 
@@ -19,7 +19,7 @@
             <div class="col-md-12 col-sm-12  ">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Showing general configuration</h2>
+                        <h2>Mostrando registros del sistema</h2>
 
                         <ul class="nav navbar-right panel_toolbox">
                             <li>
@@ -36,19 +36,19 @@
                         <ul class="nav nav-tabs bar_tabs" id="myTab" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link active" id="userlogs-tab" data-toggle="tab" href="#userlogs"
-                                    role="tab" aria-controls="userlogs" aria-selected="true">User</a>
+                                    role="tab" aria-controls="userlogs" aria-selected="true">Usuario</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" id="adminlogs-tab" data-toggle="tab" href="#adminlogs"
-                                    role="tab" aria-controls="adminlogs" aria-selected="false">Admin</a>
+                                    role="tab" aria-controls="adminlogs" aria-selected="false">Administrador</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" id="subscriptionlogs-tab" data-toggle="tab" href="#subscriptionlogs" role="tab"
-                                    aria-controls="subscriptionlogs" aria-selected="false">Subscription</a>
+                                    aria-controls="subscriptionlogs" aria-selected="false">Suscripción</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" id="trackinglogs-tab" data-toggle="tab" href="#trackinglogs" role="tab"
-                                    aria-controls="trackinglogs" aria-selected="false">Tracking</a>
+                                    aria-controls="trackinglogs" aria-selected="false">Seguimiento</a>
                             </li>
                         </ul>
 
@@ -87,7 +87,7 @@
         var table_logs = $('.tables').DataTable({
             "ordering": false,
             "language": {
-                "emptyTable": "No logs found"
+                "emptyTable": "No se encontraron registros"
             },
             "lengthChange": false,
             "pageLength": 100
