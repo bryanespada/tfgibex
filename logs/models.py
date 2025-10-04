@@ -59,3 +59,4 @@ class TrackingLog(GeneralLog):
     mercado = models.ForeignKey(Mercado, on_delete=models.CASCADE, null=True, blank=True, default=None)
     bolsa = models.ForeignKey(Bolsa, on_delete=models.CASCADE, null=True, blank=True, default=None)
     empresa = models.ForeignKey(Empresa, on_delete=models.CASCADE, null=True, blank=True, default=None)
+    noticia = models.ForeignKey('appmodels.Noticia', on_delete=models.CASCADE, null=True, blank=True, default=None)

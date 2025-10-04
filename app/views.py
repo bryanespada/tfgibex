@@ -187,7 +187,7 @@ def noticia(request, noticia_id):
 
     context['noticia'] = selected_noticia
 
-    log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"Element", "item":"Noticia", "has_active_subscription":is_premium, "empresa":selected_noticia.empresa, "bolsa":None, "mercado":selected_noticia.empresa.mercado if selected_noticia.empresa else None})
+    log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"Element", "item":"Noticia", "has_active_subscription":is_premium, "empresa":selected_noticia.empresa, "bolsa":None, "mercado":selected_noticia.empresa.mercado if selected_noticia.empresa else None, "noticia":selected_noticia})
     return render(request, "app/noticia.html", context=context)
 
 

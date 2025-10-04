@@ -32,7 +32,6 @@ def dashboard(request):
 
     start_of_last_week = timezone.now() - timedelta(days=7) # Last week reference day
     administration_group = Group.objects.get(name='Administration') # Administration group object
-    continents = ['EU', 'AS', 'NA', 'OC', 'SA', 'AN', 'AF']
 
     ##########################################################################################
     # Chart R0_C1: Top row
@@ -189,33 +188,57 @@ def dashboard(request):
 
 
     ##########################################################################################
-    # Chart R2_C3: Top countries
+    # Chart R2_C3: Top noticias (más leídas)
 
-    # Obtener los principales países de la tabla UserLogs
-    top_countries = UserLog.objects.exclude(country=None).values('country').annotate(country_count=Count('country')).order_by('-country_count')[:8]
+    # Obtener las 8 noticias más vistas
+    top_noticias = TrackingLog.objects.exclude(noticia=None).values('noticia__title').annotate(noticia_count=Count('noticia')).order_by('-noticia_count')[:8]
 
-    context['top_countries'] = {}
-    context['top_countries']['show'] = True if top_countries else False
+    context['top_noticias'] = {}
+    context['top_noticias']['show'] = True if top_noticias else False
     # Adjuntar los resultados al contexto general
-    context['top_countries']['names'] = [country['country'] for country in top_countries]
-    context['top_countries']['values'] = [country['country_count'] for country in top_countries]
+    context['top_noticias']['names'] = [noticia['noticia__title'][:30] + '...' if len(noticia['noticia__title']) > 30 else noticia['noticia__title'] for noticia in top_noticias]
+    context['top_noticias']['values'] = [noticia['noticia_count'] for noticia in top_noticias]
 
 
     ##########################################################################################
-    # Chart R3_C1: Loads by continent
+    # Chart R3_C1: Actividad por día de la semana
 
-    context['total_loads_continent'] = {}
-    context['total_loads_continent']['names'] = []
-    context['total_loads_continent']['values'] = []
+    context['activity_by_weekday'] = {}
+    context['activity_by_weekday']['names'] = []
+    context['activity_by_weekday']['values'] = []
 
-    continent_counts = UserLog.objects.values('continent').annotate(total=Count('id'))
-    total_loads_continent = {continent['continent']: continent['total'] for continent in continent_counts}
-    for continent in continents:
-        context['total_loads_continent']['names'].append(continent)
-        context['total_loads_continent']['values'].append(total_loads_continent.get(continent, 0))
+    from django.db.models.functions import ExtractWeekDay
+
+    # Obtener actividad por día de la semana (1=Domingo, 2=Lunes, etc en PostgreSQL/MySQL)
+    weekday_counts = UserLog.objects.annotate(
+        weekday=ExtractWeekDay('timestamp')
+    ).values('weekday').annotate(
+        total=Count('id')
+    ).order_by('weekday')
+
+    # Mapeo de números a nombres de días en español
+    weekday_names = {
+        1: 'Domingo',
+        2: 'Lunes',
+        3: 'Martes',
+        4: 'Miércoles',
+        5: 'Jueves',
+        6: 'Viernes',
+        7: 'Sábado'
+    }
+
+    # Crear diccionario con los conteos
+    weekday_dict = {item['weekday']: item['total'] for item in weekday_counts}
+
+    # Ordenar empezando por Lunes
+    weekday_order = [2, 3, 4, 5, 6, 7, 1]  # Lunes a Domingo
+
+    for day_num in weekday_order:
+        context['activity_by_weekday']['names'].append(weekday_names[day_num])
+        context['activity_by_weekday']['values'].append(weekday_dict.get(day_num, 0))
 
     # If there's no element to print the chart, this flag tell the template show -No data- message
-    context['total_loads_continent']['show'] = False if sum(s for s in context['total_loads_continent']['values']) == 0 else True
+    context['activity_by_weekday']['show'] = False if sum(s for s in context['activity_by_weekday']['values']) == 0 else True
 
 
     ##########################################################################################

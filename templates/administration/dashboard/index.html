@@ -548,7 +548,7 @@
             <div class="x_panel" style="border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.08);">
                 <div class="x_title" style="border-bottom: 2px solid #E7E7E7; padding-bottom: 10px;">
                     <h2 style="color: #2A3F54; font-size: 1.2em;">
-                        <i class="fa-solid fa-globe" style="color: #1ABC9C;"></i> Países principales
+                        <i class="fa-solid fa-newspaper" style="color: #E74C3C;"></i> Noticias más leídas
                     </h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
@@ -557,14 +557,14 @@
                 </div>
                 <div class="x_content" style="padding: 20px;">
                     <div class="col-md-12 col-sm-12">
-                        
-                        {% if top_countries.show %}
+
+                        {% if top_noticias.show %}
                             <!-- Chart Canvas -->
                             <canvas id="admin_chart_2_3" style="height:350px!important;width:100%!important;"></canvas>
                             <!-- Chart script -->
                             <script>
                                 const ctx_admin_chart_2_3 = document.getElementById('admin_chart_2_3');
-                                var labels_2_3 = {{top_countries.names | safe}};
+                                var labels_2_3 = {{top_noticias.names | safe}};
                                 var colours_array_2_3 = get_colour_list(labels_2_3.length);
 
                                 new Chart(ctx_admin_chart_2_3, {
@@ -572,8 +572,8 @@
                                     data: {
                                         labels: labels_2_3,
                                         datasets: [{
-                                            label: "Total accesos",
-                                            data: {{top_countries.values}},
+                                            label: "Total vistas",
+                                            data: {{top_noticias.values}},
                                             borderColor: colours_array_2_3[0],
                                             backgroundColor: colours_array_2_3[1],
                                             hoverOffset: 5,
@@ -633,7 +633,7 @@
             <div class="x_panel" style="border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.08);">
                 <div class="x_title" style="border-bottom: 2px solid #E7E7E7; padding-bottom: 10px;">
                     <h2 style="color: #2A3F54; font-size: 1.2em;">
-                        <i class="fa-solid fa-earth-americas" style="color: #E74C3C;"></i> Solicitudes por continente
+                        <i class="fa-solid fa-calendar-days" style="color: #3498DB;"></i> Actividad por día de la semana
                     </h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
@@ -643,26 +643,27 @@
                 <div class="x_content" style="padding: 20px;">
 
                     <div class="col-md-12 col-sm-12">
-                        
-                        {% if total_loads_continent.show %}
+
+                        {% if activity_by_weekday.show %}
                             <!-- Chart Canvas -->
                             <canvas id="admin_chart_3_1" style="height:350px!important;width:100%!important;"></canvas>
                             <!-- Chart script -->
                             <script>
                                 const ctx_admin_chart_3_1 = document.getElementById('admin_chart_3_1');
-                                var labels_3_1 = {{total_loads_continent.names | safe}};
+                                var labels_3_1 = {{activity_by_weekday.names | safe}};
                                 var colours_array_3_1 = get_colour_list(labels_3_1.length);
 
                                 new Chart(ctx_admin_chart_3_1, {
-                                    type: 'doughnut',
+                                    type: 'bar',
                                     data: {
                                         labels: labels_3_1,
                                         datasets: [{
-                                            label: "Total solicitudes",
-                                            data: {{total_loads_continent.values}},
-                                            borderColor: colours_array_3_1[0],
-                                            backgroundColor: colours_array_3_1[1],
-                                            hoverOffset: 5
+                                            label: "Actividad total",
+                                            data: {{activity_by_weekday.values}},
+                                            backgroundColor: 'rgba(52, 152, 219, 0.8)',
+                                            borderColor: '#3498DB',
+                                            borderWidth: 2,
+                                            borderRadius: 8
                                         }]
                                     },
                                     options: {
@@ -670,20 +671,41 @@
                                             delay: (context) => {
                                                 let delay = 0;
                                                 if (context.type === 'data') {
-                                                    delay = context.dataIndex * 400 + context.datasetIndex * 50;
+                                                    delay = context.dataIndex * 100;
                                                 }
                                                 return delay;
                                             },
                                         },
                                         responsive: true,
                                         maintainAspectRatio: false,
-                                        title: {
-                                            display: false,
-                                        },
                                         plugins: {
                                             legend: {
-                                                display: true,
-                                                position: 'right'
+                                                display: false
+                                            },
+                                            tooltip: {
+                                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                                padding: 12,
+                                                cornerRadius: 8
+                                            }
+                                        },
+                                        scales: {
+                                            y: {
+                                                beginAtZero: true,
+                                                ticks: {
+                                                    color: '#73879C'
+                                                },
+                                                grid: {
+                                                    color: 'rgba(0, 0, 0, 0.05)',
+                                                    drawBorder: false
+                                                }
+                                            },
+                                            x: {
+                                                ticks: {
+                                                    color: '#73879C'
+                                                },
+                                                grid: {
+                                                    display: false
+                                                }
                                             }
                                         }
                                     }
@@ -692,7 +714,7 @@
                         {% else %}
                             <div id="admin_chart_3_1" style="height:350px!important;width:100%!important; display: flex; justify-content: center; align-items: center; color: #73879C;">
                                 <div style="text-align: center;">
-                                    <i class="fa-solid fa-chart-pie" style="font-size: 48px; color: #E7E7E7; margin-bottom: 10px;"></i>
+                                    <i class="fa-solid fa-chart-bar" style="font-size: 48px; color: #E7E7E7; margin-bottom: 10px;"></i>
                                     <p style="margin: 0;">Sin datos disponibles</p>
                                 </div>
                             </div>

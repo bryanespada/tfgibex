@@ -14,5 +14,5 @@ class SubscriptionLogAdmin(admin.ModelAdmin):
 admin.site.register(SubscriptionLog, SubscriptionLogAdmin)
 
 class TrackingLogAdmin(admin.ModelAdmin):
-    list_display = ('user', 'timestamp', 'action_type', 'ip', 'status', 'continent', 'country', 'city', 'has_active_subscription',) # Fields to show in admin table
+    list_display = ('user', 'timestamp', 'action_type', 'ip', 'status', 'continent', 'country', 'city', 'has_active_subscription', 'noticia',) # Fields to show in admin table
 admin.site.register(TrackingLog, TrackingLogAdmin)
