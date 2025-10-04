@@ -21,24 +21,24 @@
 
           <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
 
-            <a class="dropdown-item" href="/users/profile"> Profile </a>
+            <a class="dropdown-item" href="/users/profile"> Mi Perfil </a>
 
             <a class="dropdown-item" href="/users/subscription">
-            
+
               {% if request.user|has_group:'Administration' %}
-                <span>Subscription </span>
+                <span>Suscripción </span>
                 <span class="badge bg-blue pull-left">ADMIN</span>
               {% elif request.user|is_premium %}
-                <span>Subscriptions </span>
+                <span>Suscripción </span>
                 <span class="badge bg-red pull-right">PREMIUM</span>
               {% else %}
-                Subscriptions
+                Suscripción
               {% endif %}
             </a>
 
-            <a class="dropdown-item" href="/app/faq/"> FAQ </a>
+            <a class="dropdown-item" href="/app/faq/"> Preguntas Frecuentes </a>
 
-            <a class="dropdown-item" href="/users/exit"> <i class="fa fa-sign-out pull-right"></i> Log out </a>
+            <a class="dropdown-item" href="/users/exit"> <i class="fa fa-sign-out pull-right"></i> Cerrar Sesión </a>
 
           </div>
         </li>

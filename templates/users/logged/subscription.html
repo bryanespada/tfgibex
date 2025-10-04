@@ -8,7 +8,7 @@
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>My subscription</h3>
+                <h3>Mi Suscripción</h3>
             </div>
         </div>
 
@@ -28,8 +28,8 @@
                                 <div class="row" style="display: inline-block;width:100%;">
                                     <div class="tile_count">
                                     <div class="col-md-12 col-sm-12  tile_stats_count">
-                                        <span class="count_top">You are</span>
-                                        <div class="count blue">Administrator</div>
+                                        <span class="count_top">Eres</span>
+                                        <div class="count blue">Administrador</div>
                                     </div>
                                     </div>
                                 </div>
@@ -45,9 +45,9 @@
                                 <div class="row" style="display: inline-block;width:100%;">
                                     <div class="tile_count">
                                     <div class="col-md-12 col-sm-12  tile_stats_count">
-                                        <span class="count_top">You are</span>
+                                        <span class="count_top">Eres</span>
                                         <div class="count green">Premium</div>
-                                        <span class="count_bottom"><i class="green">1 </i> active subscription</span>
+                                        <span class="count_bottom"><i class="green">1 </i> suscripción activa</span>
                                     </div>
                                     </div>
                                 </div>
@@ -63,9 +63,9 @@
                                 <div class="row" style="display: inline-block;width:100%;">
                                     <div class="tile_count">
                                     <div class="col-md-12 col-sm-12  tile_stats_count">
-                                        <span class="count_top">You are</span>
-                                        <div class="count red">Freemium</div>
-                                        <span class="count_bottom"><i class="red">0 </i> active subscription</span>
+                                        <span class="count_top">Eres</span>
+                                        <div class="count red">Usuario Gratuito</div>
+                                        <span class="count_bottom"><i class="red">0 </i> suscripciones activas</span>
                                     </div>
                                     </div>
                                 </div>
@@ -77,7 +77,7 @@
 
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Showing all products</h2>
+                        <h2>Productos disponibles</h2>
 
                         <ul class="nav navbar-right panel_toolbox">
                             <li>
@@ -107,7 +107,7 @@
                                 {% endif %}
                                 
                                 <div class="x_title">
-                                    <h2>Premium access</h2>
+                                    <h2>Acceso Premium</h2>
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="x_content">
@@ -137,7 +137,7 @@
                                         <div style="text-align: center; margin-bottom: 17px">
                                             <div class="text-center">
                                                 <h3 style="color:{{config.app_success}};">
-                                                    Active
+                                                    Activo
                                                 </h3>
                                             </div>
                                         </div>
@@ -204,7 +204,7 @@
                                             </style>
                                             
                                             <a href="{% url 'stripe_checkout' product_id=product.stripe_subscription_id %}">
-                                                <button class="stripe-button"> Pay with <i class="fa-brands fa-cc-stripe" style="font-size: 30px;margin-left: 5px;"></i> </button>
+                                                <button class="stripe-button"> Pagar con <i class="fa-brands fa-cc-stripe" style="font-size: 30px;margin-left: 5px;"></i> </button>
                                             </a>
                                         </div>
 
@@ -227,7 +227,7 @@
                 {% if subscriptions %}
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Previous subscriptions</h2>
+                        <h2>Suscripciones anteriores</h2>
 
                         <ul class="nav navbar-right panel_toolbox">
                             <li>
@@ -246,15 +246,15 @@
                                 <thead>
                                     <tr class="headings">
                                         <th class="column-title">ID </th>
-                                        <th class="column-title">Payment Product ID</th>
-                                        <th class="column-title">Payment Subscription ID</th>
-                                        <th class="column-title">Amount </th>
-                                        <th class="column-title">Gateway </th>
-                                        <th class="column-title">Start date </th>
-                                        <th class="column-title">Due date </th>
-                                        <th class="column-title last">On date </th>
-                                        <th class="column-title last">Status</th>
-                                        <th class="column-title last">Options</th>
+                                        <th class="column-title">ID Producto de Pago</th>
+                                        <th class="column-title">ID Suscripción de Pago</th>
+                                        <th class="column-title">Precio </th>
+                                        <th class="column-title">Pasarela de pago </th>
+                                        <th class="column-title">Fecha de inicio </th>
+                                        <th class="column-title">Fecha de vencimiento </th>
+                                        <th class="column-title last">Estado fecha </th>
+                                        <th class="column-title last">Estado suscripción</th>
+                                        <th class="column-title last">Opciones</th>
                                     </tr>
                                 </thead>
 
@@ -279,7 +279,7 @@
 
                                         <td class="last" style="text-align: right !important;">
                                             {% if susbcription.status == 'ACTIVE' %}
-                                            <a href="{% url 'cancel_subscription' payment_subscription_id=subscription.payment_subscription_id %}" onclick="return confirm('Are you sure?')">
+                                            <a href="{% url 'cancel_subscription' payment_subscription_id=subscription.payment_subscription_id %}" onclick="return confirm('¿Estás seguro?')">
                                                 <i class="fa-solid fa-ban"></i>
                                             </a>
                                             {% endif %}
