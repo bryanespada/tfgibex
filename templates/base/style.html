@@ -63,6 +63,18 @@
     /* Sidebar */
     .left_col{
         background: var(--app-primary) !important;
+        position: fixed !important;
+        height: 100vh !important;
+        overflow-y: auto !important;
+    }
+
+    /* Adjust main content to account for fixed sidebar */
+    .nav-md .container.body .right_col {
+        margin-left: 230px !important;
+    }
+
+    .nav-sm .container.body .right_col {
+        margin-left: 70px !important;
     }
 
     .sidebar-footer.hidden-small {
