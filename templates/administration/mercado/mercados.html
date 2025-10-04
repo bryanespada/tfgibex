@@ -1,67 +1,273 @@
 {% extends '../../base/base.html' %}
 {% block content %}
 
+<style>
+    .mercados-card {
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+
+    .mercados-card:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+
+    .mercados-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px 20px;
+        font-weight: 600;
+    }
+
+    .mercados-body {
+        padding: 25px;
+        background: #f8f9fa;
+    }
+
+    .table-container {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .table {
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .table thead th {
+        background: var(--app-primary) !important;
+        color: white !important;
+        border: none !important;
+        padding: 12px 15px !important;
+        font-weight: 600;
+        font-size: 0.9em;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .table thead th:first-child {
+        border-radius: 8px 0 0 0;
+    }
+
+    .table thead th:last-child {
+        border-radius: 0 8px 0 0;
+    }
+
+    .table tbody tr {
+        transition: all 0.2s ease;
+    }
+
+    .table tbody tr:hover {
+        background-color: #f5f5ff !important;
+        transform: translateX(2px);
+        box-shadow: 0 2px 4px rgba(102, 126, 234, 0.1);
+    }
+
+    .table tbody td {
+        padding: 12px 15px;
+        vertical-align: middle;
+        border-top: 1px solid #e0e0e0;
+    }
+
+    .btn-action {
+        padding: 6px 12px;
+        margin: 0 2px;
+        border-radius: 6px;
+        transition: all 0.3s;
+        display: inline-block;
+        text-decoration: none;
+    }
+
+    .btn-edit {
+        background: #17a2b8;
+        color: white;
+    }
+
+    .btn-edit:hover {
+        background: #138496;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(23, 162, 184, 0.3);
+        color: white;
+    }
+
+    .btn-delete {
+        background: #dc3545;
+        color: white;
+    }
+
+    .btn-delete:hover {
+        background: #c82333;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+        color: white;
+    }
+
+    .btn-add-new {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 25px;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-add-new:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #73879C;
+    }
+
+    .empty-state i {
+        font-size: 48px;
+        color: #E7E7E7;
+        margin-bottom: 15px;
+    }
+
+    .empty-state p {
+        font-size: 1.1em;
+        margin: 0;
+    }
+
+    .header-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .search-box {
+        display: flex;
+        align-items: center;
+        background: white;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        padding: 8px 15px;
+        width: 300px;
+        transition: all 0.3s;
+    }
+
+    .search-box:focus-within {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+
+    .search-box i {
+        color: #999;
+        margin-right: 10px;
+    }
+
+    .search-box input {
+        border: none;
+        outline: none;
+        width: 100%;
+        background: transparent;
+    }
+
+    .id-badge {
+        font-weight: 600;
+        color: #667eea;
+        background: #f0f4ff;
+        padding: 4px 8px;
+        border-radius: 4px;
+    }
+
+    .description-text {
+        color: #73879C;
+        line-height: 1.4;
+    }
+</style>
+
 <!-- page content -->
 <div class="right_col" role="main">
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>Mercados</h3>
+                <h3><i class="fa-solid fa-globe"></i> Gestión de Mercados</h3>
             </div>
         </div>
 
         <div class="clearfix"></div>
 
-        <div class="row" style="display: block;">
-
-            <div class="clearfix"></div>
-
-            <div class="col-md-12 col-sm-12  ">
-                <div class="x_panel">
-                    <div class="x_title">
-                        <h2>Mostrando todos los mercados</h2>
-
-                        <ul class="nav navbar-right panel_toolbox">
-                            <li>
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <div class="mercados-card">
+                    <div class="mercados-header">
+                        <i class="fa-solid fa-list"></i> Listado de Mercados
                     </div>
+                    <div class="mercados-body">
+                        <div class="header-actions">
+                            <div class="search-box">
+                                <i class="fa-solid fa-search"></i>
+                                <input type="text" id="searchInput" placeholder="Buscar mercados..." onkeyup="filterTable()">
+                            </div>
+                            <a href="{% url 'administration_mercado_add' %}" class="btn-add-new">
+                                <i class="fa-solid fa-plus"></i> Añadir Nuevo Mercado
+                            </a>
+                        </div>
 
-                    <div class="x_content">
-
-                        <div class="table-responsive">
-                            <table class="table table-striped jambo_table bulk_action">
+                        <div class="table-container">
+                            {% if mercados %}
+                            <table class="table table-striped" id="mercadosTable">
                                 <thead>
-                                    <tr class="headings">
-                                        <th class="column-title" style="width: 0%;">ID </th>
-                                        <th class="column-title">Título </th>
-                                        <th class="column-title">Descripción </th>
-                                        <th class="column-title no-link last" style="text-align: right !important;"><span class="nobr">Acciones</span>
-                                        </th>
+                                    <tr>
+                                        <th style="width: 10%;">ID</th>
+                                        <th style="width: 30%;">Título</th>
+                                        <th style="width: 45%;">Descripción</th>
+                                        <th style="width: 15%; text-align: center;">Acciones</th>
                                     </tr>
                                 </thead>
-
                                 <tbody>
                                     {% for area in mercados %}
-                                        <tr class="even pointer">
-                                            <td>#{{area.pk}} </td>
-                                            <td>{{area.title}} </td>
-                                            <td>{{area.description}}</td>
-                                            <td class="last" style="text-align: right !important;"><a href="#">
-                                                <a href="{% url 'administration_mercado_edit' mercado_id=area.id %}"><i class="fa-regular fa-pen-to-square"></i></a>
-                                                <a href="{% url 'administration_mercado_delete' mercado_id=area.id %}" onclick="return confirm('¿Estás seguro?')"><i class="fa-solid fa-trash"></i></a>
+                                    <tr>
+                                        <td>
+                                            <span class="id-badge">#{{area.pk}}</span>
+                                        </td>
+                                        <td>
+                                            <strong>{{area.title}}</strong>
+                                        </td>
+                                        <td>
+                                            <span class="description-text">{{area.description|default:"Sin descripción"}}</span>
+                                        </td>
+                                        <td style="text-align: center;">
+                                            <a href="{% url 'administration_mercado_edit' mercado_id=area.id %}"
+                                               class="btn-action btn-edit"
+                                               title="Editar">
+                                                <i class="fa-solid fa-pen-to-square"></i>
                                             </a>
-                                            </td>
-                                        </tr>
+                                            <a href="{% url 'administration_mercado_delete' mercado_id=area.id %}"
+                                               class="btn-action btn-delete"
+                                               onclick="return confirm('¿Estás seguro de que deseas eliminar este mercado?')"
+                                               title="Eliminar">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
                                     {% endfor %}
                                 </tbody>
                             </table>
+                            {% else %}
+                            <div class="empty-state">
+                                <i class="fa-solid fa-inbox"></i>
+                                <p>No hay mercados registrados</p>
+                                <a href="{% url 'administration_mercado_add' %}" class="btn-add-new" style="margin-top: 20px;">
+                                    <i class="fa-solid fa-plus"></i> Añadir Primer Mercado
+                                </a>
+                            </div>
+                            {% endif %}
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -69,5 +275,36 @@
     </div>
 </div>
 <!-- /page content -->
+
+<script>
+function filterTable() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("searchInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("mercadosTable");
+
+    if (table) {
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 1; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td");
+            var found = false;
+
+            // Buscar en todas las columnas excepto la de acciones
+            for (var j = 0; j < td.length - 1; j++) {
+                if (td[j]) {
+                    txtValue = td[j].textContent || td[j].innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+
+            tr[i].style.display = found ? "" : "none";
+        }
+    }
+}
+</script>
 
 {% endblock %}
