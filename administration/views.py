@@ -176,16 +176,16 @@ def dashboard(request):
 
 
     ##########################################################################################
-    # Chart R2_C2: Top blocks
+    # Chart R2_C2: Top empresas
 
     # Get the top 8 most viewed empresas
-    top_blocks = TrackingLog.objects.exclude(empresa=None).values('empresa__title').annotate(block_count=Count('empresa')).order_by('-block_count')[:8]
+    top_empresas = TrackingLog.objects.exclude(empresa=None).values('empresa__title').annotate(empresa_count=Count('empresa')).order_by('-empresa_count')[:8]
 
-    context['top_blocks'] = {}
-    context['top_blocks']['show'] = True if top_blocks else False
+    context['top_empresas'] = {}
+    context['top_empresas']['show'] = True if top_empresas else False
     # Attach the results to the general context
-    context['top_blocks']['names'] = [block['empresa__title'] for block in top_blocks]
-    context['top_blocks']['values'] = [block['block_count'] for block in top_blocks]
+    context['top_empresas']['names'] = [empresa['empresa__title'] for empresa in top_empresas]
+    context['top_empresas']['values'] = [empresa['empresa_count'] for empresa in top_empresas]
 
 
     ##########################################################################################

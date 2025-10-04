@@ -4,99 +4,121 @@
 
 <div class="right_col" role="main">
     <!-- top tiles -->
-    <div class="row" style="display: inline-block; width: 100%;">
-        <div class="tile_count">
-
-            <div class="col-md-2 col-sm-4  tile_stats_count" style="min-width: 200px;">
-                <span class="count_top"><i class="fa-solid fa-user"></i> Total Usuarios</span>
-                <div class="count">{{total_users}}</div>
-                <span class="count_bottom">
+    <div class="row" style="margin-bottom: 30px;">
+        <div class="col-md-2 col-sm-4">
+            <div style="padding: 20px; background: white; border-radius: 10px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.08);">
+                <i class="fa-solid fa-user" style="font-size: 28px; color: #26B99A;"></i>
+                <h4 style="margin: 15px 0 5px 0; color: #2A3F54; font-size: 1.5em;">{{total_users}}</h4>
+                <small style="color: #73879C; font-size: 0.9em;">Total Usuarios</small>
+                <div style="margin-top: 10px; font-size: 0.85em;">
                     {% if total_users_last_week %}
-                    <i class="green">
-                        <i class="fa fa-sort-asc"></i>
+                    <span style="color: #26B99A;">
+                        <i class="fa fa-arrow-up"></i>
                         {{total_users_last_week}}
-                    </i>
+                    </span>
                     {% else %}
-                    <i class="red">
-                        <i class="fa fa-sort-desc"></i>
+                    <span style="color: #E74C3C;">
+                        <i class="fa fa-arrow-down"></i>
                         {{total_users_last_week}}
-                    </i>
+                    </span>
                     {% endif %}
-                    Desde la última semana</span>
+                    <small style="color: #73879C; display: block;">Desde la última semana</small>
+                </div>
             </div>
+        </div>
 
-            <div class="col-md-2 col-sm-4  tile_stats_count" style="min-width: 200px;">
-                <span class="count_top"><i class="fa-solid fa-user-shield"></i> Total Administradores</span>
-                <div class="count">{{total_admins}}</div>
-                <span class="count_bottom">
+        <div class="col-md-2 col-sm-4">
+            <div style="padding: 20px; background: white; border-radius: 10px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.08);">
+                <i class="fa-solid fa-user-shield" style="font-size: 28px; color: #3498DB;"></i>
+                <h4 style="margin: 15px 0 5px 0; color: #2A3F54; font-size: 1.5em;">{{total_admins}}</h4>
+                <small style="color: #73879C; font-size: 0.9em;">Total Administradores</small>
+                <div style="margin-top: 10px; font-size: 0.85em;">
                     {% if total_admins_last_week %}
-                    <i class="green">
-                        <i class="fa fa-sort-asc"></i>
+                    <span style="color: #26B99A;">
+                        <i class="fa fa-arrow-up"></i>
                         {{total_admins_last_week}}
-                    </i>
+                    </span>
                     {% else %}
-                    <i class="red">
-                        <i class="fa fa-sort-desc"></i>
+                    <span style="color: #E74C3C;">
+                        <i class="fa fa-arrow-down"></i>
                         {{total_admins_last_week}}
-                    </i>
+                    </span>
                     {% endif %}
-                    Desde la última semana</span>
+                    <small style="color: #73879C; display: block;">Desde la última semana</small>
+                </div>
             </div>
+        </div>
 
-            <div class="col-md-2 col-sm-4  tile_stats_count" style="min-width: 200px;">
-                <span class="count_top"><i class="fa-solid fa-user-plus"></i> Incremento de usuarios</span>
-                <div class="count">{{total_users_increasement |stringformat:"d"}}%</div>
-                <span class="count_bottom">
+        <div class="col-md-2 col-sm-4">
+            <div style="padding: 20px; background: white; border-radius: 10px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.08);">
+                <i class="fa-solid fa-user-plus" style="font-size: 28px; color: #9B59B6;"></i>
+                <h4 style="margin: 15px 0 5px 0; color: #2A3F54; font-size: 1.5em;">{{total_users_increasement |stringformat:"d"}}%</h4>
+                <small style="color: #73879C; font-size: 0.9em;">Incremento de usuarios</small>
+                <div style="margin-top: 10px; font-size: 0.85em;">
                     {% if total_users_last_week %}
-                    <i class="green">
-                        <i class="fa fa-sort-asc"></i>
+                    <span style="color: #26B99A;">
+                        <i class="fa fa-arrow-up"></i>
                         {{total_admin_increasement |stringformat:"d"}}%
-                    </i>
+                    </span>
                     {% else %}
-                    <i class="red">
-                        <i class="fa fa-sort-desc"></i>
+                    <span style="color: #E74C3C;">
+                        <i class="fa fa-arrow-down"></i>
                         {{total_admin_increasement |stringformat:"d"}}%
-                    </i>
+                    </span>
                     {% endif %}
-                    Administradores
-                </span>
+                    <small style="color: #73879C; display: block;">Administradores</small>
+                </div>
             </div>
+        </div>
 
-            <div class="col-md-2 col-sm-4  tile_stats_count" style="min-width: 200px;">
-                <span class="count_top"><i class="fa-brands fa-stripe-s"></i> Suscripciones</span>
-                <div class="count">{{total_active_subscriptions}}</div>
-                <span class="count_bottom">
+        <div class="col-md-2 col-sm-4">
+            <div style="padding: 20px; background: white; border-radius: 10px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.08);">
+                <i class="fa-brands fa-stripe-s" style="font-size: 28px; color: #F39C12;"></i>
+                <h4 style="margin: 15px 0 5px 0; color: #2A3F54; font-size: 1.5em;">{{total_active_subscriptions}}</h4>
+                <small style="color: #73879C; font-size: 0.9em;">Suscripciones</small>
+                <div style="margin-top: 10px; font-size: 0.85em;">
                     {% if total_active_subscriptions_last_week %}
-                    <i class="green">
-                        <i class="fa fa-sort-asc"></i>
+                    <span style="color: #26B99A;">
+                        <i class="fa fa-arrow-up"></i>
                         {{total_active_subscriptions_last_week}}
-                    </i>
+                    </span>
                     {% else %}
-                    <i class="red">
-                        <i class="fa fa-sort-desc"></i>
+                    <span style="color: #E74C3C;">
+                        <i class="fa fa-arrow-down"></i>
                         {{total_active_subscriptions_last_week}}
-                    </i>
+                    </span>
                     {% endif %}
-                    Desde la última semana
-                </span>
+                    <small style="color: #73879C; display: block;">Desde la última semana</small>
+                </div>
             </div>
+        </div>
 
-            <div class="col-md-2 col-sm-4  tile_stats_count" style="min-width: 200px;">
-                <span class="count_top"><i class="fa-solid fa-square"></i> Empresas</span>
-                <div class="count">{{total_empresas}}</div>
-                <span class="count_bottom">
-                    {{total_empresas_free}} En modo gratuito
-                </span>
+        <div class="col-md-2 col-sm-4">
+            <div style="padding: 20px; background: white; border-radius: 10px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.08);">
+                <i class="fa-solid fa-square" style="font-size: 28px; color: #1ABC9C;"></i>
+                <h4 style="margin: 15px 0 5px 0; color: #2A3F54; font-size: 1.5em;">{{total_empresas}}</h4>
+                <small style="color: #73879C; font-size: 0.9em;">Empresas</small>
+                <div style="margin-top: 10px; font-size: 0.85em;">
+                    <span style="color: #73879C;">
+                        {{total_empresas_free}}
+                    </span>
+                    <small style="color: #73879C; display: block;">En modo gratuito</small>
+                </div>
             </div>
+        </div>
 
-            <div class="col-md-2 col-sm-4  tile_stats_count" style="min-width: 200px;">
-                <span class="count_top"><i class="fa-solid fa-square-check"></i> Productos</span>
-                <div class="count">{{total_products}}</div>
-                <span class="count_bottom">
-                    {{total_products_published}} Disponibles
-                </span>
+        <div class="col-md-2 col-sm-4">
+            <div style="padding: 20px; background: white; border-radius: 10px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.08);">
+                <i class="fa-solid fa-square-check" style="font-size: 28px; color: #E74C3C;"></i>
+                <h4 style="margin: 15px 0 5px 0; color: #2A3F54; font-size: 1.5em;">{{total_products}}</h4>
+                <small style="color: #73879C; font-size: 0.9em;">Productos</small>
+                <div style="margin-top: 10px; font-size: 0.85em;">
+                    <span style="color: #73879C;">
+                        {{total_products_published}}
+                    </span>
+                    <small style="color: #73879C; display: block;">Disponibles</small>
+                </div>
             </div>
-
         </div>
     </div>
     <!-- /top tiles -->
