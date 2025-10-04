@@ -2,88 +2,163 @@
 
 {% block content %}
 
-      <div class="login_wrapper">
-        <div id="register" class="animate form login_form">
-          <section class="login_content">
-            <form method="post" action="{% url 'register' %}">
-              {% csrf_token %}
-              <h1>Create an account</h1>
-              <div>
-                {{ form.username }}
-              </div>
-              <div>
-                {{ form.password1 }}
-              </div>
-              <div>
-                {{ form.password2 }}
-              </div>
-              <div>
-                {{ form.first_name }}
-              </div>
-              <div style='text-align: -webkit-center;'>
-                {{ form.captcha }}
-              </div>
-              
-              <div class="text-danger">
-                {% if errors %}
-                  <ul>
-                      {% for field, errors_list in errors.items %}
-                          {% for error in errors_list %}
-                              <li style='text-align-last: left;'>{{ error }}</li>
-                          {% endfor %}
-                      {% endfor %}
-                  </ul>
-                {% endif %}
-              </div>
+<div style="display: flex; min-height: 100vh;">
 
+  <!-- Left side - Image -->
+  <div style="flex: 1; display: flex; align-items: center; justify-content: center; background: #f8f9fa;">
+    <img src="/media/imagen_login.jpg" style="width: 80%; max-width: 700px; height: auto; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+  </div>
 
-              <div style='margin-top:20px;'>
-                <button type="submit" class="btn btn-default submit">Register</button>
-              </div>
+  <!-- Right side - Register Form -->
+  <div style="flex: 1; display: flex; align-items: center; justify-content: flex-start; padding-left: 60px;">
+    <div style="width: 100%; max-width: 450px;">
 
-              <div class="clearfix"></div>
-
-              <div class="separator">
-                <p class="change_link">Already a member ?
-                  <a href="{% url 'access' %}" class="to_register"> Log in </a>
-                </p>
-                <p class="change_link">
-                  <a href="{% url 'password_reset' %}" class="to_register"> Lost your password?</a>
-                </p>
-
-                <div class="clearfix"></div>
-                <br />
-
-                {% if config.google_oauth_client_id %}
-                <div id="g_id_onload"
-                      data-client_id="{{ config.google_oauth_client_id }}"
-                      data-context="signup"
-                      data-ux_mode="redirect"
-                      data-login_uri="{{ config.app_url }}users/auth-receiver"
-                      data-itp_support="true">
-                  </div>
-      
-                  <div class="g_id_signin"
-                      data-type="standard"
-                      data-shape="rectangular"
-                      data-theme="outline"
-                      data-text="Access with Google"
-                      data-size="large"
-                      data-logo_alignment="left">
-                  </div>
-                  {% endif %}
-      
-      
-                <div class="clearfix"></div>
-                <br />
-      
-                <div>
-                  <h1><i class="{{config.app_icon}}"></i> {{config.app_name}}</h1>
-                  <p>©<script>document.write(new Date().getFullYear());</script> All Rights Reserved. {{config.app_name}}.<br/>Privacy and Terms</p>
-                </div>
-              </div>
-            </form>
-          </section>
+      <!-- Logo/Icon Section -->
+      <div style="text-align: center; margin-bottom: 30px;">
+        <div style="width: 80px; height: 80px; margin: 0 auto 20px; background: linear-gradient(135deg, #26B99A 0%, #1ABB9C 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+          <i class="fa-solid fa-user-plus" style="font-size: 35px; color: white;"></i>
         </div>
+        <h1 style="font-size: 28px; color: #2A3F54; font-weight: bold; margin: 0;">Crear Cuenta</h1>
+        <p style="color: #73879C; margin-top: 10px; font-size: 14px;">
+          Únete a TFG IBEX
+        </p>
       </div>
-      {% endblock content %}
+
+      <form method="post" action="{% url 'register' %}">
+        {% csrf_token %}
+
+        <!-- Error Messages -->
+        {% if errors %}
+        <div style="background: #FEF2F2; border-left: 4px solid #EF4444; padding: 12px; margin-bottom: 20px; border-radius: 4px;">
+          {% for field, errors_list in errors.items %}
+              {% for error in errors_list %}
+                  <p style="color: #DC2626; margin: 5px 0; font-size: 14px;">
+                    <i class="fa-solid fa-exclamation-circle"></i> {{ error }}
+                  </p>
+              {% endfor %}
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Email Field -->
+        <div style="margin-bottom: 20px;">
+          <label style="display: block; margin-bottom: 8px; color: #5A738E; font-size: 14px; font-weight: 500;">
+            <i class="fa-solid fa-envelope"></i> Correo Electrónico
+          </label>
+          <div style="position: relative;">
+            {{ form.username }}
+          </div>
+        </div>
+
+        <!-- First Name Field -->
+        <div style="margin-bottom: 20px;">
+          <label style="display: block; margin-bottom: 8px; color: #5A738E; font-size: 14px; font-weight: 500;">
+            <i class="fa-solid fa-user"></i> Nombre
+          </label>
+          <div style="position: relative;">
+            {{ form.first_name }}
+          </div>
+        </div>
+
+        <!-- Password Field -->
+        <div style="margin-bottom: 20px;">
+          <label style="display: block; margin-bottom: 8px; color: #5A738E; font-size: 14px; font-weight: 500;">
+            <i class="fa-solid fa-lock"></i> Contraseña
+          </label>
+          <div style="position: relative;">
+            {{ form.password1 }}
+          </div>
+        </div>
+
+        <!-- Confirm Password Field -->
+        <div style="margin-bottom: 20px;">
+          <label style="display: block; margin-bottom: 8px; color: #5A738E; font-size: 14px; font-weight: 500;">
+            <i class="fa-solid fa-lock-open"></i> Confirmar Contraseña
+          </label>
+          <div style="position: relative;">
+            {{ form.password2 }}
+          </div>
+        </div>
+
+        <!-- Captcha -->
+        <div style="margin-bottom: 25px; display: flex; justify-content: center;">
+          {{ form.captcha }}
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #26B99A 0%, #1ABB9C 100%); border: none; border-radius: 8px; color: white; font-size: 16px; font-weight: 500; cursor: pointer; transition: all 0.3s;">
+          <i class="fa-solid fa-user-plus"></i> Registrarse
+        </button>
+
+        <!-- Links -->
+        <div style="text-align: center; margin-top: 20px;">
+          <a href="{% url 'access' %}" style="color: #667eea; text-decoration: none; font-size: 14px;">
+            ¿Ya tienes cuenta? Iniciar sesión
+          </a>
+        </div>
+
+        <!-- Google Login -->
+        {% if config.google_oauth_client_id %}
+        <div style="margin-top: 30px;">
+          <div id="g_id_onload"
+                data-client_id="{{ config.google_oauth_client_id }}"
+                data-context="signup"
+                data-ux_mode="redirect"
+                data-login_uri="{{ config.app_url }}users/auth-receiver"
+                data-itp_support="true">
+          </div>
+          <div class="g_id_signin"
+                data-type="standard"
+                data-shape="rectangular"
+                data-theme="outline"
+                data-text="signup_with"
+                data-size="large"
+                data-width="100%"
+                data-logo_alignment="left">
+          </div>
+        </div>
+        {% endif %}
+
+      </form>
+    </div>
+  </div>
+</div>
+
+<style>
+/* Custom input styles */
+input[type="email"],
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #E5E7EB;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: all 0.3s;
+}
+
+input[type="email"]:focus,
+input[type="text"]:focus,
+input[type="password"]:focus {
+  outline: none;
+  border-color: #26B99A;
+  box-shadow: 0 0 0 3px rgba(38, 185, 154, 0.1);
+}
+
+button[type="submit"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(38, 185, 154, 0.3);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  div[style*="display: flex"] {
+    flex-direction: column !important;
+  }
+  div[style*="flex: 1"]:first-child {
+    display: none !important;
+  }
+}
+</style>
+
+{% endblock content %}
