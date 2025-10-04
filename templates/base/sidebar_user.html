@@ -14,7 +14,7 @@
           <img src="{% if user.pic %}/media/{{ user.pic }}{% else %}{% static 'img/default_profile.jpg' %}{% endif %}" alt="..." class="img-circle profile_img" style="height: 60px; width: 60px; object-fit: cover;">
         </div>
         <div class="profile_info">
-          <span>Welcome,</span>
+          <span>Bienvenido,</span>
           <h2>
             {% if user.first_name %}
                 {{user.first_name|truncatechars:12}}
@@ -28,10 +28,10 @@
       <br />
       <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
         <div class="menu_section">
-          <h3>User Content</h3>
+          <h3>Contenido del Usuario</h3>
           <ul class="nav side-menu">
 
-            <li><a href="/app/dashboard"><i class="fa-solid fa-chart-line"></i> Dashboard </a></li>
+            <li><a href="/app/dashboard"><i class="fa-solid fa-chart-line"></i> Panel de Control </a></li>
             <li><a href="/app/mercados"><i class="fa-solid fa-cubes"></i> Mercados </span></a></li>
             <li><a href="/app/bolsas"><i class="fa-solid fa-cube"></i> Bolsas </span></a></li>
             <li><a href="/app/empresas"><i class="fa-solid fa-square"></i> Empresas </a></li>

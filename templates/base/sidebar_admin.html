@@ -14,12 +14,12 @@
           <img src="{% if user.pic %}/media/{{ user.pic }}{% else %}{% static 'img/default_profile.jpg' %}{% endif %}" alt="..." class="img-circle profile_img" style="height: 60px; width: 60px; object-fit: cover;">
         </div>
         <div class="profile_info">
-          <span>Welcome,</span>
+          <span>Bienvenido,</span>
           <h2>
             {% if user.first_name %}
                 {{user.first_name|truncatechars:12}}
               {% else %}
-                {{user.username|truncatechars:12}} 
+                {{user.username|truncatechars:12}}
               {% endif %}
           </h2>
         </div>
@@ -33,26 +33,26 @@
         <div class="menu_section">
           <h3>General</h3>
           <ul class="nav side-menu">
-            <li><a><i class="fa-solid fa-chart-line"></i> Dashboards <span class="fa fa-chevron-down"></span></a>
+            <li><a><i class="fa-solid fa-chart-line"></i> Paneles <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu">
                 <li><a href="/administration/dashboard">General</a></li>
               </ul>
             </li>
-            <li><a><i class="fa-solid fa-gear"></i> Configuration <span class="fa fa-chevron-down"></span></a>
+            <li><a><i class="fa-solid fa-gear"></i> Configuración <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu">
-                <li><a href="/administration/parameters">Parameters</a></li>
-                <li><a href="/administration/logs">Logs</a></li>
+                <li><a href="/administration/parameters">Parámetros</a></li>
+                <li><a href="/administration/logs">Registros</a></li>
               </ul>
             </li>
             <li><a><i class="fa-solid fa-feather"></i> Blog <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu">
-                <li><a href="/administration/posts">All items</a></li>
-                <li><a href="/administration/post-add">Add new</a></li>
+                <li><a href="/administration/posts">Todos los artículos</a></li>
+                <li><a href="/administration/post-add">Añadir nuevo</a></li>
               </ul>
             </li>
-            <li><a><i class="fa-solid fa-mobile-screen-button"></i> Public <span class="fa fa-chevron-down"></span></a>
+            <li><a><i class="fa-solid fa-mobile-screen-button"></i> Público <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu">
-                <li><a href="/app/dashboard">User dashboard</a></li>
+                <li><a href="/app/dashboard">Panel de usuario</a></li>
                 <li><a href="/app/mercados"> Mercados </span></a></li>
                 <li><a href="/app/bolsas"> Bolsas </span></a></li>
                 <li><a href="/app/empresas"> Empresas </a></li>
@@ -63,31 +63,31 @@
 
         
         <div class="menu_section">
-          <h3>Content</h3>
+          <h3>Contenido</h3>
           <ul class="nav side-menu">
             
             <li><a><i class="fa-solid fa-cubes"></i> Mercados <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu">
-                <li><a href="/administration/mercados">All items</a></li>
-                <li><a href="/administration/mercado_add">Add new</a></li>
+                <li><a href="/administration/mercados">Todos los elementos</a></li>
+                <li><a href="/administration/mercado_add">Añadir nuevo</a></li>
               </ul>
             </li>
             <li><a><i class="fa-solid fa-cube"></i> Bolsas <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu">
-                <li><a href="/administration/bolsas">All items</a></li>
-                <li><a href="/administration/bolsa_add">Add new</a></li>
+                <li><a href="/administration/bolsas">Todos los elementos</a></li>
+                <li><a href="/administration/bolsa_add">Añadir nuevo</a></li>
               </ul>
             </li>
             <li><a><i class="fa-solid fa-square"></i> Empresas <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu">
-                <li><a href="/administration/empresas">All items</a></li>
-                <li><a href="/administration/empresa_add">Add new</a></li>
+                <li><a href="/administration/empresas">Todos los elementos</a></li>
+                <li><a href="/administration/empresa_add">Añadir nuevo</a></li>
               </ul>
             </li>
             <li><a><i class="fa-solid fa-newspaper"></i> Noticias <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu">
-                <li><a href="/administration/noticias">All items</a></li>
-                <li><a href="/administration/noticia_add">Add new</a></li>
+                <li><a href="/administration/noticias">Todos los elementos</a></li>
+                <li><a href="/administration/noticia_add">Añadir nuevo</a></li>
               </ul>
             </li>
           </ul>
@@ -95,26 +95,26 @@
 
         
         <div class="menu_section">
-          <h3>Interaction</h3>
+          <h3>Interacción</h3>
           <ul class="nav side-menu">
             
-            <li><a><i class="fa-solid fa-users"></i> Users <span class="fa fa-chevron-down"></span></a>
+            <li><a><i class="fa-solid fa-users"></i> Usuarios <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu">
-                <li><a href="/administration/users">All users</a></li>
-                <li><a href="/administration/user_add">Add new</a></li>
+                <li><a href="/administration/users">Todos los usuarios</a></li>
+                <li><a href="/administration/user_add">Añadir nuevo</a></li>
               </ul>
             </li>
-            <li><a><i class="fa-brands fa-stripe-s"></i> Subscriptions <span class="fa fa-chevron-down"></span></a>
+            <li><a><i class="fa-brands fa-stripe-s"></i> Suscripciones <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu">
-                <li><a href="/administration/subscriptions">All items</a></li>
-                <li><a href="/administration/subscription_add">Add new</a></li>
-                <li><a href="/administration/assign_product">Assign product</a></li>
+                <li><a href="/administration/subscriptions">Todos los elementos</a></li>
+                <li><a href="/administration/subscription_add">Añadir nuevo</a></li>
+                <li><a href="/administration/assign_product">Asignar producto</a></li>
               </ul>
             </li>
-            <li><a><i class="fa-solid fa-square-check"></i> Products <span class="fa fa-chevron-down"></span></a>
+            <li><a><i class="fa-solid fa-square-check"></i> Productos <span class="fa fa-chevron-down"></span></a>
               <ul class="nav child_menu">
-                <li><a href="/administration/products">All items</a></li>
-                <li><a href="/administration/product_add">Add new</a></li>
+                <li><a href="/administration/products">Todos los elementos</a></li>
+                <li><a href="/administration/product_add">Añadir nuevo</a></li>
               </ul>
             </li>
           </ul>
