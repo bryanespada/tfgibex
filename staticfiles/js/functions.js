@@ -44,29 +44,49 @@ function filterTable() {
     }
 }
 
-// Funcion para filtrar los elementos de empresas
+// Funcion para filtrar los elementos de empresas, noticias, mercados y bolsas
 function filterBlock() {
-    console.log("Cargado Filter Block")
+    console.log("Cargado Filter Block");
     var filterValue = $('#filterInputBlock').val().toLowerCase();
-    noResultsMessage = document.getElementById("noResultsMessage");
+    var noResultsMessage = document.getElementById("noResultsMessage");
     var anyResults = false;
+
     $('.blog').each(function () {
-        var textToFilter = $(this).find('.caption p').text().toLowerCase();
-        if (textToFilter.indexOf(filterValue) > -1) {
-            anyresult = true;
+        // Buscar solo en el título
+        var titleText = '';
+
+        // Para tarjetas con título en h4 (mercados, bolsas, empresas nuevas)
+        var h4Title = $(this).find('h4').first().text();
+        if (h4Title) {
+            titleText = h4Title.toLowerCase();
+        }
+
+        // Para tarjetas con título en b (noticias)
+        var bTitle = $(this).find('.caption b').first().text();
+        if (bTitle && !titleText) {
+            titleText = bTitle.toLowerCase();
+        }
+
+        // Verificar si el título coincide con el filtro
+        if (titleText.indexOf(filterValue) > -1) {
+            anyResults = true;
             $(this).show();
         } else {
             $(this).hide();
         }
     });
-    if (anyResults) {
-        noResultsMessage.classList.remove('d-none');
-    }
-    else if (filterValue == ''){
+
+    // Mostrar u ocultar mensaje de "no resultados"
+    if (filterValue === '') {
+        // Si no hay filtro, ocultar mensaje y mostrar todo
         noResultsMessage.classList.add('d-none');
-    }
-    else {
-        noResultsMessage.classList.add('d-none'); 
+        $('.blog').show();
+    } else if (anyResults) {
+        // Si hay resultados, ocultar mensaje
+        noResultsMessage.classList.add('d-none');
+    } else {
+        // Si no hay resultados, mostrar mensaje
+        noResultsMessage.classList.remove('d-none');
     }
 }
 
