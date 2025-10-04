@@ -6,109 +6,231 @@
 <!-- page content -->
 <div class="right_col" role="main">
     <div class="">
-        <div class="page-title">
+        <!-- Modern Profile Header -->
+        <div class="page-title" style="margin-bottom: 30px;">
             <div class="title_left">
-                <h3>Profile</h3>
+                <h3 style="color: #2A3F54; font-weight: bold;">Mi Perfil</h3>
             </div>
         </div>
 
         <div class="clearfix"></div>
 
-        <div class="row" style="display: block;">
-            <div class="clearfix"></div>
-            <div class="col-md-12 col-sm-12  ">
+        <div class="row">
+            <!-- Profile Card Column -->
+            <div class="col-md-4">
+                <div class="x_panel" style="border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08);">
+                    <div class="x_content" style="text-align: center; padding: 30px;">
+                        <!-- Profile Picture with Overlay Effect -->
+                        <div style="position: relative; display: inline-block; margin-bottom: 20px;">
+                            <img src="{% if request.user.pic %}/media/{{request.user.pic}}{% else %}{% static 'img/default_profile.jpg' %}{% endif %}"
+                                 alt="profile pic"
+                                 style="height: 150px; width: 150px; border-radius: 50%; object-fit: cover; border: 4px solid #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.15);">
 
-                <div class="x_panel">
-
-                        {% endif %}
-
-                    <div class="x_content">
-                        <div class="table-responsive">
-
-                            <div class="row" style="display: inline-block;width:100%;">
-                                <div class="tile_count">
-                                    <div class="col-md-12 col-sm-12  tile_stats_count">
-                                        <div class="profile_pic">
-                                            <img src="{% if request.user.pic %}/media/{{request.user.pic}}{% else %}{% static 'img/default_profile.jpg' %}{% endif %}" alt="profile pic" class="img-circle profile_img" style="height: 120px; width: 120px; margin-left: 0px; margin-top: 0px;object-fit: cover;">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-12 col-sm-12  tile_stats_count">
-                                        <div class="count blue">{{request.user.first_name}} {{request.user.last_name}}</div>
-                                        <span class="count_bottom">
-                                            {% if request.user|has_group:'Administration' %}Administrator
-                                            {% elif request.user|is_premium %}Premium
-                                            {% else %} Freemium
-                                            {% endif %} user
-                                        </span>
-                                    </div>
-                                </div>
+                            <!-- Status Badge -->
+                            <div style="position: absolute; bottom: 10px; right: 10px; background: {% if request.user|is_premium %}#26B99A{% else %}#73879C{% endif %}; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid #fff;">
+                                {% if request.user|is_premium %}
+                                    <i class="fa-solid fa-crown" style="color: white; font-size: 14px;"></i>
+                                {% else %}
+                                    <i class="fa-solid fa-user" style="color: white; font-size: 14px;"></i>
+                                {% endif %}
                             </div>
                         </div>
 
+                        <!-- User Name -->
+                        <h3 style="margin: 0; color: #2A3F54; font-weight: bold;">
+                            {{request.user.first_name}} {{request.user.last_name}}
+                        </h3>
+
+                        <!-- User Email -->
+                        <p style="color: #73879C; margin: 10px 0;">
+                            <i class="fa-solid fa-envelope" style="margin-right: 5px;"></i>
+                            {{request.user.username}}
+                        </p>
+
+                        <!-- User Type Badge -->
+                        <div style="margin-top: 20px;">
+                            {% if request.user|has_group:'Administration' %}
+                                <span style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 8px 20px; border-radius: 20px; font-size: 14px; font-weight: 500;">
+                                    <i class="fa-solid fa-shield-halved"></i> Administrador
+                                </span>
+                            {% elif request.user|is_premium %}
+                                <span style="background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); color: white; padding: 8px 20px; border-radius: 20px; font-size: 14px; font-weight: 500;">
+                                    <i class="fa-solid fa-crown"></i> Usuario Premium
+                                </span>
+                            {% else %}
+                                <span style="background: #E7E7E7; color: #5A738E; padding: 8px 20px; border-radius: 20px; font-size: 14px; font-weight: 500;">
+                                    <i class="fa-solid fa-user"></i> Usuario Gratuito
+                                </span>
+                            {% endif %}
+                        </div>
+
+
+                        <!-- Quick Actions -->
+                        {% if not request.user|is_premium %}
+                        <div style="margin-top: 20px;">
+                            <a href="/users/subscription" class="btn btn-warning btn-block" style="border-radius: 25px;">
+                                <i class="fa-solid fa-rocket"></i> Actualizar a Premium
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Informational Section moved here -->
+                <div class="x_panel" style="border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); margin-top: 20px;">
+                    <div class="x_content" style="padding: 20px;">
+                        <h5 style="color: #2A3F54; margin-bottom: 15px;">
+                            <i class="fa-solid fa-info-circle" style="color: #3498DB;"></i>
+                            Información de la cuenta
+                        </h5>
+
+                        <div class="row">
+                            <div class="col-md-12" style="margin-bottom: 10px;">
+                                <p style="margin-bottom: 5px;">
+                                    <strong style="color: #2A3F54;">Fecha de registro:</strong><br>
+                                    <span style="color: #73879C;">
+                                        {{ request.user.date_joined|date:"d/m/Y H:i" }}
+                                    </span>
+                                </p>
+                            </div>
+                            <div class="col-md-12" style="margin-bottom: 10px;">
+                                <p style="margin-bottom: 5px;">
+                                    <strong style="color: #2A3F54;">Último acceso:</strong><br>
+                                    <span style="color: #73879C;">
+                                        {% if request.user.last_login %}
+                                            {{ request.user.last_login|date:"d/m/Y H:i" }}
+                                        {% else %}
+                                            Primera sesión
+                                        {% endif %}
+                                    </span>
+                                </p>
+                            </div>
+                            <div class="col-md-12">
+                                <p style="margin-bottom: 5px;">
+                                    <strong style="color: #2A3F54;">Estado de suscripción:</strong><br>
+                                    <span style="color: #73879C;">
+                                        {% if request.user|is_premium %}
+                                            <span style="color: #26B99A; font-weight: bold;">Activa</span>
+                                        {% else %}
+                                            <span style="color: #73879C;">Sin suscripción</span>
+                                        {% endif %}
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edit Form Column -->
+            <div class="col-md-8">
+                <div class="x_panel" style="border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.08);">
+                    <div class="x_title" style="border-bottom: 2px solid #E7E7E7; padding-bottom: 15px;">
+                        <h2 style="color: #2A3F54; font-weight: 600;">
+                            <i class="fa-solid fa-edit" style="color: #3498DB;"></i> Editar Información
+                        </h2>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div class="x_content" style="padding: 30px;">
+
                         <form action="" role="form" method="POST" class="text-start" enctype="multipart/form-data">
                             {% csrf_token %}
-                            
-                            <div class="tab-content" id="myTabContent">
 
-                                <div class="tab-pane fade show active" id="general" role="tabpanel"
-                                    aria-labelledby="general-tab">
-                                    <div class="seccion bg-gray-100 border-radius-lg">
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Email *</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.username }}</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">First name *</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.first_name }}</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Last name *</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.last_name }}</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Profile picture</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.pic }}</p>
-                                            </div>
-                                        </div>
-
-                                    </div>
+                            <!-- Email Field -->
+                            <div class="form-group" style="margin-bottom: 25px;">
+                                <label style="color: #2A3F54; font-weight: 600; margin-bottom: 10px; font-size: 14px;">
+                                    <i class="fa-solid fa-envelope" style="color: #3498DB; margin-right: 5px;"></i>
+                                    Correo Electrónico
+                                </label>
+                                <div style="position: relative;">
+                                    {{ form.username }}
+                                    <small class="form-text text-muted">Este será tu usuario para iniciar sesión</small>
                                 </div>
                             </div>
 
-                            <div class="text-danger">
-                                {% if errors %}
-                                  <ul>
-                                      {% for field, errors_list in errors.items %}
-                                          {% for error in errors_list %}
-                                              <li style='text-align-last: left;'>{{ error }}</li>
-                                          {% endfor %}
-                                      {% endfor %}
-                                  </ul>
-                                {% endif %}
-                              </div>
+                            <!-- First Name Field -->
+                            <div class="form-group" style="margin-bottom: 25px;">
+                                <label style="color: #2A3F54; font-weight: 600; margin-bottom: 10px; font-size: 14px;">
+                                    <i class="fa-solid fa-user" style="color: #26B99A; margin-right: 5px;"></i>
+                                    Nombre
+                                </label>
+                                {{ form.first_name }}
+                            </div>
 
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-primary">
-                                    Save <i class="fa-solid fa-check"></i>
+                            <!-- Last Name Field -->
+                            <div class="form-group" style="margin-bottom: 25px;">
+                                <label style="color: #2A3F54; font-weight: 600; margin-bottom: 10px; font-size: 14px;">
+                                    <i class="fa-solid fa-user" style="color: #26B99A; margin-right: 5px;"></i>
+                                    Apellidos
+                                </label>
+                                {{ form.last_name }}
+                            </div>
+
+                            <!-- Profile Picture Field -->
+                            <div class="form-group" style="margin-bottom: 30px;">
+                                <label style="color: #2A3F54; font-weight: 600; margin-bottom: 10px; font-size: 14px;">
+                                    <i class="fa-solid fa-camera" style="color: #9B59B6; margin-right: 5px;"></i>
+                                    Foto de Perfil
+                                </label>
+
+                                <!-- Current Picture Preview -->
+                                {% if request.user.pic %}
+                                <div style="margin-bottom: 15px; padding: 15px; background: #F8F9FA; border-radius: 10px;">
+                                    <div style="display: flex; align-items: center;">
+                                        <img src="/media/{{request.user.pic}}"
+                                             alt="current profile"
+                                             style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; margin-right: 15px;">
+                                        <div style="flex: 1;">
+                                            <p style="margin: 0; color: #2A3F54; font-weight: 500;">Imagen actual</p>
+                                            <small style="color: #73879C;">Selecciona una nueva imagen para cambiarla</small>
+                                        </div>
+                                    </div>
+
+                                    <!-- Subtle delete option -->
+                                    <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #E7E7E7;">
+                                        <label style="display: flex; align-items: center; cursor: pointer; margin: 0;">
+                                            <input type="checkbox" name="pic-clear" id="pic-clear_id" style="width: 16px; height: 16px; margin-right: 8px; cursor: pointer;">
+                                            <span style="color: #73879C; font-size: 14px;">
+                                                <i class="fa-solid fa-times" style="margin-right: 4px; font-size: 12px;"></i>
+                                                Eliminar imagen
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                <div style="display: flex; flex-direction: column; gap: 10px;">
+                                    <!-- Hide Django's default clear checkbox and render only the file input -->
+                                    <div id="custom-file-input">
+                                        {{ form.pic }}
+                                    </div>
+
+                                    <small class="form-text text-muted">Formatos permitidos: JPG, PNG. Tamaño máximo: 2MB</small>
+                                </div>
+
+                            </div>
+
+                            <!-- Error Messages -->
+                            {% if errors %}
+                            <div class="alert alert-danger" style="border-radius: 10px; margin-bottom: 20px;">
+                                <ul style="margin: 0; padding-left: 20px;">
+                                    {% for field, errors_list in errors.items %}
+                                        {% for error in errors_list %}
+                                            <li>{{ error }}</li>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            {% endif %}
+
+                            <!-- Submit Buttons -->
+                            <div style="display: flex; justify-content: space-between; gap: 15px;">
+                                <a href="/app/dashboard" class="btn btn-light" style="border-radius: 25px; padding: 10px 30px;">
+                                    <i class="fa-solid fa-arrow-left"></i> Cancelar
+                                </a>
+                                <button type="submit" class="btn btn-primary" style="border-radius: 25px; padding: 10px 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none;">
+                                    <i class="fa-solid fa-save"></i> Guardar Cambios
                                 </button>
                             </div>
                         </form>
@@ -120,5 +242,43 @@
     </div>
 </div>
 <!-- /page content -->
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Hide Django's default clear checkbox and its label
+    var customFileInput = document.getElementById('custom-file-input');
+    if (customFileInput) {
+        // Find and hide any checkbox that Django auto-generates for clearing
+        var checkboxes = customFileInput.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(function(checkbox) {
+            // Hide the checkbox
+            checkbox.style.display = 'none';
+
+            // Find and hide the associated label
+            var label = customFileInput.querySelector('label[for="' + checkbox.id + '"]');
+            if (label && label.textContent.includes('Clear')) {
+                label.style.display = 'none';
+            }
+        });
+
+        // Also hide any text nodes that contain "Clear"
+        var walker = document.createTreeWalker(
+            customFileInput,
+            NodeFilter.SHOW_TEXT,
+            null,
+            false
+        );
+
+        var node;
+        while(node = walker.nextNode()) {
+            if (node.nodeValue.includes('Clear')) {
+                if (node.parentElement) {
+                    node.parentElement.style.display = 'none';
+                }
+            }
+        }
+    }
+});
+</script>
 
 {% endblock %}
