@@ -148,19 +148,17 @@
     <div class="row">
 
         <!-- First col /8 -->
-        <div class="col-md-8 col-sm-8 ">
-            <div class="dashboard_graph">
-
-                <!-- Title -->
-                <div class="row x_title">
-                    <div class="col-md-6">
-                        <h3>Visitantes y nuevos usuarios</h3>
-                    </div>
+        <div class="col-md-8 col-sm-8">
+            <div class="x_panel" style="border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.08);">
+                <div class="x_title" style="border-bottom: 2px solid #E7E7E7; padding-bottom: 10px;">
+                    <h2 style="color: #2A3F54; font-size: 1.2em;">
+                        <i class="fa-solid fa-chart-line" style="color: #3498DB;"></i> Visitantes y nuevos usuarios
+                    </h2>
+                    <div class="clearfix"></div>
                 </div>
-
-                <!-- Chart Canvas -->
-                <div class="col-md-12 col-sm-12">
-                    <canvas id="admin_chart_1_1" style="height:500px!important;width:100%!important;"></canvas>
+                <div class="x_content" style="padding: 20px;">
+                    {% if visitors.show %}
+                    <canvas id="admin_chart_1_1" style="height:400px!important;width:100%!important;"></canvas>
                 </div>
 
                 <!-- Chart script -->
@@ -176,36 +174,53 @@
                                     data: {{visitors.count | safe}},
                                     cubicInterpolationMode: 'monotone',
                                     label: "Visitantes",
-                                    borderColor: "{{config.app_color_1}}", // Border color
-                                    fill: true, // Area color
-                                    backgroundColor: '{{config.app_color_1}}{{config.app_transparency_factor}}', // Border color with transparency
-                                    pointStyle: 'circle', // Point shape
-                                    pointRadius: 10, // Point shape size
-                                    pointHoverRadius: 25 // When the point expands itself on hover
+                                    borderColor: "#3498DB",
+                                    fill: true,
+                                    backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                                    pointStyle: 'circle',
+                                    pointRadius: 6,
+                                    pointHoverRadius: 10,
+                                    borderWidth: 3,
+                                    tension: 0.4
                                 },
                                 {
                                     data: {{new_users.count | safe}},
                                     cubicInterpolationMode: 'monotone',
                                     label: "Nuevos usuarios",
-                                    borderColor: "{{config.app_color_4}}", // Border color
-                                    fill: true, // Area color
-                                    backgroundColor: '{{config.app_color_4}}{{config.app_transparency_factor}}', // Border color with transparency
-                                    pointStyle: 'circle', // Point shape
-                                    pointRadius: 10, // Point shape size
-                                    pointHoverRadius: 25 // When the point expands itself on hover
+                                    borderColor: "#26B99A",
+                                    fill: true,
+                                    backgroundColor: 'rgba(38, 185, 154, 0.1)',
+                                    pointStyle: 'circle',
+                                    pointRadius: 6,
+                                    pointHoverRadius: 10,
+                                    borderWidth: 3,
+                                    tension: 0.4
                                 }
                             ]
                         },
                         options: {
-                            title: {
-                                display: true,
-                                text: 'World population per region (in millions)'
-                            },
                             responsive: true,
                             maintainAspectRatio: false,
                             plugins: {
                                 legend: {
-                                    display: false,
+                                    display: true,
+                                    position: 'bottom',
+                                    labels: {
+                                        padding: 20,
+                                        usePointStyle: true,
+                                        color: '#73879C'
+                                    }
+                                },
+                                tooltip: {
+                                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                    padding: 12,
+                                    cornerRadius: 8,
+                                    titleFont: {
+                                        size: 14
+                                    },
+                                    bodyFont: {
+                                        size: 13
+                                    }
                                 }
                             },
                             animation: {
@@ -219,42 +234,54 @@
                             },
                             scales: {
                                 y: {
-                                    beginAtZero: true, // Initialize iun 0 y-axis
+                                    beginAtZero: true,
                                     ticks: {
-                                        stepSize: 1 // Forces step size to be 1 units
+                                        stepSize: 1,
+                                        color: '#73879C'
+                                    },
+                                    grid: {
+                                        color: 'rgba(0, 0, 0, 0.05)',
+                                        drawBorder: false
                                     }
                                 },
                                 x: {
                                     ticks: {
-                                        maxTicksLimit: 10 // Define el número máximo de etiquetas en el eje x
+                                        maxTicksLimit: 10,
+                                        color: '#73879C'
+                                    },
+                                    grid: {
+                                        display: false
                                     }
                                 }
                             }
                         }
                     });
                 </script>
-
-                <div class="clearfix"></div>
+                {% else %}
+                <div style="height:400px!important;width:100%!important; display: flex; justify-content: center; align-items: center; color: #73879C;">
+                    <div style="text-align: center;">
+                        <i class="fa-solid fa-chart-line" style="font-size: 48px; color: #E7E7E7; margin-bottom: 10px;"></i>
+                        <p style="margin: 0;">Sin datos disponibles</p>
+                    </div>
+                </div>
+                {% endif %}
             </div>
         </div>
 
 
         <!-- Second col /4 -->
-        <div class="col-md-4 col-sm-4 ">
-            <div class="dashboard_graph">
-
-                <!-- Title -->
-                <div class="row x_title">
-                    <div class="col-md-6">
-                        <h3>Ganancias</h3>
-                    </div>
+        <div class="col-md-4 col-sm-4">
+            <div class="x_panel" style="border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.08);">
+                <div class="x_title" style="border-bottom: 2px solid #E7E7E7; padding-bottom: 10px;">
+                    <h2 style="color: #2A3F54; font-size: 1.2em;">
+                        <i class="fa-solid fa-dollar-sign" style="color: #26B99A;"></i> Ganancias
+                    </h2>
+                    <div class="clearfix"></div>
                 </div>
-
-                <!-- Chart Canvas -->
-                <div class="col-md-12 col-sm-12">
+                <div class="x_content" style="padding: 20px;">
                     {% if total_earned.show %}
                         <!-- Chart Canvas -->
-                        <canvas id="admin_chart_1_2" style="height:500px!important;width:100%!important;"></canvas>
+                        <canvas id="admin_chart_1_2" style="height:400px!important;width:100%!important;"></canvas>
                         <!-- Chart script -->
                         <script>
                             const ctx_admin_chart_1_2 = document.getElementById('admin_chart_1_2');
@@ -268,25 +295,34 @@
                                             data: {{total_earned.amount}},
                                             cubicInterpolationMode: 'monotone',
                                             label: "Total ganado",
-                                            borderColor: "#03586a",
+                                            borderColor: "#26B99A",
                                             fill: true,
-                                            backgroundColor: '#03586a{{config.app_transparency_factor}}',
+                                            backgroundColor: 'rgba(38, 185, 154, 0.1)',
                                             pointStyle: 'circle',
-                                            pointRadius: 10,
-                                            pointHoverRadius: 25
+                                            pointRadius: 6,
+                                            pointHoverRadius: 10,
+                                            borderWidth: 3,
+                                            tension: 0.4
                                         }
                                     ]
                                 },
                                 options: {
-                                    title: {
-                                        display: true,
-                                        text: 'World population per region (in millions)'
-                                    },
                                     responsive: true,
                                     maintainAspectRatio: false,
                                     plugins: {
                                         legend: {
-                                            display: false,
+                                            display: false
+                                        },
+                                        tooltip: {
+                                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                            padding: 12,
+                                            cornerRadius: 8,
+                                            titleFont: {
+                                                size: 14
+                                            },
+                                            bodyFont: {
+                                                size: 13
+                                            }
                                         }
                                     },
                                     animation: {
@@ -300,11 +336,25 @@
                                     },
                                     scales: {
                                         y: {
-                                            beginAtZero: true // Initialize iun 0 y-axis
+                                            beginAtZero: true,
+                                            ticks: {
+                                                color: '#73879C',
+                                                callback: function(value) {
+                                                    return '$' + value;
+                                                }
+                                            },
+                                            grid: {
+                                                color: 'rgba(0, 0, 0, 0.05)',
+                                                drawBorder: false
+                                            }
                                         },
                                         x: {
                                             ticks: {
-                                                maxTicksLimit: 20 // Define el número máximo de etiquetas en el eje x
+                                                maxTicksLimit: 20,
+                                                color: '#73879C'
+                                            },
+                                            grid: {
+                                                display: false
                                             }
                                         }
                                     }
@@ -312,12 +362,14 @@
                             });
                         </script>
                         {% else %}
-                            <div id="admin_chart_1_2" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">Sin datos</div>
+                            <div id="admin_chart_1_2" style="height:400px!important;width:100%!important; display: flex; justify-content: center; align-items: center; color: #73879C;">
+                                <div style="text-align: center;">
+                                    <i class="fa-solid fa-chart-line" style="font-size: 48px; color: #E7E7E7; margin-bottom: 10px;"></i>
+                                    <p style="margin: 0;">Sin datos disponibles</p>
+                                </div>
+                            </div>
                         {% endif %}
                 </div>
-
-
-                <div class="clearfix"></div>
             </div>
         </div>
 
@@ -329,27 +381,24 @@
     <div class="row">
 
         <!-- First col /4 -->
-        <div class="col-md-4 col-sm-4 ">
-            <div class="x_panel tile" style="height:auto;">
-
-                <!-- Title -->
-                <div class="x_title">
-                    <h2>Productos destacados</h2>
+        <div class="col-md-4 col-sm-4">
+            <div class="x_panel" style="border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.08);">
+                <div class="x_title" style="border-bottom: 2px solid #E7E7E7; padding-bottom: 10px;">
+                    <h2 style="color: #2A3F54; font-size: 1.2em;">
+                        <i class="fa-solid fa-box" style="color: #9B59B6;"></i> Productos destacados
+                    </h2>
                     <ul class="nav navbar-right panel_toolbox">
-                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
-                        <li><a class="close-link"><i class="fa fa-close"></i></a>
-                        </li>
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                     </ul>
                     <div class="clearfix"></div>
                 </div>
-
-                <div class="x_content">
+                <div class="x_content" style="padding: 20px;">
 
                     <div class="col-md-12 col-sm-12">
                         
                         {% if top_products.show %}
                             <!-- Chart Canvas -->
-                            <canvas id="admin_chart_2_1" style="height:500px!important;width:100%!important;"></canvas>
+                            <canvas id="admin_chart_2_1" style="height:350px!important;width:100%!important;"></canvas>
                             <!-- Chart script -->
                             <script>
                                 const ctx_admin_chart_2_1 = document.getElementById('admin_chart_2_1');
@@ -399,7 +448,12 @@
                                 });
                             </script>
                         {% else %}
-                            <div id="admin_chart_2_1" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">Sin datos</div>
+                            <div id="admin_chart_2_1" style="height:350px!important;width:100%!important; display: flex; justify-content: center; align-items: center; color: #73879C;">
+                                <div style="text-align: center;">
+                                    <i class="fa-solid fa-chart-bar" style="font-size: 48px; color: #E7E7E7; margin-bottom: 10px;"></i>
+                                    <p style="margin: 0;">Sin datos disponibles</p>
+                                </div>
+                            </div>
                         {% endif %}
                     </div>
 
@@ -408,27 +462,24 @@
         </div>
 
         <!-- Second col /4 -->
-        <div class="col-md-4 col-sm-4 ">
-            <div class="x_panel tile" style="height:auto;">
-
-                <!-- Title -->
-                <div class="x_title">
-                    <h2>Empresas destacadas</h2>
+        <div class="col-md-4 col-sm-4">
+            <div class="x_panel" style="border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.08);">
+                <div class="x_title" style="border-bottom: 2px solid #E7E7E7; padding-bottom: 10px;">
+                    <h2 style="color: #2A3F54; font-size: 1.2em;">
+                        <i class="fa-solid fa-building" style="color: #F39C12;"></i> Empresas destacadas
+                    </h2>
                     <ul class="nav navbar-right panel_toolbox">
-                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
-                        <li><a class="close-link"><i class="fa fa-close"></i></a>
-                        </li>
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                     </ul>
                     <div class="clearfix"></div>
                 </div>
-
-                <div class="x_content">
+                <div class="x_content" style="padding: 20px;">
 
                     <div class="col-md-12 col-sm-12">
                         
                         {% if top_empresas.show %}
                             <!-- Chart Canvas -->
-                            <canvas id="admin_chart_2_2" style="height:500px!important;width:100%!important;"></canvas>
+                            <canvas id="admin_chart_2_2" style="height:350px!important;width:100%!important;"></canvas>
                             <!-- Chart script -->
                             <script>
                                 const ctx_admin_chart_2_2 = document.getElementById('admin_chart_2_2');
@@ -478,7 +529,12 @@
                                 });
                             </script>
                         {% else %}
-                            <div id="admin_chart_2_2" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">Sin datos</div>
+                            <div id="admin_chart_2_2" style="height:350px!important;width:100%!important; display: flex; justify-content: center; align-items: center; color: #73879C;">
+                                <div style="text-align: center;">
+                                    <i class="fa-solid fa-chart-bar" style="font-size: 48px; color: #E7E7E7; margin-bottom: 10px;"></i>
+                                    <p style="margin: 0;">Sin datos disponibles</p>
+                                </div>
+                            </div>
                         {% endif %}
                     </div>
 
@@ -488,26 +544,23 @@
         </div>
 
         <!-- Third col /4 -->
-        <div class="col-md-4 col-sm-4 ">
-            <div class="x_panel tile" style="height:auto;">
-
-                <!-- Title -->
-                <div class="x_title">
-                    <h2>Países principales</h2>
+        <div class="col-md-4 col-sm-4">
+            <div class="x_panel" style="border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.08);">
+                <div class="x_title" style="border-bottom: 2px solid #E7E7E7; padding-bottom: 10px;">
+                    <h2 style="color: #2A3F54; font-size: 1.2em;">
+                        <i class="fa-solid fa-globe" style="color: #1ABC9C;"></i> Países principales
+                    </h2>
                     <ul class="nav navbar-right panel_toolbox">
-                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
-                        <li><a class="close-link"><i class="fa fa-close"></i></a>
-                        </li>
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                     </ul>
                     <div class="clearfix"></div>
                 </div>
-
-                <div class="x_content">
+                <div class="x_content" style="padding: 20px;">
                     <div class="col-md-12 col-sm-12">
                         
                         {% if top_countries.show %}
                             <!-- Chart Canvas -->
-                            <canvas id="admin_chart_2_3" style="height:500px!important;width:100%!important;"></canvas>
+                            <canvas id="admin_chart_2_3" style="height:350px!important;width:100%!important;"></canvas>
                             <!-- Chart script -->
                             <script>
                                 const ctx_admin_chart_2_3 = document.getElementById('admin_chart_2_3');
@@ -557,7 +610,12 @@
                                 });
                             </script>
                         {% else %}
-                            <div id="admin_chart_2_3" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">Sin datos</div>
+                            <div id="admin_chart_2_3" style="height:350px!important;width:100%!important; display: flex; justify-content: center; align-items: center; color: #73879C;">
+                                <div style="text-align: center;">
+                                    <i class="fa-solid fa-chart-bar" style="font-size: 48px; color: #E7E7E7; margin-bottom: 10px;"></i>
+                                    <p style="margin: 0;">Sin datos disponibles</p>
+                                </div>
+                            </div>
                         {% endif %}
                     </div>
 
@@ -571,27 +629,24 @@
     <div class="row">
 
         <!-- First col /4 -->
-        <div class="col-md-4 col-sm-4 ">
-            <div class="x_panel tile" style="height:auto;">
-
-                <!-- Title -->
-                <div class="x_title">
-                    <h2>Solicitudes por continente</h2>
+        <div class="col-md-4 col-sm-4">
+            <div class="x_panel" style="border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.08);">
+                <div class="x_title" style="border-bottom: 2px solid #E7E7E7; padding-bottom: 10px;">
+                    <h2 style="color: #2A3F54; font-size: 1.2em;">
+                        <i class="fa-solid fa-earth-americas" style="color: #E74C3C;"></i> Solicitudes por continente
+                    </h2>
                     <ul class="nav navbar-right panel_toolbox">
-                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
-                        <li><a class="close-link"><i class="fa fa-close"></i></a>
-                        </li>
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                     </ul>
                     <div class="clearfix"></div>
                 </div>
-
-                <div class="x_content">
+                <div class="x_content" style="padding: 20px;">
 
                     <div class="col-md-12 col-sm-12">
                         
                         {% if total_loads_continent.show %}
                             <!-- Chart Canvas -->
-                            <canvas id="admin_chart_3_1" style="height:500px!important;width:100%!important;"></canvas>
+                            <canvas id="admin_chart_3_1" style="height:350px!important;width:100%!important;"></canvas>
                             <!-- Chart script -->
                             <script>
                                 const ctx_admin_chart_3_1 = document.getElementById('admin_chart_3_1');
@@ -635,7 +690,12 @@
                                 });
                             </script>
                         {% else %}
-                            <div id="admin_chart_3_1" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">Sin datos</div>
+                            <div id="admin_chart_3_1" style="height:350px!important;width:100%!important; display: flex; justify-content: center; align-items: center; color: #73879C;">
+                                <div style="text-align: center;">
+                                    <i class="fa-solid fa-chart-pie" style="font-size: 48px; color: #E7E7E7; margin-bottom: 10px;"></i>
+                                    <p style="margin: 0;">Sin datos disponibles</p>
+                                </div>
+                            </div>
                         {% endif %}
                     </div>
 
@@ -645,26 +705,23 @@
         </div>
 
         <!-- Second col /4 -->
-        <div class="col-md-4 col-sm-4 ">
-            <div class="x_panel tile" style="height:auto;">
-
-                <!-- Title -->
-                <div class="x_title">
-                    <h2>Usuarios por país</h2>
+        <div class="col-md-4 col-sm-4">
+            <div class="x_panel" style="border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.08);">
+                <div class="x_title" style="border-bottom: 2px solid #E7E7E7; padding-bottom: 10px;">
+                    <h2 style="color: #2A3F54; font-size: 1.2em;">
+                        <i class="fa-solid fa-users" style="color: #3498DB;"></i> Usuarios por país
+                    </h2>
                     <ul class="nav navbar-right panel_toolbox">
-                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
-                        <li><a class="close-link"><i class="fa fa-close"></i></a>
-                        </li>
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                     </ul>
                     <div class="clearfix"></div>
                 </div>
-
-                <div class="x_content">
+                <div class="x_content" style="padding: 20px;">
 
                     <div class="col-md-12 col-sm-12">
                         {% if total_registered_country.show %}
                         <!-- Chart Canvas -->
-                        <canvas id="admin_chart_3_2" style="height:500px!important;width:100%!important;"></canvas>
+                        <canvas id="admin_chart_3_2" style="height:350px!important;width:100%!important;"></canvas>
                         <!-- Chart script -->
                         <script>
                             const ctx_admin_chart_3_2 = document.getElementById('admin_chart_3_2');
@@ -708,7 +765,12 @@
                             });
                         </script>
                         {% else %}
-                            <div id="admin_chart_3_2" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">Sin datos</div>
+                            <div id="admin_chart_3_2" style="height:350px!important;width:100%!important; display: flex; justify-content: center; align-items: center; color: #73879C;">
+                                <div style="text-align: center;">
+                                    <i class="fa-solid fa-chart-pie" style="font-size: 48px; color: #E7E7E7; margin-bottom: 10px;"></i>
+                                    <p style="margin: 0;">Sin datos disponibles</p>
+                                </div>
+                            </div>
                         {% endif %}
                     </div>
 
@@ -718,26 +780,23 @@
         </div>
 
         <!-- Third col /4 -->
-        <div class="col-md-4 col-sm-4 ">
-            <div class="x_panel tile" style="height:auto;">
-
-                <!-- Title -->
-                <div class="x_title">
-                    <h2>Suscripciones por país</h2>
+        <div class="col-md-4 col-sm-4">
+            <div class="x_panel" style="border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.08);">
+                <div class="x_title" style="border-bottom: 2px solid #E7E7E7; padding-bottom: 10px;">
+                    <h2 style="color: #2A3F54; font-size: 1.2em;">
+                        <i class="fa-brands fa-stripe-s" style="color: #F39C12;"></i> Suscripciones por país
+                    </h2>
                     <ul class="nav navbar-right panel_toolbox">
-                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
-                        <li><a class="close-link"><i class="fa fa-close"></i></a>
-                        </li>
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                     </ul>
                     <div class="clearfix"></div>
                 </div>
-
-                <div class="x_content">
+                <div class="x_content" style="padding: 20px;">
 
                     <div class="col-md-12 col-sm-12">
                         {% if total_subscriptions_country.show %}
                             <!-- Chart Canvas -->
-                            <canvas id="admin_chart_3_3" style="height:500px!important;width:100%!important;"></canvas>
+                            <canvas id="admin_chart_3_3" style="height:350px!important;width:100%!important;"></canvas>
                             <!-- Chart script -->
                             <script>
                                 const ctx_admin_chart_3_3 = document.getElementById('admin_chart_3_3');
@@ -781,7 +840,12 @@
                                 });
                             </script>
                         {% else %}
-                            <div id="admin_chart_3_3" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">Sin datos</div>
+                            <div id="admin_chart_3_3" style="height:350px!important;width:100%!important; display: flex; justify-content: center; align-items: center; color: #73879C;">
+                                <div style="text-align: center;">
+                                    <i class="fa-solid fa-chart-pie" style="font-size: 48px; color: #E7E7E7; margin-bottom: 10px;"></i>
+                                    <p style="margin: 0;">Sin datos disponibles</p>
+                                </div>
+                            </div>
                         {% endif %}
                     </div>
 
