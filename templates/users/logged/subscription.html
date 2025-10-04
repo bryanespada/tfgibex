@@ -3,304 +3,480 @@
 {% load custom_tags %}
 {% block content %}
 
+<style>
+    .subscription-card {
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+
+    .subscription-card:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+
+    .subscription-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px 20px;
+        font-weight: 600;
+    }
+
+    .subscription-body {
+        padding: 25px;
+        background: #f8f9fa;
+    }
+
+    .status-card {
+        background: white;
+        border-radius: 10px;
+        padding: 30px;
+        text-align: center;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        margin-bottom: 30px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .status-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+    }
+
+    .status-admin::before {
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .status-premium::before {
+        background: linear-gradient(90deg, #00d084 0%, #00a046 100%);
+    }
+
+    .status-free::before {
+        background: linear-gradient(90deg, #ff6b6b 0%, #ee5a24 100%);
+    }
+
+    .status-icon {
+        font-size: 48px;
+        margin-bottom: 15px;
+    }
+
+    .status-title {
+        font-size: 14px;
+        color: #73879C;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 10px;
+    }
+
+    .status-type {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .status-info {
+        font-size: 14px;
+        color: #999;
+    }
+
+    .product-card {
+        background: white;
+        border-radius: 10px;
+        padding: 25px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+
+    .product-ribbon {
+        position: absolute;
+        top: 20px;
+        right: -30px;
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+        color: white;
+        padding: 5px 40px;
+        transform: rotate(45deg);
+        font-size: 12px;
+        font-weight: 600;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .product-header {
+        text-align: center;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #f0f0f0;
+        margin-bottom: 20px;
+    }
+
+    .product-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #2A3F54;
+        margin-bottom: 10px;
+    }
+
+    .product-price {
+        font-size: 32px;
+        font-weight: 700;
+        color: #667eea;
+    }
+
+    .product-price del {
+        color: #999;
+        font-size: 24px;
+        margin-right: 10px;
+    }
+
+    .product-currency {
+        font-size: 18px;
+        color: #73879C;
+    }
+
+    .product-interval {
+        font-size: 16px;
+        color: #999;
+        margin-top: 5px;
+    }
+
+    .product-description {
+        color: #73879C;
+        line-height: 1.6;
+        margin-bottom: 20px;
+        min-height: 60px;
+    }
+
+    .product-active {
+        background: linear-gradient(135deg, #00d084 0%, #00a046 100%);
+        color: white;
+        padding: 12px;
+        border-radius: 8px;
+        text-align: center;
+        font-weight: 600;
+        font-size: 16px;
+    }
+
+    .payment-buttons {
+        margin-top: 20px;
+    }
+
+    .stripe-button-custom {
+        display: flex;
+        background: linear-gradient(135deg, #635bff 0%, #4239c8 100%);
+        justify-content: center;
+        align-items: center;
+        color: white;
+        border-radius: 8px;
+        padding: 12px 24px;
+        font-size: 15px;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.3s;
+        width: 100%;
+        border: none;
+        box-shadow: 0 4px 15px rgba(99, 91, 255, 0.3);
+    }
+
+    .stripe-button-custom:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(99, 91, 255, 0.4);
+        color: white;
+    }
+
+    .table-container {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .table thead th {
+        background: var(--app-primary) !important;
+        color: white !important;
+        border: none !important;
+        padding: 12px 8px !important;
+        font-weight: 600;
+        font-size: 0.9em;
+    }
+
+    .table thead th:first-child {
+        border-radius: 8px 0 0 0;
+    }
+
+    .table thead th:last-child {
+        border-radius: 0 8px 0 0;
+    }
+
+    .badge-status {
+        padding: 4px 10px;
+        border-radius: 4px;
+        font-size: 0.85em;
+        font-weight: 600;
+    }
+
+    .badge-active {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .badge-cancelled {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+    .no-subscriptions {
+        text-align: center;
+        padding: 60px 20px;
+        color: #73879C;
+    }
+
+    .no-subscriptions i {
+        font-size: 48px;
+        color: #E7E7E7;
+        margin-bottom: 15px;
+    }
+</style>
+
 <!-- page content -->
 <div class="right_col" role="main">
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>Mi Suscripción</h3>
+                <h3><i class="fa-solid fa-crown"></i> Mi Suscripción</h3>
             </div>
         </div>
 
         <div class="clearfix"></div>
 
-        <div class="row" style="display: block;">
-
-            <div class="clearfix"></div>
-
-            <div class="col-md-12 col-sm-12  ">
-
+        <div class="row">
+            <!-- Estado de la cuenta -->
+            <div class="col-md-12">
                 {% if request.user|has_group:'Administration' %}
-                    <div class="x_panel">
-                        <div class="x_content">
-                            <div class="table-responsive">
-
-                                <div class="row" style="display: inline-block;width:100%;">
-                                    <div class="tile_count">
-                                    <div class="col-md-12 col-sm-12  tile_stats_count">
-                                        <span class="count_top">Eres</span>
-                                        <div class="count blue">Administrador</div>
-                                    </div>
-                                    </div>
-                                </div>
-                                
-                            </div>
-                        </div>
+                    <div class="status-card status-admin">
+                        <i class="fa-solid fa-user-shield status-icon" style="color: #667eea;"></i>
+                        <div class="status-title">Tu Estado</div>
+                        <div class="status-type" style="color: #667eea;">Administrador</div>
+                        <div class="status-info">Acceso completo a todas las funciones</div>
                     </div>
                 {% elif request.user|is_premium %}
-                    <div class="x_panel">
-                        <div class="x_content">
-                            <div class="table-responsive">
-
-                                <div class="row" style="display: inline-block;width:100%;">
-                                    <div class="tile_count">
-                                    <div class="col-md-12 col-sm-12  tile_stats_count">
-                                        <span class="count_top">Eres</span>
-                                        <div class="count green">Premium</div>
-                                        <span class="count_bottom"><i class="green">1 </i> suscripción activa</span>
-                                    </div>
-                                    </div>
-                                </div>
-                                
-                            </div>
+                    <div class="status-card status-premium">
+                        <i class="fa-solid fa-gem status-icon" style="color: #00d084;"></i>
+                        <div class="status-title">Tu Estado</div>
+                        <div class="status-type" style="color: #00d084;">Usuario Premium</div>
+                        <div class="status-info">
+                            <i class="fa-solid fa-check-circle"></i> 1 suscripción activa
                         </div>
                     </div>
                 {% else %}
-                    <div class="x_panel">
-                        <div class="x_content">
-                            <div class="table-responsive">
-
-                                <div class="row" style="display: inline-block;width:100%;">
-                                    <div class="tile_count">
-                                    <div class="col-md-12 col-sm-12  tile_stats_count">
-                                        <span class="count_top">Eres</span>
-                                        <div class="count red">Usuario Gratuito</div>
-                                        <span class="count_bottom"><i class="red">0 </i> suscripciones activas</span>
-                                    </div>
-                                    </div>
-                                </div>
-                                
-                            </div>
+                    <div class="status-card status-free">
+                        <i class="fa-solid fa-user status-icon" style="color: #ff6b6b;"></i>
+                        <div class="status-title">Tu Estado</div>
+                        <div class="status-type" style="color: #ff6b6b;">Usuario Gratuito</div>
+                        <div class="status-info">
+                            <i class="fa-solid fa-info-circle"></i> Acceso limitado - Actualiza a Premium
                         </div>
                     </div>
                 {% endif %}
+            </div>
 
-                <div class="x_panel">
-                    <div class="x_title">
-                        <h2>Productos disponibles</h2>
-
-                        <ul class="nav navbar-right panel_toolbox">
-                            <li>
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="clearfix"></div>
+            <!-- Productos disponibles -->
+            <div class="col-md-12">
+                <div class="subscription-card">
+                    <div class="subscription-header">
+                        <i class="fa-solid fa-shopping-cart"></i> Productos Disponibles
                     </div>
-
-                    <div class="x_content">
-
+                    <div class="subscription-body">
                         <script src="https://www.paypal.com/sdk/js?client-id={{config.paypal_client_id}}&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
                         <script async src="https://js.stripe.com/v3/buy-button.js"> </script>
 
-                        {% for product in products %}
-                        <div class="col-md-3   widget widget_tally_box" style="min-width: 350px;">
-                            <div class="x_panel ui-ribbon-container" style="min-height: 470px;">
-
-                                {% if product.discount %}
-                                <div class="ui-ribbon-wrapper">
-                                    <div class="ui-ribbon">
-                                        {{product.discount|stringformat:"d"}}% Off
+                        <div class="row">
+                            {% for product in products %}
+                            <div class="col-md-4 col-sm-6">
+                                <div class="product-card">
+                                    {% if product.discount %}
+                                    <div class="product-ribbon">
+                                        {{product.discount|stringformat:"d"}}% OFF
                                     </div>
-                                </div>
-                                {% endif %}
-                                
-                                <div class="x_title">
-                                    <h2>Acceso Premium</h2>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div class="x_content">
+                                    {% endif %}
 
-                                    <div style="text-align: center; margin-bottom: 17px">
-                                        <h4 class="name_title">
+                                    <div class="product-header">
+                                        <h3 class="product-title">
+                                            <i class="fa-solid fa-star" style="color: #ffd700;"></i> Acceso Premium
+                                        </h3>
+                                        <div class="product-price">
                                             {% if product.discount %}
-                                                <del> {{ product.price |stringformat:"d" }} </del> &nbsp; {{product.final_price |stringformat:"d"}} {{config.currency}}
+                                                <del>{{product.price|stringformat:"d"}}</del>
+                                                {{product.final_price|stringformat:"d"}}
                                             {% else %}
-                                                {{ product.price |stringformat:"d" }}  {{config.currency}}
+                                                {{product.price|stringformat:"d"}}
                                             {% endif %}
-                                        </h4>
+                                            <span class="product-currency">{{config.currency}}</span>
+                                        </div>
+                                        <div class="product-interval">{{product.get_interval_display}}</div>
                                     </div>
 
-                                    <h3 class="name_title">{{product.get_interval_display}}</h3>
+                                    <div class="product-body">
+                                        <h4 style="color: #2A3F54; font-weight: 600; margin-bottom: 10px;">{{product.title}}</h4>
+                                        <p class="product-description">{{product.description}}</p>
 
-                                    <div class="divider"></div>
-
-                                    <h4 class="name_title">{{product.title}}</h4>
-
-                                    <p>{{product.description}}</p>
-
-                                    <!-- if product.id == active_subscription.payment_product_id -->
-
-                                        <div class="divider"></div>
-
-                                        <div style="text-align: center; margin-bottom: 17px">
-                                            <div class="text-center">
-                                                <h3 style="color:{{config.app_success}};">
-                                                    Activo
-                                                </h3>
+                                        <!-- if product.id == active_subscription.payment_product_id -->
+                                            <div class="product-active">
+                                                <i class="fa-solid fa-check-circle"></i> ACTIVO
                                             </div>
+                                        <!-- else -->
+
+                                        <div class="payment-buttons">
+                                            {% if product.paypal_subscription_id %}
+                                                <div id="paypal-button-container-{{product.paypal_subscription_id}}" style="margin-bottom: 10px;"></div>
+                                                <script>
+                                                    paypal.Buttons({
+                                                        style: {
+                                                            shape: 'rect',
+                                                            color: 'gold',
+                                                            layout: 'vertical',
+                                                            label: 'subscribe'
+                                                        },
+                                                        createSubscription: function(data, actions) {
+                                                            return actions.subscription.create({
+                                                                custom_id: '{{request.user.id}}',
+                                                                plan_id: '{{product.paypal_subscription_id}}',
+                                                                custom_product_id: '{{product.paypal_subscription_id}}'
+                                                            });
+                                                        },
+                                                        onApprove: function(data, actions) {
+                                                            window.location.href = "{% url 'paypal_successful' %}";
+                                                        },
+                                                        onError(err) {
+                                                            window.location.href = "{% url 'paypal_cancelled' %}";
+                                                        },
+                                                        ontouchcancel(err) {
+                                                            window.location.href = "{% url 'paypal_cancelled' %}";
+                                                        }
+                                                    }).render('#paypal-button-container-{{product.paypal_subscription_id}}');
+                                                </script>
+                                            {% endif %}
+
+                                            {% if product.stripe_subscription_id %}
+                                                <a href="{% url 'stripe_checkout' product_id=product.stripe_subscription_id %}" style="text-decoration: none;">
+                                                    <button class="stripe-button-custom">
+                                                        Pagar con <i class="fa-brands fa-stripe" style="font-size: 24px; margin-left: 8px;"></i>
+                                                    </button>
+                                                </a>
+                                            {% endif %}
                                         </div>
 
-
-                                    <!-- else  -->
-
-                                        {% if product.paypal_subscription_id %}
-
-                                            <div class="divider"></div>
-
-                                            <div id="paypal-button-container-{{product.paypal_subscription_id}}"></div>
-                                            <script>
-                                                paypal.Buttons({
-                                                    style: {
-                                                        shape: 'rect',
-                                                        color: 'silver',
-                                                        layout: 'vertical',
-                                                        label: 'subscribe'
-                                                    },
-                                                    createSubscription: function(data, actions) {
-                                                        return actions.subscription.create({
-                                                            /* Creates the subscription */
-                                                            custom_id: '{{request.user.id}}',
-                                                            plan_id: '{{product.paypal_subscription_id}}',
-                                                            custom_product_id: '{{product.paypal_subscription_id}}'
-                                                        });
-                                                    },
-                                                    onApprove: function(data, actions) {
-                                                        window.location.href = "{% url 'paypal_successful' %}";
-                                                    },
-                                                    onError(err) {
-                                                        window.location.href = "{% url 'paypal_cancelled' %}";
-                                                    },
-                                                    ontouchcancel(err) {
-                                                        window.location.href = "{% url 'paypal_cancelled' %}";
-                                                    }
-                                                }).render('#paypal-button-container-{{product.paypal_subscription_id}}'); // Renders the PayPal button
-                                                
-                                           </script>
-                                        {% endif %}
-
-                                        {% if product.stripe_subscription_id %}
-
-                                        <div class="divider"></div>
-
-                                        <div style="text-align-last: center;">
-                                            <style>
-                                                .stripe-button {
-                                                display: flex;
-                                                background-color: #2c2e2f;
-                                                justify-content: center;
-                                                align-items: center;
-                                                color: #fff;
-                                                border-radius: 4px;
-                                                border: 1px solid transparent;
-                                                padding: 4px 24px;
-                                                font-size: 13px;
-                                                text-decoration: none;
-                                                cursor: pointer;
-                                                transition: background-color 0.3s;
-                                                width: 100%;
-                                                }
-                                            </style>
-                                            
-                                            <a href="{% url 'stripe_checkout' product_id=product.stripe_subscription_id %}">
-                                                <button class="stripe-button"> Pagar con <i class="fa-brands fa-cc-stripe" style="font-size: 30px;margin-left: 5px;"></i> </button>
-                                            </a>
-                                        </div>
-
-                                        {% endif %}
-
-                                    <!-- endif -->
+                                        <!-- endif -->
+                                    </div>
                                 </div>
                             </div>
+                            {% endfor %}
                         </div>
-                        {% endfor %}
-
-
                     </div>
                 </div>
-
-
-
-
-
-                {% if subscriptions %}
-                <div class="x_panel">
-                    <div class="x_title">
-                        <h2>Suscripciones anteriores</h2>
-
-                        <ul class="nav navbar-right panel_toolbox">
-                            <li>
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="clearfix"></div>
-                    </div>
-
-                    <div class="x_content">
-
-                        <div class="table-responsive">
-                            <table class="table table-striped jambo_table bulk_action">
-                                <thead>
-                                    <tr class="headings">
-                                        <th class="column-title">ID </th>
-                                        <th class="column-title">ID Producto de Pago</th>
-                                        <th class="column-title">ID Suscripción de Pago</th>
-                                        <th class="column-title">Precio </th>
-                                        <th class="column-title">Pasarela de pago </th>
-                                        <th class="column-title">Fecha de inicio </th>
-                                        <th class="column-title">Fecha de vencimiento </th>
-                                        <th class="column-title last">Estado fecha </th>
-                                        <th class="column-title last">Estado suscripción</th>
-                                        <th class="column-title last">Opciones</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    {% for subscription in subscriptions %}
-                                    <tr class="even pointer">
-                                        <td># {{ subscription.pk }} </td>
-                                        <td># {{ subscription.payment_product_id }} </td>
-                                        <td>{{ subscription.payment_subscription_id }} </td>
-                                        <td>{{ subscription.amount }} {{ subscription.currency }} </td>
-                                        <td>{{ subscription.payment_method }} </td>
-                                        <td>{{ subscription.start_date|date:"d/m/Y" }} </td>
-                                        <td>{{ subscription.due_date|date:"d/m/Y" }} </td>
-                                        <td>
-                                            {% if subscription.due_date >= today.date %} 
-                                                <i class="fa-solid fa-circle-check" style="color:{{config.app_success}}"></i>
-                                            {% else %}
-                                                <i class="fa-solid fa-circle-xmark" style="color:{{config.app_danger}}"></i>
-                                            {% endif %}
-                                        </td>
-                                        <td>{{ subscription.status }} </td>
-
-                                        <td class="last" style="text-align: right !important;">
-                                            {% if susbcription.status == 'ACTIVE' %}
-                                            <a href="{% url 'cancel_subscription' payment_subscription_id=subscription.payment_subscription_id %}" onclick="return confirm('¿Estás seguro?')">
-                                                <i class="fa-solid fa-ban"></i>
-                                            </a>
-                                            {% endif %}
-                                        </td>
-                                        
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-
-                    </div>
-                </div>
-                {% endif %}
-
-
-
-
-
-
             </div>
+
+            <!-- Historial de suscripciones -->
+            {% if subscriptions %}
+            <div class="col-md-12">
+                <div class="subscription-card">
+                    <div class="subscription-header">
+                        <i class="fa-solid fa-clock-rotate-left"></i> Historial de Suscripciones
+                    </div>
+                    <div class="subscription-body">
+                        <div class="table-container">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Producto</th>
+                                            <th>Precio</th>
+                                            <th>Pasarela</th>
+                                            <th>Inicio</th>
+                                            <th>Vencimiento</th>
+                                            <th>Estado</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for subscription in subscriptions %}
+                                        <tr>
+                                            <td>#{{subscription.pk}}</td>
+                                            <td>{{subscription.payment_product_id}}</td>
+                                            <td><strong>{{subscription.amount}} {{subscription.currency}}</strong></td>
+                                            <td>
+                                                {% if subscription.payment_method == 'PayPal' %}
+                                                    <i class="fa-brands fa-paypal" style="color: #003087; font-size: 20px;"></i>
+                                                {% elif subscription.payment_method == 'Stripe' %}
+                                                    <i class="fa-brands fa-stripe" style="color: #635bff; font-size: 20px;"></i>
+                                                {% else %}
+                                                    {{subscription.payment_method}}
+                                                {% endif %}
+                                            </td>
+                                            <td>{{subscription.start_date|date:"d/m/Y"}}</td>
+                                            <td>
+                                                {{subscription.due_date|date:"d/m/Y"}}
+                                                {% if subscription.due_date >= today.date %}
+                                                    <i class="fa-solid fa-circle-check" style="color: #00d084; margin-left: 5px;"></i>
+                                                {% else %}
+                                                    <i class="fa-solid fa-circle-xmark" style="color: #ff6b6b; margin-left: 5px;"></i>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if subscription.status == 'ACTIVE' %}
+                                                    <span class="badge-status badge-active">ACTIVO</span>
+                                                {% else %}
+                                                    <span class="badge-status badge-cancelled">{{subscription.status}}</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if subscription.status == 'ACTIVE' %}
+                                                <a href="{% url 'cancel_subscription' payment_subscription_id=subscription.payment_subscription_id %}"
+                                                   onclick="return confirm('¿Estás seguro de que deseas cancelar esta suscripción?')"
+                                                   class="btn btn-sm btn-danger" style="padding: 4px 10px;">
+                                                    <i class="fa-solid fa-ban"></i> Cancelar
+                                                </a>
+                                                {% else %}
+                                                -
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-md-12">
+                <div class="subscription-card">
+                    <div class="subscription-header">
+                        <i class="fa-solid fa-clock-rotate-left"></i> Historial de Suscripciones
+                    </div>
+                    <div class="subscription-body">
+                        <div class="no-subscriptions">
+                            <i class="fa-solid fa-inbox"></i>
+                            <p>No tienes suscripciones anteriores</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
         </div>
     </div>
 </div>

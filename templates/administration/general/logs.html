@@ -1,76 +1,255 @@
 {% extends '../../base/base.html' %}
 {% block content %}
 
+<style>
+    .logs-card {
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        margin-bottom: 20px;
+    }
+
+    .logs-card:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+
+    .logs-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px 20px;
+        border-radius: 10px 10px 0 0;
+        font-weight: 600;
+    }
+
+    .logs-body {
+        padding: 25px;
+        background: #f8f9fa;
+        border-radius: 0 0 10px 10px;
+    }
+
+    .nav-tabs-logs {
+        border-bottom: 2px solid #e0e0e0;
+        margin-bottom: 30px;
+    }
+
+    .nav-tabs-logs .nav-link {
+        color: #73879C;
+        border: none;
+        padding: 12px 20px;
+        margin-right: 5px;
+        border-radius: 8px 8px 0 0;
+        transition: all 0.3s;
+        font-weight: 500;
+    }
+
+    .nav-tabs-logs .nav-link:hover {
+        background: #f0f0f0;
+        color: #2A3F54;
+    }
+
+    .nav-tabs-logs .nav-link.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+    }
+
+    .table-container {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .table-striped tbody tr {
+        transition: all 0.2s ease;
+    }
+
+    .table-striped tbody tr:hover {
+        background-color: #f5f5ff !important;
+        cursor: pointer;
+        transform: translateX(2px);
+        box-shadow: 0 2px 4px rgba(102, 126, 234, 0.1);
+    }
+
+    .table thead th {
+        background: var(--app-primary) !important;
+        color: white !important;
+        border: none !important;
+        padding: 12px 8px !important;
+        font-weight: 600;
+        font-size: 0.9em;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .table thead th:first-child {
+        border-radius: 8px 0 0 0;
+    }
+
+    .table thead th:last-child {
+        border-radius: 0 8px 0 0;
+    }
+
+    .badge-status {
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.85em;
+        font-weight: 600;
+    }
+
+    .badge-success {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .badge-error {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+    .badge-info {
+        background: #d1ecf1;
+        color: #0c5460;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #73879C;
+    }
+
+    .empty-state i {
+        font-size: 48px;
+        color: #E7E7E7;
+        margin-bottom: 15px;
+    }
+
+    .empty-state p {
+        font-size: 1.1em;
+        margin: 0;
+    }
+
+    .dataTables_wrapper .dataTables_paginate {
+        margin-top: 20px;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        padding: 8px 16px;
+        margin: 0 2px;
+        border-radius: 6px;
+        background: white;
+        border: 1px solid #e0e0e0;
+        transition: all 0.3s;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white !important;
+        border-color: #667eea;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white !important;
+        border-color: #667eea;
+    }
+
+    .dataTables_wrapper .dataTables_info {
+        color: #73879C;
+        font-size: 0.9em;
+        margin-top: 20px;
+    }
+
+    .dataTables_wrapper .dataTables_filter {
+        margin-bottom: 20px;
+    }
+
+    .dataTables_wrapper .dataTables_filter input {
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        padding: 8px 12px;
+        transition: all 0.3s;
+    }
+
+    .dataTables_wrapper .dataTables_filter input:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        outline: none;
+    }
+</style>
+
 <!-- page content -->
 <div class="right_col" role="main">
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>Registros</h3>
+                <h3><i class="fa-solid fa-file-lines"></i> Registros del Sistema</h3>
             </div>
         </div>
 
         <div class="clearfix"></div>
 
-        <div class="row" style="display: block;">
-
-            <div class="clearfix"></div>
-
-            <div class="col-md-12 col-sm-12  ">
-                <div class="x_panel">
-                    <div class="x_title">
-                        <h2>Mostrando registros del sistema</h2>
-
-                        <ul class="nav navbar-right panel_toolbox">
-                            <li>
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <div class="logs-card">
+                    <div class="logs-header">
+                        <i class="fa-solid fa-database"></i> Registro de Actividades
                     </div>
+                    <div class="logs-body">
 
-                    <div class="x_content">
-
-                        <ul class="nav nav-tabs bar_tabs" id="myTab" role="tablist">
+                        <ul class="nav nav-tabs nav-tabs-logs" id="myTab" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link active" id="userlogs-tab" data-toggle="tab" href="#userlogs"
-                                    role="tab" aria-controls="userlogs" aria-selected="true">Usuario</a>
+                                    role="tab" aria-controls="userlogs" aria-selected="true">
+                                    <i class="fa-solid fa-user"></i> Usuario
+                                </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" id="adminlogs-tab" data-toggle="tab" href="#adminlogs"
-                                    role="tab" aria-controls="adminlogs" aria-selected="false">Administrador</a>
+                                    role="tab" aria-controls="adminlogs" aria-selected="false">
+                                    <i class="fa-solid fa-user-shield"></i> Administrador
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="subscriptionlogs-tab" data-toggle="tab" href="#subscriptionlogs" role="tab"
-                                    aria-controls="subscriptionlogs" aria-selected="false">Suscripción</a>
+                                <a class="nav-link" id="subscriptionlogs-tab" data-toggle="tab" href="#subscriptionlogs"
+                                    role="tab" aria-controls="subscriptionlogs" aria-selected="false">
+                                    <i class="fa-solid fa-credit-card"></i> Suscripción
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="trackinglogs-tab" data-toggle="tab" href="#trackinglogs" role="tab"
-                                    aria-controls="trackinglogs" aria-selected="false">Seguimiento</a>
+                                <a class="nav-link" id="trackinglogs-tab" data-toggle="tab" href="#trackinglogs"
+                                    role="tab" aria-controls="trackinglogs" aria-selected="false">
+                                    <i class="fa-solid fa-chart-line"></i> Seguimiento
+                                </a>
                             </li>
                         </ul>
 
                         <div class="tab-content" id="myTabContent">
-
                             <div class="tab-pane fade show active" id="userlogs" role="tabpanel" aria-labelledby="userlogs-tab">
-                                {% include '../general/logs_tables/logs_user.html' %}
+                                <div class="table-container">
+                                    {% include '../general/logs_tables/logs_user.html' %}
+                                </div>
                             </div>
 
                             <div class="tab-pane fade" id="adminlogs" role="tabpanel" aria-labelledby="adminlogs-tab">
-                                {% include '../general/logs_tables/logs_admin.html' %}
+                                <div class="table-container">
+                                    {% include '../general/logs_tables/logs_admin.html' %}
+                                </div>
                             </div>
 
                             <div class="tab-pane fade" id="subscriptionlogs" role="tabpanel" aria-labelledby="subscriptionlogs-tab">
-                                {% include '../general/logs_tables/logs_subscription.html' %}
+                                <div class="table-container">
+                                    {% include '../general/logs_tables/logs_subscription.html' %}
+                                </div>
                             </div>
 
                             <div class="tab-pane fade" id="trackinglogs" role="tabpanel" aria-labelledby="trackinglogs-tab">
-                                {% include '../general/logs_tables/logs_tracking.html' %}
+                                <div class="table-container">
+                                    {% include '../general/logs_tables/logs_tracking.html' %}
+                                </div>
                             </div>
-
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -78,25 +257,62 @@
     </div>
 </div>
 
-<div id="modalContainer">
+<div id="modalContainer" style="display: none;">
 </div>
 <!-- /page content -->
 
 <script>
     $(document).ready(function() {
+        // Inicializar DataTables con configuración mejorada
         var table_logs = $('.tables').DataTable({
             "ordering": false,
             "language": {
-                "emptyTable": "No se encontraron registros"
+                "emptyTable": '<div class="empty-state"><i class="fa-solid fa-inbox"></i><p>No se encontraron registros</p></div>',
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                "infoEmpty": "Mostrando 0 a 0 de 0 registros",
+                "infoFiltered": "(filtrado de _MAX_ registros totales)",
+                "lengthMenu": "Mostrar _MENU_ registros",
+                "loadingRecords": "Cargando...",
+                "processing": "Procesando...",
+                "search": "Buscar:",
+                "zeroRecords": "No se encontraron registros coincidentes",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
             },
             "lengthChange": false,
-            "pageLength": 100
+            "pageLength": 50,
+            "dom": '<"row"<"col-sm-12 col-md-6"f><"col-sm-12 col-md-6"p>>rt<"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+            "drawCallback": function() {
+                // Aplicar estilos a los badges de status
+                $('.tables tbody td').each(function() {
+                    var text = $(this).text().toLowerCase().trim();
+                    if (text === '200' || text === 'success' || text === 'active') {
+                        $(this).html('<span class="badge-status badge-success">' + $(this).text() + '</span>');
+                    } else if (text === '404' || text === '500' || text === 'error' || text === 'failed') {
+                        $(this).html('<span class="badge-status badge-error">' + $(this).text() + '</span>');
+                    } else if (text === 'read' || text === 'login' || text === 'logout') {
+                        $(this).html('<span class="badge-status badge-info">' + $(this).text() + '</span>');
+                    }
+                });
+            }
         });
 
-        // Event listener for opening modal on row click
+        // Event listener for opening modal on row click con efecto visual
         $('.tables').on('click', 'tr', function () {
+            // No aplicar a header rows
+            if ($(this).closest('thead').length) return;
+
+            // Efecto visual de click
+            $(this).css('transform', 'scale(0.98)');
+            setTimeout(() => {
+                $(this).css('transform', 'scale(1)');
+            }, 100);
+
             var rowData = table_logs.row(this).data();
-            // Here you can retrieve the data of the clicked row if needed
             var logId = $(this).data('log-id');
             var logType = $(this).data('log-type');
 
@@ -104,14 +320,27 @@
             $.ajax({
                 url: "{% url 'administration_get_log_details' log_type='none' log_id=0 %}".replace(0, logId).replace('none', logType),
                 type: 'GET',
+                beforeSend: function() {
+                    // Mostrar loader
+                    $('#modalContainer').show().html('<div class="text-center"><i class="fa fa-spinner fa-spin fa-2x"></i></div>');
+                },
                 success: function(response) {
-                    $('#modalContainer').html(response); // Load modal content into modal container
+                    $('#modalContainer').show().html(response);
                 },
                 error: function(xhr, status, error) {
                     console.error('Error loading modal content:', error);
+                    // No mostrar mensaje de error visible, solo en consola
+                    $('#modalContainer').hide().empty();
                 }
             });
         });
+
+        // Animación al cambiar de tab
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            var targetPane = $($(e.target).attr('href'));
+            targetPane.css('opacity', '0').animate({'opacity': '1'}, 300);
+        });
     });
 </script>
+
 {% endblock %}

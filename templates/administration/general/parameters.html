@@ -110,6 +110,20 @@
         margin-left: 10px;
         border: 2px solid #e0e0e0;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .color-preview:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .color-input-hidden {
+        position: absolute;
+        visibility: hidden;
+        width: 0;
+        height: 0;
     }
 
     .help-text {
@@ -535,18 +549,63 @@
 </div>
 
 <script>
-    // Script para actualizar preview de colores en tiempo real
+    // Script para selector de colores y actualización en tiempo real
     document.addEventListener('DOMContentLoaded', function() {
-        // Color inputs
-        const colorInputs = document.querySelectorAll('input[type="color"], input[id*="color"], input[id*="primary"], input[id*="success"], input[id*="danger"]');
+        // Función para convertir hex a formato de input color
+        function formatColorValue(color) {
+            if (!color) return '#000000';
+            if (color.startsWith('#')) return color;
+            if (color.length === 6) return '#' + color;
+            return '#000000';
+        }
 
-        colorInputs.forEach(input => {
-            input.addEventListener('input', function() {
-                const preview = this.parentElement.querySelector('.color-preview');
-                if (preview) {
-                    preview.style.backgroundColor = this.value;
-                }
-            });
+        // Crear selectores de color para cada preview
+        const colorPreviews = document.querySelectorAll('.color-preview');
+
+        colorPreviews.forEach(preview => {
+            const parentDiv = preview.closest('.form-group-custom');
+            const textInput = parentDiv.querySelector('input[type="text"]');
+
+            if (textInput) {
+                // Crear input de color oculto
+                const colorInput = document.createElement('input');
+                colorInput.type = 'color';
+                colorInput.className = 'color-input-hidden';
+                colorInput.value = formatColorValue(textInput.value);
+                parentDiv.appendChild(colorInput);
+
+                // Actualizar el color del preview inicialmente
+                preview.style.backgroundColor = colorInput.value;
+
+                // Click en preview abre el selector de color
+                preview.addEventListener('click', function() {
+                    colorInput.click();
+                });
+
+                // Cuando cambia el color en el selector
+                colorInput.addEventListener('input', function() {
+                    const newColor = this.value;
+                    preview.style.backgroundColor = newColor;
+                    textInput.value = newColor.toUpperCase();
+                });
+
+                // Cuando se escribe directamente en el input de texto
+                textInput.addEventListener('input', function() {
+                    const formattedColor = formatColorValue(this.value);
+                    if (/^#[0-9A-F]{6}$/i.test(formattedColor)) {
+                        colorInput.value = formattedColor;
+                        preview.style.backgroundColor = formattedColor;
+                    }
+                });
+
+                // Formatear el valor al salir del campo
+                textInput.addEventListener('blur', function() {
+                    const formattedColor = formatColorValue(this.value);
+                    if (/^#[0-9A-F]{6}$/i.test(formattedColor)) {
+                        this.value = formattedColor.toUpperCase();
+                    }
+                });
+            }
         });
 
         // Icon input
