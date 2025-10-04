@@ -572,7 +572,6 @@ def empresa_add(request):
     # Rest of empty fields to fill
     form.fields['title'].widget.attrs.update({'class': 'form-control'})
     form.fields['description'].widget.attrs.update({'class': 'form-control'})
-    form.fields['video_link'].widget.attrs.update({'class': 'form-control'})
     form.fields['public'].widget.attrs.update({'class': 'form-control'})
 
     # Attach fields configuration to the context
@@ -620,7 +619,6 @@ def empresa_edit(request, empresa_id):
     # Rest of empty fields to fill
     form.fields['title'].widget.attrs.update({'class': 'form-control'})
     form.fields['description'].widget.attrs.update({'class': 'form-control'})
-    form.fields['video_link'].widget.attrs.update({'class': 'form-control'})
     form.fields['public'].widget.attrs.update({'class': 'form-control'})
 
     # Attach fields configuration to the context

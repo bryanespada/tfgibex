@@ -1,133 +1,431 @@
 {% extends '../../base/base.html' %}
 {% block content %}
 
+<style>
+    .gallery-card {
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+
+    .gallery-card:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+
+    .gallery-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px 20px;
+        font-weight: 600;
+    }
+
+    .gallery-body {
+        padding: 25px;
+        background: #f8f9fa;
+    }
+
+    .form-section {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .section-title {
+        color: #667eea;
+        font-size: 1.1em;
+        font-weight: 600;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #f0f0f0;
+    }
+
+    .form-group-custom {
+        margin-bottom: 20px;
+        padding: 15px;
+        background: white;
+        border-radius: 8px;
+        border-left: 3px solid #667eea;
+    }
+
+    .form-label-custom {
+        color: #2A3F54;
+        font-weight: 600;
+        margin-bottom: 8px;
+        display: block;
+        font-size: 0.95em;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        transition: all 0.3s;
+        font-size: 14px;
+    }
+
+    input[type="file"].form-control {
+        padding: 12px 15px;
+        min-height: 48px;
+    }
+
+    .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        outline: none;
+    }
+
+    textarea.form-control {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    .btn-save-custom {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 12px 40px;
+        border: none;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-save-custom:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+
+    .btn-cancel {
+        background: #6c757d;
+        color: white;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    .btn-cancel:hover {
+        background: #5a6268;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+        color: white;
+    }
+
+    .breadcrumb-nav {
+        background: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .breadcrumb-nav a {
+        color: #667eea;
+        text-decoration: none;
+        transition: all 0.3s;
+    }
+
+    .breadcrumb-nav a:hover {
+        color: #764ba2;
+    }
+
+    .breadcrumb-nav i {
+        margin: 0 10px;
+        color: #999;
+    }
+
+    .help-text {
+        font-size: 0.85em;
+        color: #999;
+        margin-top: 5px;
+        font-style: italic;
+    }
+
+    .gallery-grid {
+        margin-top: 30px;
+    }
+
+    .gallery-item {
+        position: relative;
+        margin-bottom: 30px;
+    }
+
+    .gallery-item-card {
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+    .gallery-item-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .gallery-image-container {
+        position: relative;
+        width: 100%;
+        padding-bottom: 75%; /* 4:3 Aspect Ratio */
+        overflow: hidden;
+        background: #f0f0f0;
+    }
+
+    .gallery-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .delete-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 10;
+        background: #dc3545;
+        color: white;
+        border: none;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+        box-shadow: 0 2px 8px rgba(220, 53, 69, 0.4);
+    }
+
+    .delete-button:hover {
+        background: #c82333;
+        transform: scale(1.1);
+        color: white;
+        box-shadow: 0 4px 12px rgba(220, 53, 69, 0.6);
+    }
+
+    .gallery-caption {
+        padding: 15px;
+        background: white;
+    }
+
+    .gallery-title {
+        font-weight: 600;
+        color: #2A3F54;
+        margin-bottom: 5px;
+        font-size: 1.1em;
+    }
+
+    .gallery-description {
+        color: #73879C;
+        font-size: 0.9em;
+        line-height: 1.4;
+    }
+
+    .empty-gallery {
+        text-align: center;
+        padding: 60px 20px;
+        background: white;
+        border-radius: 10px;
+        margin-top: 30px;
+    }
+
+    .empty-gallery i {
+        font-size: 48px;
+        color: #E7E7E7;
+        margin-bottom: 15px;
+    }
+
+    .empty-gallery p {
+        color: #73879C;
+        font-size: 1.1em;
+        margin: 0;
+    }
+
+    .divider {
+        border-top: 2px solid #e0e0e0;
+        margin: 40px 0 30px;
+        position: relative;
+    }
+
+    .divider-text {
+        position: absolute;
+        top: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #f8f9fa;
+        padding: 0 20px;
+        color: #667eea;
+        font-weight: 600;
+    }
+
+    .empresa-info {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        padding: 15px 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+
+    .empresa-info h4 {
+        color: #2A3F54;
+        margin: 0;
+        font-weight: 600;
+    }
+
+    .empresa-info .badge {
+        background: #667eea;
+        color: white;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.85em;
+        margin-left: 10px;
+    }
+</style>
+
 <!-- page content -->
 <div class="right_col" role="main">
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>Empresas</h3>
+                <h3><i class="fa-solid fa-images"></i> Galería de Imágenes</h3>
             </div>
         </div>
 
         <div class="clearfix"></div>
 
-        <div class="row" style="display: block;">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb-nav">
+            <a href="{% url 'administration_empresas' %}">
+                <i class="fa-solid fa-list"></i> Empresas
+            </a>
+            <i class="fa-solid fa-chevron-right"></i>
+            <span>Galería: {{ empresa.title }}</span>
+        </div>
 
-            <div class="clearfix"></div>
+        <!-- Empresa Info -->
+        <div class="empresa-info">
+            <h4>
+                <i class="fa-solid fa-building"></i> {{ empresa.title }}
+                <span class="badge">{{ images.count }} imágenes</span>
+            </h4>
+        </div>
 
-            <div class="col-md-12 col-sm-12  ">
-                <div class="x_panel">
-                    <div class="x_title">
-                        <h2>Edit image gallery</h2>
-
-                        {% if form.errors %}
-                        <div class="alert alert-danger alert-dismissible" role="alert">
-                            <div id="form_errors">
-                                {% for key, value in form.errors.items %}
-                                    <strong>{{ value }}</strong>
-                                {% endfor %}
-                            </div>
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                    {% endif %}
-
-                        <ul class="nav navbar-right panel_toolbox">
-                            <li>
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <div class="gallery-card">
+                    <div class="gallery-header">
+                        <i class="fa-solid fa-plus-circle"></i> Añadir Nueva Imagen
                     </div>
+                    <div class="gallery-body">
 
-                    <div class="x_content">
+                        {% include '../../errors/error_messages.html' %}
 
                         <form action="" role="form" method="POST" class="text-start" enctype="multipart/form-data">
                             {% csrf_token %}
 
-                            <div class="tab-content" id="myTabContent">
+                            <div class="form-section">
+                                <div class="section-title">
+                                    <i class="fa-solid fa-upload"></i> Subir Imagen a la Galería
+                                </div>
 
-                                <div class="tab-pane fade show active" id="general" role="tabpanel"
-                                    aria-labelledby="general-tab">
-                                    <div class="seccion bg-gray-100 border-radius-lg">
-
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Title</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.title }}</p>
-                                            </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-custom">
+                                                <i class="fa-solid fa-tag"></i> Título
+                                            </label>
+                                            {{ form.title }}
+                                            <small class="help-text">Título descriptivo para la imagen</small>
                                         </div>
-
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Description</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.description }}</p>
-                                            </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-custom">
+                                                <i class="fa-solid fa-file-image"></i> Archivo de Imagen
+                                            </label>
+                                            {{ form.image }}
+                                            <small class="help-text">Formatos aceptados: JPG, PNG, GIF (máx. 5MB)</small>
                                         </div>
+                                    </div>
+                                </div>
 
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Image</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.image }}</p>
-                                            </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-custom">
+                                                <i class="fa-solid fa-align-left"></i> Descripción
+                                            </label>
+                                            {{ form.description }}
+                                            <small class="help-text">Descripción opcional de la imagen</small>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
 
                             <div class="text-center">
-                                <button type="submit" class="btn btn-primary"
-                                    style="background:{{ config.app_color_2 }};border:1px solid {{ config.app_color_1 }}">Save
-                                    <i class="fa-solid fa-check" style="font-size:0.875rem"></i></button>
+                                <a href="{% url 'administration_empresas' %}" class="btn-cancel">
+                                    <i class="fa-solid fa-arrow-left"></i> Volver
+                                </a>
+                                <button type="submit" class="btn btn-save-custom">
+                                    <i class="fa-solid fa-upload"></i> Subir Imagen
+                                </button>
                             </div>
                         </form>
 
-                        <style>
-                            .delete-button {
-                                position: absolute;
-                                float: right;
-                                top: -12px;
-                                right: 4px;
-                                z-index:2;
-                                font-size: x-large;
-                            }
-                            .images-gallery {
-                                margin-top: 3rem!important;
-                            }
-                        </style>
+                        <!-- Divider -->
+                        <div class="divider">
+                            <span class="divider-text">Galería Actual</span>
+                        </div>
 
-                        <div class="mt-3 images-gallery">
+                        <!-- Gallery Grid -->
+                        {% if images %}
+                        <div class="gallery-grid">
                             <div class="row">
                                 {% for image in images %}
-                                <div class="col-12 col-sm-12 col-md-6 col-lg-4 mb-4 blog" style="cursor: pointer">
-                                    <a href="{% url 'administration_empresa_image_delete' image_id=image.id %}" onclick="return confirm('Area you sure?')">
-                                        <i class="bg-white fa-solid fa-square-xmark delete-button"></i></a>
-                                    
-                                    <div>
-                                        <div class="image view view-first">
-                                            <img style="width: 100%; display: block;"
-                                                src="{{ image.image.url }}" alt="image">
+                                <div class="col-12 col-sm-6 col-md-4 col-lg-3 gallery-item">
+                                    <div class="gallery-item-card">
+                                        <a href="{% url 'administration_empresa_image_delete' image_id=image.id %}"
+                                           class="delete-button"
+                                           onclick="return confirm('¿Estás seguro de que deseas eliminar esta imagen?')"
+                                           title="Eliminar imagen">
+                                            <i class="fa-solid fa-times"></i>
+                                        </a>
+                                        <div class="gallery-image-container">
+                                            <img class="gallery-image"
+                                                 src="{{ image.image.url }}"
+                                                 alt="{{ image.title }}">
                                         </div>
-                                    </div>
-                                    <div class="caption text-center">
-                                        <b>{{ image.title }}</b>
-                                        <p>{{ image.description|linebreaksbr }}</p>
+                                        <div class="gallery-caption">
+                                            <div class="gallery-title">{{ image.title }}</div>
+                                            <div class="gallery-description">
+                                                {{ image.description|default:"Sin descripción"|linebreaksbr }}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 {% endfor %}
                             </div>
                         </div>
+                        {% else %}
+                        <div class="empty-gallery">
+                            <i class="fa-solid fa-image"></i>
+                            <p>No hay imágenes en la galería</p>
+                        </div>
+                        {% endif %}
 
                     </div>
                 </div>
@@ -135,6 +433,59 @@
         </div>
     </div>
 </div>
+
+<script>
+$(document).ready(function() {
+    // Add Bootstrap classes to form elements
+    $('input[type="text"], input[type="file"], textarea').each(function() {
+        if (!$(this).hasClass('form-control')) {
+            $(this).addClass('form-control');
+        }
+    });
+
+    // Auto-resize textarea
+    $('textarea').on('input', function() {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+    });
+
+    // Trigger resize on load if has content
+    $('textarea').each(function() {
+        if (this.value) {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        }
+    });
+
+    // Preview image before upload
+    $('#id_image').on('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const fileSize = file.size / 1024 / 1024; // in MB
+            if (fileSize > 5) {
+                alert('El archivo es demasiado grande. El tamaño máximo permitido es 5MB.');
+                this.value = '';
+                return;
+            }
+
+            const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+            if (!validTypes.includes(file.type)) {
+                alert('Formato de archivo no válido. Solo se permiten JPG, PNG y GIF.');
+                this.value = '';
+                return;
+            }
+        }
+    });
+
+    // Add hover effect to gallery items
+    $('.gallery-item-card').on('mouseenter', function() {
+        $(this).find('.delete-button').css('opacity', '1');
+    }).on('mouseleave', function() {
+        $(this).find('.delete-button').css('opacity', '0.8');
+    });
+});
+</script>
+
 <!-- /page content -->
 
 {% endblock %}

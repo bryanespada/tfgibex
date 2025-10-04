@@ -1,181 +1,472 @@
 {% extends '../../base/base.html' %}
 {% block content %}
 
+<style>
+    .form-card {
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+
+    .form-card:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+
+    .form-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px 20px;
+        font-weight: 600;
+    }
+
+    .form-body {
+        padding: 25px;
+        background: #f8f9fa;
+    }
+
+    .form-group-custom {
+        margin-bottom: 20px;
+        padding: 15px;
+        background: white;
+        border-radius: 8px;
+        border-left: 3px solid #667eea;
+    }
+
+    .form-label-custom {
+        color: #2A3F54;
+        font-weight: 600;
+        margin-bottom: 8px;
+        display: block;
+        font-size: 0.95em;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        transition: all 0.3s;
+        font-size: 14px;
+    }
+
+    .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        outline: none;
+    }
+
+    select.form-control {
+        cursor: pointer;
+        min-height: 44px;
+        line-height: 1.5;
+    }
+
+    textarea.form-control {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    input[type="file"].form-control {
+        padding: 12px 15px;
+        min-height: 48px;
+    }
+
+    input[type="datetime-local"].form-control {
+        cursor: pointer;
+    }
+
+    .btn-save-custom {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 12px 40px;
+        border: none;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-save-custom:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+
+    .btn-cancel {
+        background: #6c757d;
+        color: white;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    .btn-cancel:hover {
+        background: #5a6268;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+        color: white;
+    }
+
+    .breadcrumb-nav {
+        background: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .breadcrumb-nav a {
+        color: #667eea;
+        text-decoration: none;
+        transition: all 0.3s;
+    }
+
+    .breadcrumb-nav a:hover {
+        color: #764ba2;
+    }
+
+    .breadcrumb-nav i {
+        margin: 0 10px;
+        color: #999;
+    }
+
+    .help-text {
+        font-size: 0.85em;
+        color: #999;
+        margin-top: 5px;
+        font-style: italic;
+    }
+
+    .form-section {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .section-title {
+        color: #667eea;
+        font-size: 1.1em;
+        font-weight: 600;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #f0f0f0;
+    }
+
+    .checkbox-group {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        background: #f8f9fa;
+        border-radius: 6px;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+        cursor: pointer;
+    }
+
+    .checkbox-label {
+        cursor: pointer;
+        user-select: none;
+        font-weight: 500;
+        color: #2A3F54;
+    }
+
+    .current-image {
+        max-width: 200px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        margin-top: 10px;
+    }
+
+    .current-image-container {
+        background: white;
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 10px;
+        border: 2px dashed #e0e0e0;
+    }
+
+    .api-info-box {
+        background: #fff3cd;
+        border: 1px solid #ffc107;
+        color: #856404;
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 20px;
+    }
+
+    .api-info-box h5 {
+        color: #856404;
+        font-size: 1em;
+        margin-bottom: 10px;
+        font-weight: 600;
+    }
+
+    .api-info-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 5px 0;
+    }
+
+    .api-info-label {
+        font-weight: 600;
+    }
+
+    .api-info-value {
+        color: #666;
+    }
+</style>
+
 <!-- page content -->
 <div class="right_col" role="main">
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>Noticias</h3>
+                <h3><i class="fa-solid fa-newspaper"></i> Editar Noticia</h3>
             </div>
         </div>
 
         <div class="clearfix"></div>
 
-        <div class="row" style="display: block;">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb-nav">
+            <a href="{% url 'administration_noticias' %}">
+                <i class="fa-solid fa-list"></i> Noticias
+            </a>
+            <i class="fa-solid fa-chevron-right"></i>
+            <span>Editar: {{ noticia.title|truncatewords:5 }}</span>
+        </div>
 
-            <div class="clearfix"></div>
-
-            <div class="col-md-12 col-sm-12  ">
-                <div class="x_panel">
-                    <div class="x_title">
-                        <h2>Edit noticia</h2>
-
-                        <ul class="nav navbar-right panel_toolbox">
-                            <li>
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <div class="form-card">
+                    <div class="form-header">
+                        <i class="fa-solid fa-edit"></i> Formulario de Edición
                     </div>
+                    <div class="form-body">
 
-                    <div class="x_content">
+                        {% include '../../errors/error_messages.html' %}
 
                         <form action="" role="form" method="POST" class="text-start" enctype="multipart/form-data">
                             {% csrf_token %}
 
-                            <div class="tab-content" id="myTabContent">
+                            <!-- Información Básica -->
+                            <div class="form-section">
+                                <div class="section-title">
+                                    <i class="fa-solid fa-info-circle"></i> Información Básica
+                                </div>
 
-                                <div class="tab-pane fade show active" id="general" role="tabpanel"
-                                    aria-labelledby="general-tab">
-                                    <div class="seccion bg-gray-100 border-radius-lg">
-
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Title</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.title }}</p>
-                                            </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-custom">
+                                                <i class="fa-solid fa-heading"></i> Título de la Noticia
+                                            </label>
+                                            {{ form.title }}
+                                            <small class="help-text">Título principal que aparecerá en la lista de noticias</small>
                                         </div>
+                                    </div>
+                                </div>
 
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Summary</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.summary }}</p>
-                                            </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-custom">
+                                                <i class="fa-solid fa-building"></i> Empresa
+                                            </label>
+                                            {{ form.empresa }}
+                                            <small class="help-text">Empresa relacionada con esta noticia</small>
                                         </div>
-
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Content</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.content }}</p>
-                                            </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-custom">
+                                                <i class="fa-solid fa-calendar"></i> Fecha de Publicación
+                                            </label>
+                                            {{ form.published_date }}
+                                            <small class="help-text">Fecha y hora de publicación de la noticia</small>
                                         </div>
+                                    </div>
+                                </div>
 
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Empresa</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.empresa }}</p>
-                                            </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-custom">
+                                                <i class="fa-solid fa-align-left"></i> Resumen
+                                            </label>
+                                            {{ form.summary }}
+                                            <small class="help-text">Breve resumen que aparecerá en la vista previa (máx. 1000 caracteres)</small>
                                         </div>
+                                    </div>
+                                </div>
 
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Published Date</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.published_date }}</p>
-                                            </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-custom">
+                                                <i class="fa-solid fa-file-text"></i> Contenido Completo
+                                            </label>
+                                            {{ form.content }}
+                                            <small class="help-text">Contenido completo de la noticia</small>
                                         </div>
-
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Source Information</div>
-                                            </div>
-                                            <div class="col-md-6 col-sm-12">
-                                                <small class="form-text text-muted">Source name (Bloomberg, Reuters, etc.)</small>
-                                                <p class="p-class">{{ form.source }}</p>
-                                            </div>
-                                            <div class="col-md-6 col-sm-12">
-                                                <small class="form-text text-muted">Source URL</small>
-                                                <p class="p-class">{{ form.source_url }}</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Author</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.author }}</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Image</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <small class="form-text text-muted">Upload a new image (leave blank to keep current)</small>
-                                                <p class="p-class">{{ form.image }}</p>
-                                            </div>
-                                            {% if noticia.image %}
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">
-                                                    <strong>Current image:</strong><br>
-                                                    <img src="/media/{{ noticia.image }}" alt="Noticia image" style="max-width: 400px; width: 100%; margin-top: 10px;">
-                                                </p>
-                                            </div>
-                                            {% endif %}
-                                        </div>
-
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Tags</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <small class="form-text text-muted">Comma separated tags</small>
-                                                <p class="p-class">{{ form.tags }}</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-6 col-sm-12">
-                                                <div class="font-weight-bold">Premium Content</div>
-                                                <small class="form-text text-muted">Requires subscription to view</small>
-                                                <div class="input-group input-group-outline mb-3">
-                                                    <p class="p-class">{{ form.is_premium }}</p>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6 col-sm-12">
-                                                <div class="font-weight-bold">Published</div>
-                                                <small class="form-text text-muted">Is visible to users</small>
-                                                <div class="input-group input-group-outline mb-3">
-                                                    <p class="p-class">{{ form.public }}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {% if noticia.api_id or noticia.api_source %}
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">API Information</div>
-                                            </div>
-                                            <div class="col-md-6 col-sm-12">
-                                                <small class="form-text text-muted">API Source: {{ noticia.api_source|default:"—" }}</small>
-                                            </div>
-                                            <div class="col-md-6 col-sm-12">
-                                                <small class="form-text text-muted">API ID: {{ noticia.api_id|default:"—" }}</small>
-                                            </div>
-                                        </div>
-                                        {% endif %}
-
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-primary">
-                                    Save <i class="fa-solid fa-check"></i>
+                            <!-- Información de Fuente -->
+                            <div class="form-section">
+                                <div class="section-title">
+                                    <i class="fa-solid fa-link"></i> Información de la Fuente
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-custom">
+                                                <i class="fa-solid fa-globe"></i> Fuente
+                                            </label>
+                                            {{ form.source }}
+                                            <small class="help-text">Bloomberg, Reuters, etc.</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-custom">
+                                                <i class="fa-solid fa-link"></i> URL de la Fuente
+                                            </label>
+                                            {{ form.source_url }}
+                                            <small class="help-text">Enlace al artículo original</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-custom">
+                                                <i class="fa-solid fa-user-pen"></i> Autor
+                                            </label>
+                                            {{ form.author }}
+                                            <small class="help-text">Autor del artículo original</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Multimedia y Etiquetas -->
+                            <div class="form-section">
+                                <div class="section-title">
+                                    <i class="fa-solid fa-photo-video"></i> Multimedia y Etiquetas
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-custom">
+                                                <i class="fa-solid fa-image"></i> Imagen
+                                            </label>
+                                            {{ form.image }}
+                                            <small class="help-text">Subir nueva imagen (dejar en blanco para mantener la actual)</small>
+
+                                            {% if noticia.image %}
+                                            <div class="current-image-container">
+                                                <strong>Imagen actual:</strong>
+                                                <img src="{{ noticia.image.url }}" alt="Imagen actual" class="current-image">
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-custom">
+                                                <i class="fa-solid fa-video"></i> Enlace de Video
+                                            </label>
+                                            {{ form.video_link }}
+                                            <small class="help-text">URL de YouTube, Vimeo, etc. (opcional)</small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-custom">
+                                                <i class="fa-solid fa-tags"></i> Etiquetas
+                                            </label>
+                                            {{ form.tags }}
+                                            <small class="help-text">Etiquetas separadas por comas (ej: finanzas, tecnología, resultados)</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Configuración de Publicación -->
+                            <div class="form-section">
+                                <div class="section-title">
+                                    <i class="fa-solid fa-cog"></i> Configuración de Publicación
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-custom">
+                                                <i class="fa-solid fa-crown"></i> Contenido Premium
+                                            </label>
+                                            <div class="checkbox-group">
+                                                {{ form.is_premium }}
+                                                <label for="{{ form.is_premium.id_for_label }}" class="checkbox-label">
+                                                    Requiere suscripción para ver el contenido completo
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-custom">
+                                                <i class="fa-solid fa-eye"></i> Estado de Publicación
+                                            </label>
+                                            <div class="checkbox-group">
+                                                {{ form.public }}
+                                                <label for="{{ form.public.id_for_label }}" class="checkbox-label">
+                                                    Publicar noticia (visible para usuarios)
+                                                </label>
+                                            </div>
+                                            <small class="help-text">Desmarcar para guardar como borrador</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {% if noticia.api_id or noticia.api_source %}
+                            <div class="api-info-box">
+                                <h5><i class="fa-solid fa-database"></i> Información de API</h5>
+                                <div class="api-info-item">
+                                    <span class="api-info-label">Fuente API:</span>
+                                    <span class="api-info-value">{{ noticia.api_source|default:"—" }}</span>
+                                </div>
+                                <div class="api-info-item">
+                                    <span class="api-info-label">ID API:</span>
+                                    <span class="api-info-value">{{ noticia.api_id|default:"—" }}</span>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            <div class="text-center" style="margin-top: 30px;">
+                                <a href="{% url 'administration_noticias' %}" class="btn-cancel">
+                                    <i class="fa-solid fa-times"></i> Cancelar
+                                </a>
+                                <button type="submit" class="btn btn-save-custom">
+                                    <i class="fa-solid fa-save"></i> Guardar Cambios
                                 </button>
                             </div>
                         </form>
@@ -186,6 +477,58 @@
         </div>
     </div>
 </div>
+
+<script>
+$(document).ready(function() {
+    // Add Bootstrap classes to form elements
+    $('input[type="text"], input[type="url"], input[type="file"], textarea').each(function() {
+        if (!$(this).hasClass('form-control')) {
+            $(this).addClass('form-control');
+        }
+    });
+
+    $('select').each(function() {
+        if (!$(this).hasClass('form-control')) {
+            $(this).addClass('form-control');
+        }
+    });
+
+    // Auto-resize textarea
+    $('textarea').on('input', function() {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+    });
+
+    // Trigger resize on load if has content
+    $('textarea').each(function() {
+        if (this.value) {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        }
+    });
+
+    // Preview image before upload
+    $('#id_image').on('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const fileSize = file.size / 1024 / 1024; // in MB
+            if (fileSize > 5) {
+                alert('El archivo es demasiado grande. El tamaño máximo permitido es 5MB.');
+                this.value = '';
+                return;
+            }
+
+            const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+            if (!validTypes.includes(file.type)) {
+                alert('Formato de archivo no válido. Solo se permiten JPG, PNG, GIF y WebP.');
+                this.value = '';
+                return;
+            }
+        }
+    });
+});
+</script>
+
 <!-- /page content -->
 
 {% endblock %}

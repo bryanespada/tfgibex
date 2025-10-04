@@ -2,88 +2,373 @@
 {% block content %}
 {% load custom_tags %}
 
+<style>
+    .noticias-card {
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+
+    .noticias-card:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+
+    .noticias-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px 20px;
+        font-weight: 600;
+    }
+
+    .noticias-body {
+        padding: 25px;
+        background: #f8f9fa;
+    }
+
+    .table-container {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .table {
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .table thead th {
+        background: var(--app-primary) !important;
+        color: white !important;
+        border: none !important;
+        padding: 12px 15px !important;
+        font-weight: 600;
+        font-size: 0.9em;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .table thead th:first-child {
+        border-radius: 8px 0 0 0;
+    }
+
+    .table thead th:last-child {
+        border-radius: 0 8px 0 0;
+    }
+
+    .table tbody tr {
+        transition: all 0.2s ease;
+    }
+
+    .table tbody tr:hover {
+        background-color: #f5f5ff !important;
+        transform: translateX(2px);
+        box-shadow: 0 2px 4px rgba(102, 126, 234, 0.1);
+    }
+
+    .table tbody td {
+        padding: 12px 15px;
+        vertical-align: middle;
+        border-top: 1px solid #e0e0e0;
+    }
+
+    .btn-action {
+        padding: 6px 12px;
+        margin: 0 2px;
+        border-radius: 6px;
+        transition: all 0.3s;
+        display: inline-block;
+        text-decoration: none;
+    }
+
+    .btn-edit {
+        background: #17a2b8;
+        color: white;
+    }
+
+    .btn-edit:hover {
+        background: #138496;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(23, 162, 184, 0.3);
+        color: white;
+    }
+
+    .btn-delete {
+        background: #dc3545;
+        color: white;
+    }
+
+    .btn-delete:hover {
+        background: #c82333;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+        color: white;
+    }
+
+    .btn-add-new {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 25px;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-add-new:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #73879C;
+    }
+
+    .empty-state i {
+        font-size: 48px;
+        color: #E7E7E7;
+        margin-bottom: 15px;
+    }
+
+    .empty-state p {
+        font-size: 1.1em;
+        margin: 0;
+    }
+
+    .header-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .search-box {
+        display: flex;
+        align-items: center;
+        background: white;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        padding: 8px 15px;
+        width: 300px;
+        transition: all 0.3s;
+    }
+
+    .search-box:focus-within {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+
+    .search-box i {
+        color: #999;
+        margin-right: 10px;
+    }
+
+    .search-box input {
+        border: none;
+        outline: none;
+        width: 100%;
+        background: transparent;
+    }
+
+    .id-badge {
+        font-weight: 600;
+        color: #667eea;
+        background: #f0f4ff;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.85em;
+    }
+
+    .title-text {
+        font-weight: 500;
+        color: #2A3F54;
+        max-width: 300px;
+        display: inline-block;
+    }
+
+    .empresa-badge {
+        background: linear-gradient(135deg, #00d084 0%, #00a046 100%);
+        color: white;
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 0.85em;
+        font-weight: 600;
+        display: inline-block;
+    }
+
+    .source-badge {
+        background: #e3f2fd;
+        color: #1976d2;
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 0.85em;
+        font-weight: 500;
+        display: inline-block;
+    }
+
+    .date-badge {
+        color: #73879C;
+        font-size: 0.9em;
+    }
+
+    .premium-badge {
+        background: linear-gradient(135deg, #ffd700 0%, #ffa500 100%);
+        color: white;
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 0.85em;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .free-badge {
+        background: #d4edda;
+        color: #155724;
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 0.85em;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .status-public {
+        color: #28a745;
+        font-size: 1.2em;
+    }
+
+    .status-private {
+        color: #dc3545;
+        font-size: 1.2em;
+    }
+</style>
+
 <!-- page content -->
 <div class="right_col" role="main">
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>Noticias</h3>
+                <h3><i class="fa-solid fa-newspaper"></i> Gestión de Noticias</h3>
             </div>
         </div>
 
         <div class="clearfix"></div>
 
-        <div class="row" style="display: block;">
-
-            <div class="clearfix"></div>
-
-            <div class="col-md-12 col-sm-12  ">
-                <div class="x_panel">
-                    <div class="x_title">
-                        <h2>Showing all noticias</h2>
-
-                        <ul class="nav navbar-right panel_toolbox">
-                            <li>
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <div class="noticias-card">
+                    <div class="noticias-header">
+                        <i class="fa-solid fa-list"></i> Listado de Noticias
                     </div>
+                    <div class="noticias-body">
+                        <div class="header-actions">
+                            <div class="search-box">
+                                <i class="fa-solid fa-search"></i>
+                                <input type="text" id="searchInput" placeholder="Buscar noticias...">
+                            </div>
+                            <a href="{% url 'administration_noticia_add' %}" class="btn-add-new">
+                                <i class="fa-solid fa-plus"></i> Añadir Nueva Noticia
+                            </a>
+                        </div>
 
-                    <div class="x_content">
-                        <div class="table-responsive">
-                            <table class="table table-striped jambo_table bulk_action">
+                        <div class="table-container">
+                            {% if noticias %}
+                            <table class="table table-striped" id="noticiasTable">
                                 <thead>
-                                    <tr class="headings">
-                                        <th class="column-title">#</th>
-                                        <th class="column-title">Title</th>
-                                        <th class="column-title">Empresa</th>
-                                        <th class="column-title">Source</th>
-                                        <th class="column-title">Published Date</th>
-                                        <th class="column-title">Premium</th>
-                                        <th class="column-title">Public</th>
-                                        <th class="column-title no-link last" style="text-align: right !important;"><span class="nobr">Actions</span>
-                                        </th>
+                                    <tr>
+                                        <th style="width: 5%;">ID</th>
+                                        <th style="width: 28%;">Título</th>
+                                        <th style="width: 15%;">Empresa</th>
+                                        <th style="width: 12%;">Fuente</th>
+                                        <th style="width: 14%;">Fecha</th>
+                                        <th style="width: 10%;">Tipo</th>
+                                        <th style="width: 8%;">Estado</th>
+                                        <th style="width: 8%; text-align: center;">Acciones</th>
                                     </tr>
                                 </thead>
-
                                 <tbody>
                                     {% for noticia in noticias %}
-                                        <tr class="even pointer">
-                                            <td>{{ noticia.pk }}</td>
-                                            <td>{{ noticia.title|truncatewords:10 }}</td>
-                                            <td>{{ noticia.empresa.title }}</td>
-                                            <td>{{ noticia.source|default:"—" }}</td>
-                                            <td>{{ noticia.published_date|date:"Y-m-d H:i" }}</td>
-                                            <td>
-                                                {% if noticia.is_premium %}
-                                                    <i class="fa-solid fa-crown" style="color:{{config.app_primary}}" title="Premium"></i>
-                                                {% else %}
-                                                    <i class="fa-solid fa-users" style="color:{{config.app_success}}" title="Free"></i>
-                                                {% endif %}
-                                            </td>
-                                            <td>
-                                                {% if noticia.public %}
-                                                    <i class="fa-solid fa-circle-check" style="color:{{config.app_success}}"></i>
-                                                {% else %}
-                                                    <i class="fa-solid fa-circle-xmark" style="color:{{config.app_danger}}"></i>
-                                                {% endif %}
-                                            </td>
-                                            <td class="last" style="text-align: right !important;">
-                                                <a href="{% url 'administration_noticia_edit' noticia_id=noticia.id %}">
-                                                    <i class="fa-regular fa-pen-to-square" title="Edit"></i>
-                                                </a>
-
-                                                <a href="{% url 'administration_noticia_delete' noticia_id=noticia.id %}" onclick="return confirm('Are you sure?')">
-                                                    <i class="fa-solid fa-trash" title="Delete"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="id-badge">#{{noticia.pk}}</span>
+                                        </td>
+                                        <td>
+                                            <span class="title-text" title="{{ noticia.title }}">
+                                                {{ noticia.title|truncatewords:8 }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="empresa-badge">
+                                                <i class="fa-solid fa-building"></i> {{ noticia.empresa.title }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {% if noticia.source %}
+                                                <span class="source-badge">{{ noticia.source }}</span>
+                                            {% else %}
+                                                <span style="color: #999;">—</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <span class="date-badge">
+                                                <i class="fa-regular fa-calendar"></i>
+                                                {{ noticia.published_date|date:"d/m/Y H:i" }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {% if noticia.is_premium %}
+                                                <span class="premium-badge">
+                                                    <i class="fa-solid fa-crown"></i> Premium
+                                                </span>
+                                            {% else %}
+                                                <span class="free-badge">
+                                                    <i class="fa-solid fa-users"></i> Gratuita
+                                                </span>
+                                            {% endif %}
+                                        </td>
+                                        <td style="text-align: center;">
+                                            {% if noticia.public %}
+                                                <i class="fa-solid fa-circle-check status-public" title="Pública"></i>
+                                            {% else %}
+                                                <i class="fa-solid fa-circle-xmark status-private" title="Privada"></i>
+                                            {% endif %}
+                                        </td>
+                                        <td style="text-align: center;">
+                                            <a href="{% url 'administration_noticia_edit' noticia_id=noticia.id %}"
+                                               class="btn-action btn-edit"
+                                               title="Editar">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+                                            <a href="{% url 'administration_noticia_delete' noticia_id=noticia.id %}"
+                                               class="btn-action btn-delete"
+                                               onclick="return confirm('¿Estás seguro de que deseas eliminar esta noticia?')"
+                                               title="Eliminar">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
                                     {% endfor %}
                                 </tbody>
                             </table>
+                            {% else %}
+                            <div class="empty-state">
+                                <i class="fa-solid fa-inbox"></i>
+                                <p>No hay noticias registradas</p>
+                                <a href="{% url 'administration_noticia_add' %}" class="btn-add-new" style="margin-top: 20px;">
+                                    <i class="fa-solid fa-plus"></i> Añadir Primera Noticia
+                                </a>
+                            </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -92,5 +377,67 @@
     </div>
 </div>
 <!-- /page content -->
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Función de búsqueda
+    function filterTable() {
+        const input = document.getElementById("searchInput");
+        const filter = input.value.toLowerCase();
+        const table = document.getElementById("noticiasTable");
+
+        if (!table) {
+            console.log("Tabla no encontrada");
+            return;
+        }
+
+        const tbody = table.getElementsByTagName("tbody")[0];
+        if (!tbody) {
+            console.log("Tbody no encontrado");
+            return;
+        }
+
+        const rows = tbody.getElementsByTagName("tr");
+
+        // Si no hay texto de búsqueda, mostrar todas las filas
+        if (filter === "") {
+            for (let i = 0; i < rows.length; i++) {
+                rows[i].style.display = "";
+            }
+            return;
+        }
+
+        // Filtrar filas
+        for (let i = 0; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName("td");
+            let found = false;
+
+            // Buscar en todas las columnas excepto la última (acciones)
+            for (let j = 0; j < cells.length - 1; j++) {
+                if (cells[j]) {
+                    const txtValue = cells[j].textContent || cells[j].innerText;
+                    if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+
+            // Mostrar u ocultar la fila
+            rows[i].style.display = found ? "" : "none";
+        }
+    }
+
+    // Conectar el evento al input
+    const searchInput = document.getElementById("searchInput");
+    if (searchInput) {
+        searchInput.addEventListener('keyup', filterTable);
+        searchInput.addEventListener('input', filterTable);
+        searchInput.addEventListener('paste', function() {
+            setTimeout(filterTable, 100);
+        });
+    }
+});
+</script>
 
 {% endblock %}
