@@ -19,7 +19,7 @@
             <div class="col-md-12 col-sm-12  ">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Showing all mercados</h2>
+                        <h2>Mostrando todos los mercados</h2>
 
                         <ul class="nav navbar-right panel_toolbox">
                             <li>
@@ -38,9 +38,9 @@
                                 <thead>
                                     <tr class="headings">
                                         <th class="column-title" style="width: 0%;">ID </th>
-                                        <th class="column-title">Title </th>
-                                        <th class="column-title">Description </th>
-                                        <th class="column-title no-link last" style="text-align: right !important;"><span class="nobr">Actions</span>
+                                        <th class="column-title">Título </th>
+                                        <th class="column-title">Descripción </th>
+                                        <th class="column-title no-link last" style="text-align: right !important;"><span class="nobr">Acciones</span>
                                         </th>
                                     </tr>
                                 </thead>
@@ -53,7 +53,7 @@
                                             <td>{{area.description}}</td>
                                             <td class="last" style="text-align: right !important;"><a href="#">
                                                 <a href="{% url 'administration_mercado_edit' mercado_id=area.id %}"><i class="fa-regular fa-pen-to-square"></i></a>
-                                                <a href="{% url 'administration_mercado_delete' mercado_id=area.id %}" onclick="return confirm('Are you sure?')"><i class="fa-solid fa-trash"></i></a>
+                                                <a href="{% url 'administration_mercado_delete' mercado_id=area.id %}" onclick="return confirm('¿Estás seguro?')"><i class="fa-solid fa-trash"></i></a>
                                             </a>
                                             </td>
                                         </tr>
