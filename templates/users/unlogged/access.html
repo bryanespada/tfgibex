@@ -2,11 +2,16 @@
 
 {% block content %}
 
-<div style="display: flex; min-height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+<div style="display: flex; min-height: 100vh;">
 
-  <!-- Login Card Container -->
-  <div style="margin: auto; width: 100%; max-width: 450px; padding: 20px;">
-    <div style="background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); padding: 40px;">
+  <!-- Left side - Image -->
+  <div style="flex: 1; display: flex; align-items: center; justify-content: center; background: #f8f9fa;">
+    <img src="/media/imagen_login.jpg" style="width: 80%; max-width: 700px; height: auto; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+  </div>
+
+  <!-- Right side - Login Form -->
+  <div style="flex: 1; display: flex; align-items: center; justify-content: flex-start; padding-left: 60px;">
+    <div style="width: 100%; max-width: 450px;">
 
       <!-- Logo/Icon Section -->
       <div style="text-align: center; margin-bottom: 30px;">
@@ -68,13 +73,6 @@
           </a>
         </div>
 
-        <!-- Divider -->
-        <div style="position: relative; margin: 30px 0;">
-          <hr style="border: none; border-top: 1px solid #E7E7E7;">
-          <span style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: white; padding: 0 15px; color: #9CA3AF; font-size: 14px;">
-            o
-          </span>
-        </div>
 
         <!-- Google Login -->
         {% if config.google_oauth_client_id %}
