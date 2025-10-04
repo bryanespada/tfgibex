@@ -2,120 +2,432 @@
 {% block content %}
 {% load static %}
 
+<style>
+    .form-card {
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+
+    .form-card:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+
+    .form-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px 20px;
+        font-weight: 600;
+    }
+
+    .form-body {
+        padding: 25px;
+        background: #f8f9fa;
+    }
+
+    .form-section {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .section-title {
+        color: #667eea;
+        font-size: 1.1em;
+        font-weight: 600;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #f0f0f0;
+    }
+
+    .form-group-custom {
+        margin-bottom: 20px;
+        padding: 15px;
+        background: white;
+        border-radius: 8px;
+        border-left: 3px solid #667eea;
+    }
+
+    .form-label-custom {
+        color: #2A3F54;
+        font-weight: 600;
+        margin-bottom: 8px;
+        display: block;
+        font-size: 0.95em;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        transition: all 0.3s;
+        font-size: 14px;
+    }
+
+    .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        outline: none;
+    }
+
+    input[type="file"].form-control {
+        padding: 12px 15px;
+        min-height: 48px;
+    }
+
+    .btn-save-custom {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 12px 40px;
+        border: none;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-save-custom:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+
+    .btn-cancel {
+        background: #6c757d;
+        color: white;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    .btn-cancel:hover {
+        background: #5a6268;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+        color: white;
+    }
+
+    .btn-change-password {
+        background: #17a2b8;
+        color: white;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    .btn-change-password:hover {
+        background: #138496;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(23, 162, 184, 0.3);
+        color: white;
+    }
+
+    .breadcrumb-nav {
+        background: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .breadcrumb-nav a {
+        color: #667eea;
+        text-decoration: none;
+        transition: all 0.3s;
+    }
+
+    .breadcrumb-nav a:hover {
+        color: #764ba2;
+    }
+
+    .breadcrumb-nav i {
+        margin: 0 10px;
+        color: #999;
+    }
+
+    .help-text {
+        font-size: 0.85em;
+        color: #999;
+        margin-top: 5px;
+        font-style: italic;
+    }
+
+    .required-field {
+        color: #dc3545;
+        font-weight: normal;
+    }
+
+    .error-list {
+        background: #fff5f5;
+        border-left: 3px solid #dc3545;
+        border-radius: 6px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    .error-list ul {
+        margin: 0;
+        padding-left: 20px;
+    }
+
+    .error-list li {
+        color: #dc3545;
+        margin-bottom: 5px;
+    }
+
+    .current-image {
+        max-width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid #667eea;
+        margin-top: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        transition: all 0.3s;
+    }
+
+    .current-image:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+
+    .image-preview-container {
+        text-align: center;
+        padding: 15px;
+        background: #f0f4ff;
+        border-radius: 8px;
+        margin-top: 10px;
+    }
+
+    .image-preview-label {
+        display: block;
+        color: #667eea;
+        font-weight: 600;
+        font-size: 0.9em;
+        margin-bottom: 10px;
+    }
+
+    .user-info-badge {
+        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 25px;
+        display: inline-block;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+
+    .user-info-badge i {
+        margin-right: 8px;
+    }
+</style>
+
 <!-- page content -->
 <div class="right_col" role="main">
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>Users</h3>
+                <h3>
+                    <i class="fa-solid fa-user-edit"></i> Editar Usuario
+                </h3>
             </div>
         </div>
 
         <div class="clearfix"></div>
 
-        <div class="row" style="display: block;">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb-nav">
+            <a href="{% url 'administration_users' %}">
+                <i class="fa-solid fa-list"></i> Usuarios
+            </a>
+            <i class="fa-solid fa-chevron-right"></i>
+            <span>Editar Usuario</span>
+        </div>
 
-            <div class="clearfix"></div>
-
-            <div class="col-md-12 col-sm-12  ">
-                <div class="x_panel">
-                    <div class="x_title">
-                        <h2>Edit user</h2>
-
-                        <ul class="nav navbar-right panel_toolbox">
-                            <li>
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <div class="form-card">
+                    <div class="form-header">
+                        <i class="fa-solid fa-pen-to-square"></i> Formulario de Edición de Usuario
                     </div>
+                    <div class="form-body">
 
-                    <div class="x_content">
+                        <!-- User Info Badge -->
+                        <div class="text-center">
+                            <span class="user-info-badge">
+                                <i class="fa-solid fa-user"></i>
+                                Editando: {{ custom_user.username }}
+                            </span>
+                        </div>
 
-
-
-
+                        {% if errors %}
+                        <div class="error-list">
+                            <ul>
+                                {% for field, errors_list in errors.items %}
+                                    {% for error in errors_list %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
 
                         <form action="" role="form" method="POST" class="text-start" enctype="multipart/form-data">
                             {% csrf_token %}
-                            
-                            <div class="tab-content" id="myTabContent">
 
-                                <div class="tab-pane fade show active" id="general" role="tabpanel"
-                                    aria-labelledby="general-tab">
-                                    <div class="seccion bg-gray-100 border-radius-lg">
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Email *</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.username }}</p>
-                                            </div>
+                            <!-- Información Personal -->
+                            <div class="form-section">
+                                <div class="section-title">
+                                    <i class="fa-solid fa-user"></i> Información Personal
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-custom">
+                                                <i class="fa-solid fa-envelope"></i> Correo Electrónico / Usuario
+                                                <span class="required-field">*</span>
+                                            </label>
+                                            {{ form.username }}
+                                            <small class="help-text">Este es el nombre de usuario para iniciar sesión</small>
                                         </div>
-
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">First name *</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.first_name }}</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Last name *</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.last_name }}</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Profile picture</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.pic }}</p>
-                                            </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-custom">
+                                                <i class="fa-solid fa-image"></i> Foto de Perfil
+                                            </label>
+                                            {{ form.pic }}
                                             {% if custom_user.pic %}
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class"> <img src="/media/{{custom_user.pic}}" alt="profile pic" class="img-circle profile_img" style="max-width: 100px; width: 100%; margin-left: 0px; margin-top: 0px;"></p>
+                                            <div class="image-preview-container">
+                                                <span class="image-preview-label">Imagen Actual:</span>
+                                                <img src="/media/{{custom_user.pic}}"
+                                                     alt="Foto de perfil actual"
+                                                     class="current-image">
+                                            </div>
+                                            {% else %}
+                                            <div class="image-preview-container">
+                                                <span class="image-preview-label">Sin imagen de perfil</span>
+                                                <img src="{% static 'img/default_profile.jpg' %}"
+                                                     alt="Sin foto de perfil"
+                                                     class="current-image">
                                             </div>
                                             {% endif %}
+                                            <small class="help-text">Sube una nueva imagen para reemplazar la actual</small>
                                         </div>
+                                    </div>
+                                </div>
 
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-custom">
+                                                <i class="fa-solid fa-user-tag"></i> Nombre
+                                                <span class="required-field">*</span>
+                                            </label>
+                                            {{ form.first_name }}
+                                            <small class="help-text">Nombre del usuario</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-custom">
+                                                <i class="fa-solid fa-user-tag"></i> Apellido
+                                                <span class="required-field">*</span>
+                                            </label>
+                                            {{ form.last_name }}
+                                            <small class="help-text">Apellido del usuario</small>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="text-danger">
-                                {% if errors %}
-                                  <ul>
-                                      {% for field, errors_list in errors.items %}
-                                          {% for error in errors_list %}
-                                              <li style='text-align-last: left;'>{{ error }}</li>
-                                          {% endfor %}
-                                      {% endfor %}
-                                  </ul>
-                                {% endif %}
-                              </div>
+                            <!-- Información de Cuenta -->
+                            <div class="form-section">
+                                <div class="section-title">
+                                    <i class="fa-solid fa-info-circle"></i> Información de la Cuenta
+                                </div>
 
-                              <div class="text-center">
-                                <button type="submit" class="btn btn-primary">
-                                    Save <i class="fa-solid fa-check"></i>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-custom">
+                                                <i class="fa-solid fa-calendar-plus"></i> Fecha de Registro
+                                            </label>
+                                            <input type="text" class="form-control"
+                                                   value="{{ custom_user.date_joined|date:'d/m/Y H:i' }}"
+                                                   disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-custom">
+                                                <i class="fa-solid fa-clock"></i> Última Conexión
+                                            </label>
+                                            <input type="text" class="form-control"
+                                                   value="{% if custom_user.last_login %}{{ custom_user.last_login|date:'d/m/Y H:i' }}{% else %}Nunca{% endif %}"
+                                                   disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-custom">
+                                                <i class="fa-solid fa-toggle-on"></i> Estado de la Cuenta
+                                            </label>
+                                            <input type="text" class="form-control"
+                                                   value="{% if custom_user.is_active %}Activa{% else %}Inactiva{% endif %}"
+                                                   disabled
+                                                   style="color: {% if custom_user.is_active %}#28a745{% else %}#dc3545{% endif %}; font-weight: 600;">
+                                            <small class="help-text">El estado se puede cambiar desde el listado de usuarios</small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-custom">
+                                                <i class="fa-solid fa-shield-halved"></i> Rol del Usuario
+                                            </label>
+                                            <input type="text" class="form-control"
+                                                   value="{% if custom_user.is_staff %}Administrador{% else %}Usuario Regular{% endif %}"
+                                                   disabled
+                                                   style="font-weight: 600;">
+                                            <small class="help-text">El rol del usuario se puede cambiar desde el listado de usuarios</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-center" style="margin-top: 30px;">
+                                <a href="{% url 'administration_users' %}" class="btn-cancel">
+                                    <i class="fa-solid fa-arrow-left"></i> Volver
+                                </a>
+                                {% if custom_user.id %}
+                                <a href="/admin/auth/user/{{ custom_user.id }}/password/" class="btn-change-password" target="_blank">
+                                    <i class="fa-solid fa-key"></i> Cambiar Contraseña
+                                </a>
+                                {% endif %}
+                                <button type="submit" class="btn btn-save-custom">
+                                    <i class="fa-solid fa-save"></i> Guardar Cambios
                                 </button>
                             </div>
                         </form>
-
-
-
-
-
-
-
 
                     </div>
                 </div>
@@ -123,6 +435,62 @@
         </div>
     </div>
 </div>
+
+<script>
+$(document).ready(function() {
+    // Add Bootstrap classes to form elements
+    $('input[type="text"], input[type="email"], input[type="file"]').each(function() {
+        if (!$(this).hasClass('form-control') && !$(this).is(':disabled')) {
+            $(this).addClass('form-control');
+        }
+    });
+
+    // Preview new image before upload
+    $('#id_pic').on('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const fileSize = file.size / 1024 / 1024; // in MB
+            if (fileSize > 5) {
+                alert('El archivo es demasiado grande. El tamaño máximo permitido es 5MB.');
+                this.value = '';
+                return;
+            }
+
+            const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+            if (!validTypes.includes(file.type)) {
+                alert('Formato de archivo no válido. Solo se permiten JPG, PNG, GIF y WebP.');
+                this.value = '';
+                return;
+            }
+
+            // Preview the new image
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                $('.current-image').attr('src', e.target.result);
+                $('.image-preview-label').text('Nueva imagen (vista previa):');
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Confirm before leaving if form has changes
+    let formChanged = false;
+    $('form input, form select, form textarea').on('change', function() {
+        formChanged = true;
+    });
+
+    $(window).on('beforeunload', function() {
+        if (formChanged) {
+            return '¿Estás seguro de que deseas salir? Los cambios no guardados se perderán.';
+        }
+    });
+
+    $('form').on('submit', function() {
+        formChanged = false;
+    });
+});
+</script>
+
 <!-- /page content -->
 
 {% endblock %}
