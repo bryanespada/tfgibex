@@ -10,6 +10,7 @@ urlpatterns = [
     path("access/", views.access, name="access"),
     path("register/", views.register, name="register"),
     path('password-reset/', ResetPasswordView.as_view(), name='password_reset'),
+    path('password-reset/done/', views.password_reset_done, name='password_reset_done'),
     path('passwordreset-confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='users/unlogged/password_reset_confirm.html'), name='password_reset_confirm'),
     path('password-reset-complete/', auth_views.PasswordResetCompleteView.as_view(template_name='users/unlogged/password_reset_complete.html'), name='password_reset_complete'),
     path('auth-receiver', views.auth_receiver, name='auth_receiver'), # Endpoint to Google Auth

@@ -143,20 +143,106 @@ def register(request):
     return render(request, "users/unlogged/register.html", context=context)
     
 
-class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
+class ResetPasswordView(PasswordResetView):
     template_name = 'users/unlogged/password_reset.html'
     email_template_name = 'users/unlogged/password_reset_email.html'
     subject_template_name = 'users/unlogged/password_reset_subject'
-    success_message = "We've emailed you instructions for setting your password, " \
-                      "if an account exists with the email you entered. You should receive them shortly." \
-                      " If you don't receive an email, " \
-                      "please make sure you've entered the address you registered with, and check your spam folder."
-    success_url = reverse_lazy('access')
+    success_url = reverse_lazy('password_reset_done')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['config'] = get_object_or_404(GeneralConfig, id=1)
         return context
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['email'].widget.attrs.update({
+            'class': 'form-control',
+            'placeholder': 'Email',
+            'type': 'email',
+            'autofocus': True
+        })
+        return form
+
+    def form_valid(self, form):
+        # Log para debug
+        email = form.cleaned_data.get('email')
+        print(f"[DEBUG] Intentando enviar email de recuperación a: {email}")
+
+        # Verificar si el usuario existe
+        from users.models import CustomUser
+        user_exists = CustomUser.objects.filter(username=email).exists()
+        print(f"[DEBUG] ¿Usuario existe con email {email}?: {user_exists}")
+
+        # Verificar configuración SMTP
+        from django.conf import settings
+        print(f"[DEBUG] Configuración SMTP:")
+        print(f"  - HOST: {settings.EMAIL_HOST}")
+        print(f"  - PORT: {settings.EMAIL_PORT}")
+        print(f"  - USER: {settings.EMAIL_HOST_USER}")
+        print(f"  - USE_TLS: {settings.EMAIL_USE_TLS}")
+        print(f"  - FROM: {settings.DEFAULT_FROM_EMAIL}")
+
+        # Intentar enviar email de prueba directamente
+        from django.core.mail import send_mail
+        try:
+            test_result = send_mail(
+                'Test directo de SMTP',
+                f'Si recibes esto, SMTP funciona. Intentando recuperar contraseña para: {email}',
+                settings.DEFAULT_FROM_EMAIL,
+                [settings.EMAIL_HOST_USER],  # Enviamos a nosotros mismos
+                fail_silently=False,
+            )
+            print(f"[DEBUG] Email de prueba enviado: {test_result}")
+        except Exception as e:
+            print(f"[ERROR] Error enviando email de prueba: {str(e)}")
+            import traceback
+            traceback.print_exc()
+
+        # Verificar que Django realmente envíe el email
+        print(f"[DEBUG] Llamando a super().form_valid()...")
+
+        # Interceptar el envío real
+        from django.contrib.auth.forms import PasswordResetForm
+        form_instance = form
+
+        # Ver qué usuarios encuentra Django
+        users = form_instance.get_users(email)
+        user_count = len(list(users))
+        print(f"[DEBUG] Django encontró {user_count} usuarios con ese email")
+
+        # Reintentar para obtener usuarios (get_users es un generador)
+        for user in form_instance.get_users(email):
+            print(f"[DEBUG] Usuario encontrado: {user.username}, email: {user.email}, is_active: {user.is_active}")
+            print(f"[DEBUG] Email field vacío?: '{user.email}' == ''")
+
+        # Verificar directamente en la BD
+        from users.models import CustomUser
+        user_direct = CustomUser.objects.filter(username=email).first()
+        if user_direct:
+            print(f"[DEBUG] Verificación directa - username: {user_direct.username}, email field: '{user_direct.email}'")
+            if not user_direct.email:
+                print(f"[PROBLEMA] El campo email está vacío! Django NO enviará el email de recuperación")
+                print(f"[SOLUCION] Actualizando el campo email...")
+                user_direct.email = user_direct.username
+                user_direct.save()
+                print(f"[DEBUG] Campo email actualizado a: {user_direct.email}")
+
+        try:
+            result = super().form_valid(form)
+            print(f"[DEBUG] form_valid completado - Django debería haber enviado el email de recuperación")
+            return result
+        except Exception as e:
+            print(f"[ERROR] Error en form_valid: {str(e)}")
+            import traceback
+            traceback.print_exc()
+            return super().form_valid(form)
+
+
+def password_reset_done(request):
+    context = {}
+    context['config'] = get_object_or_404(GeneralConfig, id=1)
+    return render(request, 'users/unlogged/password_reset_done.html', context)
 
 
 def exit(request):

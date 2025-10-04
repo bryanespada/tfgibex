@@ -100,17 +100,17 @@ DATABASES = {
 }
 
 
-# Email config
+# Email config - Gmail SMTP
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 ACCOUNT_AUTHENTICATION_METHOD = "username_email"
-EMAIL_HOST = 'smtp.servidor-correo.net'         #os.environ.get('SMTP_SERVER', 'host'),
-DEFAULT_FROM_EMAIL = 'tfgibex Team <no-reply@tfgibex.com>'
-EMAIL_FROM = 'no-reply@tfgibex.com'
+EMAIL_HOST = 'smtp.gmail.com'
+DEFAULT_FROM_EMAIL = 'TFG IBEX <tfgibex@gmail.com>'  # CAMBIAR por tu email de Gmail
+EMAIL_FROM = 'tfgibex@gmail.com'  # CAMBIAR por tu email de Gmail
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
-EMAIL_PORT = '587'                              #os.environ.get('SMTP_PORT', 'port'),
-EMAIL_HOST_USER = 'no-reply@tfgibex.com'    #os.environ.get('SMTP_USER', 'user'),
-EMAIL_HOST_PASSWORD = 'app2024ERB/'    #os.environ.get('SMTP_PASS', 'pass'),
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'tfgibex@gmail.com'  # CAMBIAR por tu email de Gmail
+EMAIL_HOST_PASSWORD = 'nnxtxrsywwzjukok'  # CAMBIAR por tu contraseña de aplicación de 16 caracteres
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
