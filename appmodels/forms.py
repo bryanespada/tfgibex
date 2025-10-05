@@ -105,8 +105,25 @@ class SubscriptionForm(forms.ModelForm):
 
 class ProductForm(forms.ModelForm):
 
-    public = forms.BooleanField( required=False, widget=forms.CheckboxInput(attrs={'class': ''}), )
-    description = forms.CharField( widget=forms.Textarea(attrs={'class': 'form-control', 'cols': '40', 'rows': '5'}) )
+    INTERVAL_UNITS_SPANISH = (
+        ('W', 'Semana'),
+        ('M', 'Mes'),
+        ('Y', 'Año'),
+    )
+
+    public = forms.BooleanField(
+        required=False,
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input', 'style': 'transform: scale(1.5); margin-right: 10px;'}),
+        label="Producto público"
+    )
+    description = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'form-control', 'cols': '40', 'rows': '5'})
+    )
+    interval_unit = forms.ChoiceField(
+        choices=INTERVAL_UNITS_SPANISH,
+        widget=forms.Select(attrs={'class': 'form-control', 'style': 'height: 45px; font-size: 14px;'}),
+        label="Unidad de tiempo"
+    )
 
     class Meta:
         model = Product
@@ -124,8 +141,8 @@ class BlogForm(forms.ModelForm):
 
 
 class ProductAssignForm(forms.Form):
-    user = forms.ModelChoiceField(queryset=CustomUser.objects.all(), empty_label="Choose user")
-    product = forms.ModelChoiceField(queryset=Product.objects.all(), empty_label="Choose product")
+    user = forms.ModelChoiceField(queryset=CustomUser.objects.all(), empty_label="Seleccionar usuario")
+    product = forms.ModelChoiceField(queryset=Product.objects.all(), empty_label="Seleccionar producto")
 
 
 class NoticiaForm(forms.ModelForm):

@@ -75,35 +75,36 @@
     }
 
     .btn-action {
-        padding: 6px 12px;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         margin: 0 2px;
-        border-radius: 6px;
-        transition: all 0.3s;
-        display: inline-block;
+        transition: all 0.3s ease;
+        border: none;
+        color: white;
         text-decoration: none;
     }
 
     .btn-edit {
-        background: #17a2b8;
-        color: white;
+        background: #007bff;
     }
 
     .btn-edit:hover {
-        background: #138496;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(23, 162, 184, 0.3);
+        background: #0056b3;
+        transform: scale(1.1);
         color: white;
     }
 
     .btn-delete {
         background: #dc3545;
-        color: white;
     }
 
     .btn-delete:hover {
-        background: #c82333;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+        background: #a71e2a;
+        transform: scale(1.1);
         color: white;
     }
 
@@ -343,7 +344,7 @@
                                                 <i class="fa-solid fa-circle-xmark status-private" title="Privada"></i>
                                             {% endif %}
                                         </td>
-                                        <td style="text-align: center;">
+                                        <td style="text-align: center; white-space: nowrap;">
                                             <a href="{% url 'administration_noticia_edit' noticia_id=noticia.id %}"
                                                class="btn-action btn-edit"
                                                title="Editar">

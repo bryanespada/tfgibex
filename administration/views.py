@@ -893,6 +893,33 @@ def subscription_add(request):
         if form.is_valid():
             subscription = form.save(commit=False)
             receptor = subscription.user
+
+            # Check if user already has an active subscription
+            if subscription.status == 'ACTIVE':
+                existing_active_subscription = Subscription.objects.filter(
+                    user=receptor,
+                    due_date__gte=timezone.now().date(),
+                    status='ACTIVE'
+                ).exists()
+
+                if existing_active_subscription:
+                    messages.error(request, f"El usuario {receptor} ya tiene una suscripción activa. No se puede crear otra.")
+                    form = SubscriptionForm()
+                    form.fields['user'].widget.attrs.update({'class': 'form-control'})
+                    form.fields['product'].widget.attrs.update({'class': 'form-control'})
+                    form.fields['amount'].widget.attrs.update({'class': 'form-control'})
+                    form.fields['currency'].widget.attrs.update({'class': 'form-control'})
+                    form.fields['payment_method'].widget.attrs.update({'class': 'form-control'})
+                    form.fields['payment_product_id'].widget.attrs.update({'class': 'form-control'})
+                    form.fields['payment_subscription_id'].widget.attrs.update({'class': 'form-control'})
+                    form.fields['status'].widget.attrs.update({'class': 'form-control'})
+                    form.fields['start_date'].widget.attrs.update({'class': 'form-control'})
+                    form.fields['due_date'].widget.attrs.update({'class': 'form-control'})
+                    context['form'] = form
+                    config = get_object_or_404(GeneralConfig, id=1)
+                    context['config'] = config
+                    return render(request, 'administration/subscription/subscription_add.html', context)
+
             subscription.save()
             messages.success(request, f"Subscription #{subscription.pk} of {subscription.user} successfully added")
             log(request, "AdminsLog", {"action_type":"create", "status":200, "details":f"Created #{subscription.id}", "item":"Subscription"})
@@ -1030,6 +1057,22 @@ def assign_product(request):
         if form.is_valid():
             selected_user = form.cleaned_data['user']
             selected_product = form.cleaned_data['product']
+
+            # Check if user already has an active subscription
+            existing_active_subscription = Subscription.objects.filter(
+                user=selected_user,
+                due_date__gte=timezone.now().date(),
+                status='ACTIVE'
+            ).exists()
+
+            if existing_active_subscription:
+                messages.error(request, f"El usuario {selected_user} ya tiene una suscripción activa. No se puede crear otra.")
+                form = ProductAssignForm()
+                form.fields['user'].widget.attrs.update({'class': 'form-control'})
+                form.fields['product'].widget.attrs.update({'class': 'form-control'})
+                context['form'] = form
+                context['config'] = config
+                return render(request, 'administration/subscription/assign_product.html', context)
 
             subscription_days = 0
             

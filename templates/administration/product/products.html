@@ -2,82 +2,369 @@
 {% block content %}
 {% load custom_tags %}
 
+<style>
+    .products-card {
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+
+    .products-card:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+
+    .products-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px 20px;
+        font-weight: 600;
+    }
+
+    .products-body {
+        padding: 25px;
+        background: #f8f9fa;
+    }
+
+    .table-container {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        overflow-x: auto;
+    }
+
+    .table {
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .table thead th {
+        background: var(--app-primary) !important;
+        color: white !important;
+        border: none !important;
+        padding: 12px 15px !important;
+        font-weight: 600;
+        font-size: 0.9em;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .table tbody td {
+        padding: 12px 15px !important;
+        vertical-align: middle !important;
+        border-bottom: 1px solid #eee !important;
+    }
+
+    .table tbody tr:hover {
+        background-color: #f8f9fa !important;
+    }
+
+    .btn-action {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 2px;
+        transition: all 0.3s ease;
+        border: none;
+        color: white;
+    }
+
+    .btn-edit {
+        background: #007bff;
+    }
+
+    .btn-edit:hover {
+        background: #0056b3;
+        transform: scale(1.1);
+    }
+
+    .btn-delete {
+        background: #dc3545;
+    }
+
+    .btn-delete:hover {
+        background: #a71e2a;
+        transform: scale(1.1);
+    }
+
+    .status-badge {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.8em;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .status-active {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .status-inactive {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+
+    .price-badge {
+        background: linear-gradient(45deg, #28a745, #20c997);
+        color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-weight: 600;
+        font-size: 0.9em;
+    }
+
+    .discount-badge {
+        background: linear-gradient(45deg, #ffc107, #fd7e14);
+        color: #212529;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-weight: 600;
+        font-size: 0.8em;
+    }
+
+    .id-badge {
+        font-weight: 600;
+        color: #667eea;
+        background: #f0f4ff;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.85em;
+    }
+
+    .user-badge {
+        background: #e3f2fd;
+        color: #1976d2;
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 0.85em;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .amount-badge {
+        background: linear-gradient(135deg, #6f42c1 0%, #9c27b0 100%);
+        color: white;
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 0.85em;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .gateway-badge {
+        background: #f8f9fa;
+        color: #495057;
+        border: 1px solid #dee2e6;
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 0.8em;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .active-check {
+        color: #28a745;
+        font-size: 18px;
+    }
+
+    .inactive-check {
+        color: #dc3545;
+        font-size: 18px;
+    }
+
+    .header-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .search-box {
+        display: flex;
+        align-items: center;
+        background: white;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        padding: 8px 15px;
+        width: 300px;
+        transition: all 0.3s;
+    }
+
+    .search-box:focus-within {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+
+    .search-box i {
+        color: #999;
+        margin-right: 10px;
+    }
+
+    .search-box input {
+        border: none;
+        outline: none;
+        width: 100%;
+        background: transparent;
+    }
+
+    .btn-add-new {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 25px;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-add-new:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+</style>
+
 <!-- page content -->
 <div class="right_col" role="main">
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>Products</h3>
+                <h3>Productos</h3>
             </div>
         </div>
 
         <div class="clearfix"></div>
 
-        <div class="row" style="display: block;">
-
-            <div class="clearfix"></div>
-
-            <div class="col-md-12 col-sm-12  ">
-                <div class="x_panel">
-                    <div class="x_title">
-                        <h2>Showing all products</h2>
-
-                        <ul class="nav navbar-right panel_toolbox">
-                            <li>
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="products-card">
+                    <div class="products-header">
+                        <i class="fa-solid fa-list"></i> Listado de Productos
                     </div>
+                    <div class="products-body">
+                        <div class="header-actions">
+                            <div class="search-box">
+                                <i class="fa-solid fa-search"></i>
+                                <input type="text" id="searchInput" placeholder="Buscar productos...">
+                            </div>
+                            <a href="{% url 'administration_product_add' %}" class="btn-add-new">
+                                <i class="fa-solid fa-plus"></i> Añadir nuevo producto
+                            </a>
+                        </div>
 
-                    <div class="x_content">
-
-                        <div class="table-responsive">
-                            <table class="table table-striped jambo_table bulk_action">
+                        <div class="table-container">
+                            {% if products %}
+                            <table class="table table-striped" id="productsTable">
                                 <thead>
-                                    <tr class="headings">
-                                        <th class="column-title" style="width: 0%;">ID</th>
-                                        <th class="column-title">Title</th>
-                                        <th class="column-title" style="width: 0%;">Period</th>
-                                        <th class="column-title" style="width: 0%;">Price</th>
-                                        <th class="column-title" style="width: 0%;">Discount</th>
-                                        <th class="column-title w-auto text-wrap">Final price</th>
-                                        <th class="column-title">Stripe subscription ID</th>
-                                        <th class="column-title">Paypal subscription ID</th>
-                                        <th class="column-title">Published</th>
-                                        <th class="column-title no-link last" style="text-align: right !important;"><span class="nobr">Actions</span>
-                                        </th>
+                                    <tr>
+                                        <th style="width: 5%;">ID</th>
+                                        <th style="width: 20%;">Título</th>
+                                        <th style="width: 25%;">Descripción</th>
+                                        <th style="width: 10%;">Período</th>
+                                        <th style="width: 10%;">Precio</th>
+                                        <th style="width: 8%;">Descuento</th>
+                                        <th style="width: 10%;">Precio Final</th>
+                                        <th style="width: 7%;">Estado</th>
+                                        <th style="width: 5%; text-align: center;">Acciones</th>
                                     </tr>
                                 </thead>
-
                                 <tbody>
                                     {% for product in products %}
-                                        <tr class="even pointer">
-                                            <td>#{{ product.pk }} </td>
-                                            <td>{{ product.title }} </td>
-                                            <td>{{ product.interval_count}}{{ product.interval_unit }} </td>
-                                            <td>{{ product.price }} {{ config.currency }} </td>
-                                            <td>{{ product.discount }} %</td>
-                                            <td>{{ product.final_price }} {{ config.currency }} </td>
-                                            <td>{{ product.stripe_subscription_id }}</td>
-                                            <td>{{ product.paypal_subscription_id }}</td>
-                                            <td>{% if product.public %} <i class="fa-solid fa-circle-check" style="color:{{config.app_success}}"></i> {% else %} <i class="fa-solid fa-circle-xmark" style="color:{{config.app_danger}}"></i> {% endif %} </td>
-                                            <td class="last" style="text-align: right !important;"><a href="#">
-                                                                                                
-                                                <a href="{% url 'administration_product_edit' product_id=product.id %}"><i class="fa-regular fa-pen-to-square" title="Edit"></i></a>
-                                                
-                                                <a href="{% url 'administration_product_delete' product_id=product.id %}" onclick="return confirm('Area you sure?')"><i class="fa-solid fa-trash" title="Delete"></i></a>
-                                                
+                                    <tr>
+                                        <td>
+                                            <span class="id-badge">#{{ product.pk }}</span>
+                                        </td>
+                                        <td>
+                                            <span class="user-badge">
+                                                <i class="fa-solid fa-box"></i> {{ product.title }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span style="font-size: 0.85em; color: #666;">
+                                                {% if product.description|length > 40 %}
+                                                    {{ product.description|slice:":40" }}...
+                                                {% else %}
+                                                    {{ product.description|default:"Sin descripción" }}
+                                                {% endif %}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="gateway-badge">
+                                                {{ product.get_interval_display }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="amount-badge">
+                                                {{ product.price }} {{ config.currency }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {% if product.discount > 0 %}
+                                                <span class="discount-badge">{{ product.discount }}%</span>
+                                            {% else %}
+                                                <span style="font-size: 0.85em; color: #666;">—</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <span class="amount-badge">
+                                                {{ product.final_price }} {{ config.currency }}
+                                            </span>
+                                            {% if product.discount > 0 %}
+                                                <br><small class="text-muted text-decoration-line-through">{{ product.price }} {{ config.currency }}</small>
+                                            {% endif %}
+                                        </td>
+                                        <td style="text-align: center;">
+                                            {% if product.public %}
+                                                <i class="fa-solid fa-circle-check active-check" title="Público"></i>
+                                            {% else %}
+                                                <i class="fa-solid fa-circle-xmark inactive-check" title="Oculto"></i>
+                                            {% endif %}
+                                        </td>
+                                        <td style="text-align: center; white-space: nowrap;">
+                                            <a href="{% url 'administration_product_edit' product_id=product.id %}"
+                                               class="btn-action btn-edit"
+                                               title="Editar">
+                                                <i class="fa-solid fa-pen-to-square"></i>
                                             </a>
-                                            </td>
-                                        </tr>
+                                            <a href="{% url 'administration_product_delete' product_id=product.id %}"
+                                               class="btn-action btn-delete"
+                                               onclick="return confirm('¿Estás seguro de que deseas eliminar este producto?')"
+                                               title="Eliminar">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
                                     {% endfor %}
                                 </tbody>
                             </table>
+                            {% else %}
+                            <div class="text-center py-5">
+                                <div class="text-muted">
+                                    <i class="fas fa-box fa-3x mb-3 text-muted"></i>
+                                    <h5>No hay productos registrados</h5>
+                                    <p>Comienza agregando tu primer producto al sistema</p>
+                                    <a href="{% url 'administration_product_add' %}" class="add-btn">
+                                        <i class="fas fa-plus me-1"></i> Añadir nuevo producto
+                                    </a>
+                                </div>
+                            </div>
+                            {% endif %}
                         </div>
-
                     </div>
                 </div>
             </div>
