@@ -2,6 +2,13 @@
 {% block content %}
 {% load static %}
 
+<style>
+    .x_panel:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        transform: translateY(-2px);
+    }
+</style>
+
 <div class="right_col" role="main">
     <!-- top tiles -->
     <div class="row" style="margin-bottom: 30px;">
@@ -382,7 +389,7 @@
 
         <!-- First col /4 -->
         <div class="col-md-4 col-sm-4">
-            <div class="x_panel" style="border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.08);">
+            <div class="x_panel" style="border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: all 0.3s ease; overflow: hidden;">
                 <div class="x_title" style="border-bottom: 2px solid #E7E7E7; padding-bottom: 10px;">
                     <h2 style="color: #2A3F54; font-size: 1.2em;">
                         <i class="fa-solid fa-box" style="color: #9B59B6;"></i> Productos destacados
@@ -463,7 +470,7 @@
 
         <!-- Second col /4 -->
         <div class="col-md-4 col-sm-4">
-            <div class="x_panel" style="border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.08);">
+            <div class="x_panel" style="border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: all 0.3s ease; overflow: hidden;">
                 <div class="x_title" style="border-bottom: 2px solid #E7E7E7; padding-bottom: 10px;">
                     <h2 style="color: #2A3F54; font-size: 1.2em;">
                         <i class="fa-solid fa-building" style="color: #F39C12;"></i> Empresas destacadas
