@@ -113,7 +113,7 @@ class ProductForm(forms.ModelForm):
 
     public = forms.BooleanField(
         required=False,
-        widget=forms.CheckboxInput(attrs={'class': 'form-check-input', 'style': 'transform: scale(1.5); margin-right: 10px;'}),
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input', 'style': 'transform: scale(0.7);'}),
         label="Producto público"
     )
     description = forms.CharField(

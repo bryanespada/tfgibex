@@ -1,157 +1,317 @@
 {% extends '../../base/base.html' %}
 {% block content %}
 
+<style>
+    .form-card {
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+
+    .form-card:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+
+    .form-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px 20px;
+        font-weight: 600;
+    }
+
+    .form-body {
+        padding: 25px;
+        background: #f8f9fa;
+    }
+
+    .form-group-custom {
+        margin-bottom: 20px;
+        padding: 15px;
+        background: white;
+        border-radius: 8px;
+        border-left: 3px solid #667eea;
+    }
+
+    .form-label-custom {
+        color: #2A3F54;
+        font-weight: 600;
+        margin-bottom: 8px;
+        display: block;
+        font-size: 0.95em;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        transition: all 0.3s;
+        font-size: 14px;
+    }
+
+    .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        outline: none;
+    }
+
+    .btn-save-custom {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 12px 40px;
+        border: none;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-save-custom:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+
+    .btn-cancel {
+        background: #6c757d;
+        color: white;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    .btn-cancel:hover {
+        background: #5a6268;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+        color: white;
+    }
+
+    .breadcrumb-nav {
+        background: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .breadcrumb-nav a {
+        color: #667eea;
+        text-decoration: none;
+        transition: all 0.3s;
+    }
+
+    .breadcrumb-nav a:hover {
+        color: #764ba2;
+    }
+
+    .breadcrumb-nav i {
+        margin: 0 10px;
+        color: #999;
+    }
+
+    .help-text {
+        font-size: 0.85em;
+        color: #999;
+        margin-top: 5px;
+        font-style: italic;
+    }
+
+    .required-field {
+        color: #dc3545;
+        font-weight: normal;
+    }
+
+    .error-list {
+        background: #fff5f5;
+        border-left: 3px solid #dc3545;
+        border-radius: 6px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    .error-list ul {
+        margin: 0;
+        padding-left: 20px;
+    }
+
+    .error-list li {
+        color: #dc3545;
+        margin-bottom: 5px;
+    }
+
+    .two-column {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+        .two-column {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
 <!-- page content -->
 <div class="right_col" role="main">
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>Products</h3>
+                <h3>Productos</h3>
             </div>
         </div>
 
         <div class="clearfix"></div>
 
-        <div class="row" style="display: block;">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb-nav">
+            <a href="{% url 'administration_products' %}">
+                <i class="fas fa-list"></i> Productos
+            </a>
+            <i class="fas fa-chevron-right"></i>
+            <span>Añadir Nuevo Producto</span>
+        </div>
 
-            <div class="clearfix"></div>
-
-            <div class="col-md-12 col-sm-12  ">
-                <div class="x_panel">
-                    <div class="x_title">
-                        <h2>Add new product</h2>
-
-                        <ul class="nav navbar-right panel_toolbox">
-                            <li>
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-12">
+                <div class="form-card">
+                    <div class="form-header">
+                        <i class="fas fa-plus me-2"></i>
+                        Añadir Nuevo Producto
                     </div>
 
-                    <div class="x_content">
+                    <div class="form-body">
+                        <!-- Errores -->
+                        {% if form.errors %}
+                            <div class="error-list">
+                                <h5><i class="fas fa-exclamation-triangle me-2"></i>Errores encontrados:</h5>
+                                <ul>
+                                    {% for field, errors in form.errors.items %}
+                                        {% for error in errors %}
+                                            <li><strong>{{ field }}:</strong> {{ error }}</li>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
 
-                        <form action="" role="form" method="POST" class="text-start">
+                        <form action="" method="POST">
                             {% csrf_token %}
-                            
-                            <div class="tab-content" id="myTabContent">
 
-                                <div class="tab-pane fade show active" id="general" role="tabpanel"
-                                    aria-labelledby="general-tab">
-                                    <div class="seccion bg-gray-100 border-radius-lg">
-                                        
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Title</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.title }}</p>
-                                            </div>
-                                        </div>
+                            <!-- Título -->
+                            <div class="form-group-custom">
+                                <label class="form-label-custom">
+                                    <i class="fas fa-tag me-1" style="color: #667eea;"></i>
+                                    Título del Producto <span class="required-field">*</span>
+                                </label>
+                                {{ form.title }}
+                                <div class="help-text">Nombre descriptivo del producto de suscripción</div>
+                            </div>
 
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Description</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.description }}</p>
-                                            </div>
-                                        </div>
+                            <!-- Descripción -->
+                            <div class="form-group-custom">
+                                <label class="form-label-custom">
+                                    <i class="fas fa-align-left me-1" style="color: #17a2b8;"></i>
+                                    Descripción
+                                </label>
+                                {{ form.description }}
+                                <div class="help-text">Descripción detallada de las características del producto</div>
+                            </div>
 
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Price</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <small class="form-text text-muted">Float number (30.0)</small>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.price}}</p>
-                                            </div>
-                                        </div>
+                            <!-- Precio y Descuento -->
+                            <div class="two-column">
+                                <div class="form-group-custom">
+                                    <label class="form-label-custom">
+                                        <i class="fas fa-dollar-sign me-1" style="color: #28a745;"></i>
+                                        Precio Base <span class="required-field">*</span>
+                                    </label>
+                                    {{ form.price }}
+                                    <div class="help-text">Precio en formato decimal (ej: 29.99)</div>
+                                </div>
 
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Discount</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <small class="form-text text-muted">Just to show, not applied</small>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.discount }}</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Interval count</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <small class="form-text text-muted">Only integer numbers</small>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.interval_count }}</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Interval unit</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.interval_unit }}</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12">
-                                                <div class="font-weight-bold">Stripe button ID</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <small class="form-text text-muted">Taken from <a href="https://dashboard.stripe.com/payment-links">https://dashboard.stripe.com/payment-links</a></small>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12 form-group has-feedback">
-                                                <p class="p-class">{{ form.stripe_subscription_id }} </p>
-                                                <span class="fa-brands fa-stripe fa-lg form-control-feedback left" aria-hidden="true"></span>
-                                            </div>
-                                        </div>
-
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12">
-                                                <div class="font-weight-bold">Paypal Subscription ID</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12 form-group has-feedback">
-                                                <p class="p-class">{{ form.paypal_subscription_id }} </p>
-                                                <span class="fa-brands fa-paypal fa-lg form-control-feedback left" aria-hidden="true"></span>
-                                            </div>
-                                        </div>
-
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Published</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <small class="form-text text-muted">Available to subscribe</small>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <div
-                                                    class="input-group input-group-outline mb-3">
-                                                    <p class="p-class">{{ form.public }}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
+                                <div class="form-group-custom">
+                                    <label class="form-label-custom">
+                                        <i class="fas fa-percent me-1" style="color: #ffc107;"></i>
+                                        Descuento (%)
+                                    </label>
+                                    {{ form.discount }}
+                                    <div class="help-text">Porcentaje de descuento para mostrar (solo visual)</div>
                                 </div>
                             </div>
 
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-primary" style="background:{{ config.app_color_2 }};border:1px solid {{ config.app_color_1 }}">Save <i class="fa-solid fa-check" style="font-size:0.875rem"></i></button>
+                            <!-- Duración -->
+                            <div class="two-column">
+                                <div class="form-group-custom">
+                                    <label class="form-label-custom">
+                                        <i class="fas fa-hashtag me-1" style="color: #6c757d;"></i>
+                                        Cantidad de Períodos <span class="required-field">*</span>
+                                    </label>
+                                    {{ form.interval_count }}
+                                    <div class="help-text">Número de períodos (ej: 1, 3, 12)</div>
+                                </div>
+
+                                <div class="form-group-custom">
+                                    <label class="form-label-custom">
+                                        <i class="fas fa-calendar me-1" style="color: #6c757d;"></i>
+                                        Unidad de Tiempo <span class="required-field">*</span>
+                                    </label>
+                                    {{ form.interval_unit }}
+                                    <div class="help-text">Selecciona la unidad de tiempo para la duración de la suscripción</div>
+                                </div>
+                            </div>
+
+                            <!-- IDs de Pasarelas -->
+                            <div class="two-column">
+                                <div class="form-group-custom">
+                                    <label class="form-label-custom">
+                                        <i class="fab fa-stripe me-1" style="color: #635bff;"></i>
+                                        Stripe Subscription ID
+                                    </label>
+                                    {{ form.stripe_subscription_id }}
+                                    <div class="help-text">ID del producto en Stripe (opcional)</div>
+                                </div>
+
+                                <div class="form-group-custom">
+                                    <label class="form-label-custom">
+                                        <i class="fab fa-paypal me-1" style="color: #0070ba;"></i>
+                                        PayPal Subscription ID
+                                    </label>
+                                    {{ form.paypal_subscription_id }}
+                                    <div class="help-text">ID del producto en PayPal (opcional)</div>
+                                </div>
+                            </div>
+
+                            <!-- Estado -->
+                            <div class="form-group-custom">
+                                <label class="form-label-custom">
+                                    <i class="fas fa-eye me-1" style="color: #28a745;"></i>
+                                    Visibilidad del Producto
+                                </label>
+                                <div class="mt-1 mb-3" style="text-align: left;">
+                                    {{ form.public }}
+                                </div>
+                            </div>
+
+                            <!-- Botones -->
+                            <div class="text-center mt-4">
+                                <a href="{% url 'administration_products' %}" class="btn-cancel">
+                                    <i class="fas fa-arrow-left me-1"></i>
+                                    Cancelar
+                                </a>
+                                <button type="submit" class="btn-save-custom">
+                                    <i class="fas fa-save me-1"></i>
+                                    Crear Producto
+                                </button>
                             </div>
                         </form>
-
                     </div>
                 </div>
             </div>

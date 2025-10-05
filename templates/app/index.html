@@ -2,298 +2,397 @@
 {% block content %}
 {% load static %}
 
-<div class="right_col" role="main">
-  <div class="x_panel">
-    <div class="x_title">
-      <h2>{{config.app_name}}</h2>  
-      <div class="clearfix"></div>
-    </div>
-    <div class="x_content">
-      <div class="row">
-        <div class="col">
-          <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-            <ol class="carousel-indicators">
-              {% for post in blog %}
-                <li data-target="#carouselExampleIndicators" data-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></li>
-              {% endfor %}
-            </ol>
+<style>
+    .right_col {
+        padding-top: 0 !important;
+        margin-top: 0 !important;
+    }
 
-            <div class="carousel-inner">
-              {% for post in blog %}
-                <div class="carousel-item {% if forloop.first %}active{% endif %}" class="background: var(--app_primary)">
-                  {% if post.pic %}
-                  <img class="d-block w-100" 
-                    style="height: 800px !important; object-fit: cover !important;" 
-                    src="{% if post.pic %}/media/{{post.pic}}{% endif %}" 
-                    alt="{{post.title}}">
-                  </img>
-                  {% else %}
-                  <div class="d-block w-100" style="background-color: var(--app-primary); height: 800px !important; object-fit: cover !important;"></div>
-                  {% endif %}
-                  <div class="carousel-caption d-none d-md-block custom-carousel-title" style="text-align:-webkit-center;">
-                    <h5>{{post.title}}</h5>
-                    <p style="max-width:500px;">{{post.description | truncatewords:30}}</p>
-                    <a href="{{post.url}}" target="_blank"><div class="mt-4 p-2 border border-white" style="max-width:fit-content;"> <span style="color:white;">Show more</span> </div></a>
+    .chart-card {
+        margin-top: 0 !important;
+    }
+
+    .chart-card:first-child {
+        margin-top: 0 !important;
+        margin-bottom: 15px !important;
+    }
+
+    .chart-card:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        transform: translateY(-2px);
+    }
+
+    .chart-container {
+        transition: all 0.3s ease;
+    }
+
+    .chart-header {
+        position: relative;
+    }
+
+    .chart-header::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: rgba(255,255,255,0.2);
+    }
+</style>
+
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Panel de control</h3>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <script>
+            // Function to choose the next corresponding color
+            function get_colour_list(requested_colours) {
+                var selected_borders = [];
+                var selected_backgrounds = [];
+                var colours = ['{{config.app_color_1}}', '{{config.app_color_2}}', '{{config.app_color_3}}', '{{config.app_color_4}}', '{{config.app_color_5}}', '{{config.app_color_6}}', '{{config.app_color_7}}', '{{config.app_color_8}}']; // Available colours
+                var currentIndex = 0; // Index to take colours
+                for (var i = 0; i < requested_colours; i++) {
+                    var colourIndex = currentIndex % colours.length; // Get the element index
+                    selected_borders.push(colours[colourIndex]); // Append the selected colour
+                    selected_backgrounds.push(colours[colourIndex] + '{{config.app_transparency_factor}}'); // Append the same colour with it's transparency
+                    currentIndex++; // Increment the index to choose next colour
+                }
+                return [selected_borders, selected_backgrounds]; // Return both arrays
+            }
+        </script>
+
+        <div class="row">
+
+            <!-- Col 1/3 -->
+            <div class="col-md-4 col-sm-4">
+              <div class="chart-card" style="border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: all 0.3s ease; overflow: hidden;">
+                <div class="chart-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 20px; font-weight: 600;">
+                  <i class="fa-solid fa-chart-bar me-2"></i>
+                  Top 10 Mercados
+                  <p style="color: rgba(255,255,255,0.9); font-size: 0.85em; margin: 5px 0 0 0; font-weight: 400;">
+                    Mercados financieros más visitados por los usuarios
+                  </p>
+                </div>
+                <div class="chart-body" style="padding: 25px; background: #f8f9fa;">
+                  <div class="chart-container" style="background: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                    {% if top_10.mercados.show %}
+                      <!-- Chart Canvas -->
+                      <canvas id="admin_chart_1_3" style="height:400px!important;width:100%!important;"></canvas>
+                      <!-- Chart script -->
+                      <script>
+                          const ctx_admin_chart_1_3 = document.getElementById('admin_chart_1_3');
+                          var labels_1_3 = {{top_10.mercados.labels | safe}};
+                          var colours_array_1_3 = get_colour_list(labels_1_3.length);
+
+                          new Chart(ctx_admin_chart_1_3, {
+                              type: 'bar',
+                              data: {
+                                  labels: labels_1_3,
+                                  datasets: [{
+                                      label: "Total accesos",
+                                      data: {{top_10.mercados.values}},
+                                      borderColor: colours_array_1_3[0],
+                                      backgroundColor: colours_array_1_3[1],
+                                      hoverOffset: 5,
+                                      borderRadius: 25
+                                  }]
+                              },
+                              options: {
+                                  indexAxis: 'y',
+                                  animation: {
+                                      delay: (context) => {
+                                          let delay = 0;
+                                          if (context.type === 'data') {
+                                              delay = context.dataIndex * 400 + context.datasetIndex * 50;
+                                          }
+                                          return delay;
+                                      },
+                                  },
+                                  responsive: true,
+                                  maintainAspectRatio: false,
+                                  title: {
+                                      display: false,
+                                  },
+                                  plugins: {
+                                      legend: {
+                                          display: false,
+                                      },
+                                      tooltip: {
+                                          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                          padding: 12,
+                                          cornerRadius: 8,
+                                          titleFont: {
+                                              size: 14
+                                          },
+                                          bodyFont: {
+                                              size: 13
+                                          }
+                                      }
+                                  },
+                                  elements: {
+                                      bar: {
+                                          borderWidth: 2,
+                                      }
+                                  },
+                                  scales: {
+                                      y: {
+                                          ticks: {
+                                              color: '#73879C'
+                                          },
+                                          grid: {
+                                              color: 'rgba(0, 0, 0, 0.05)',
+                                              drawBorder: false
+                                          }
+                                      },
+                                      x: {
+                                          beginAtZero: true,
+                                          ticks: {
+                                              color: '#73879C'
+                                          },
+                                          grid: {
+                                              display: false
+                                          }
+                                      }
+                                  }
+                              }
+                          });
+                      </script>
+                    {% else %}
+                      <div style="height:400px!important;width:100%!important; display: flex; justify-content: center; align-items: center; color: #73879C;">
+                        <div style="text-align: center;">
+                          <i class="fa-solid fa-chart-bar" style="font-size: 48px; color: #E7E7E7; margin-bottom: 10px;"></i>
+                          <p style="margin: 0;">Sin datos disponibles</p>
+                        </div>
+                      </div>
+                    {% endif %}
                   </div>
                 </div>
-              {% endfor %}
-              
+              </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <script>
-    // Function to choose the next corresponding color 
-    function get_colour_list(requested_colours) {
-        var selected_borders = [];
-        var selected_backgrounds = [];
-        var colours = ['{{config.app_color_1}}', '{{config.app_color_2}}', '{{config.app_color_3}}', '{{config.app_color_4}}', '{{config.app_color_5}}', '{{config.app_color_6}}', '{{config.app_color_7}}', '{{config.app_color_8}}']; // Available colours
-        var currentIndex = 0; // Index to take colours
-        for (var i = 0; i < requested_colours; i++) {
-            var colourIndex = currentIndex % colours.length; // Get the element index
-            selected_borders.push(colours[colourIndex]); // Append the selected colour
-            selected_backgrounds.push(colours[colourIndex] + '{{config.app_transparency_factor}}'); // Append the same colour with it's transparency
-            currentIndex++; // Increment the index to choose next colour
-        }
-        return [selected_borders, selected_backgrounds]; // Return both arrays
-    }
-  </script>
+            <!-- Col 2/3 -->
+            <div class="col-md-4 col-sm-4">
+              <div class="chart-card" style="border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: all 0.3s ease; overflow: hidden;">
+                <div class="chart-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 20px; font-weight: 600;">
+                  <i class="fa-solid fa-chart-bar me-2"></i>
+                  Top 10 Bolsas
+                  <p style="color: rgba(255,255,255,0.9); font-size: 0.85em; margin: 5px 0 0 0; font-weight: 400;">
+                    Bolsas de valores con mayor actividad y consultas
+                  </p>
+                </div>
+                <div class="chart-body" style="padding: 25px; background: #f8f9fa;">
+                  <div class="chart-container" style="background: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                    {% if top_10.bolsas.show %}
+                      <!-- Chart Canvas -->
+                      <canvas id="admin_chart_2_3" style="height:400px!important;width:100%!important;"></canvas>
+                      <!-- Chart script -->
+                      <script>
+                          const ctx_admin_chart_2_3 = document.getElementById('admin_chart_2_3');
+                          var labels_2_3 = {{top_10.bolsas.labels | safe}};
+                          var colours_array_2_3 = get_colour_list(labels_2_3.length);
 
-
-  <div class="row">
-    
-    <!-- Col 1/3 -->
-    <div class="col-md-4 col-sm-4 ">
-      <div class="x_panel tile" style="height:auto;">
-
-        <!-- Title -->
-        <div class="x_title">
-            <h2>Top 10 Mercados</h2>
-            <ul class="nav navbar-right panel_toolbox">
-                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
-                <li><a class="close-link"><i class="fa fa-close"></i></a>
-                </li>
-            </ul>
-            <div class="clearfix"></div>
-        </div>
-
-        <div class="x_content">
-          <div class="col-md-12 col-sm-12">
-            {% if top_10.mercados.show %}
-              <!-- Chart Canvas -->
-              <canvas id="admin_chart_1_3" style="height:500px!important;width:100%!important;"></canvas>
-              <!-- Chart script -->
-              <script>
-                  const ctx_admin_chart_1_3 = document.getElementById('admin_chart_1_3');
-                  var labels_1_3 = {{top_10.mercados.labels | safe}};
-                  var colours_array_1_3 = get_colour_list(labels_1_3.length);
-
-                  new Chart(ctx_admin_chart_1_3, {
-                      type: 'bar',
-                      data: {
-                          labels: labels_1_3,
-                          datasets: [{
-                              label: "Total access",
-                              data: {{top_10.mercados.values}},
-                              borderColor: colours_array_1_3[0],
-                              backgroundColor: colours_array_1_3[1],
-                              hoverOffset: 5,
-                              borderRadius: 0
-                          }]
-                      },
-                      options: {
-                          indexAxis: 'y',
-                          animation: {
-                              delay: (context) => {
-                                  let delay = 0;
-                                  if (context.type === 'data') {
-                                      delay = context.dataIndex * 400 + context.datasetIndex * 50;
-                                  }
-                                  return delay;
+                          new Chart(ctx_admin_chart_2_3, {
+                              type: 'bar',
+                              data: {
+                                  labels: labels_2_3,
+                                  datasets: [{
+                                      label: "Total accesos",
+                                      data: {{top_10.bolsas.values}},
+                                      borderColor: colours_array_2_3[0],
+                                      backgroundColor: colours_array_2_3[1],
+                                      hoverOffset: 5,
+                                      borderRadius: 25
+                                  }]
                               },
-                          },
-                          responsive: true,
-                          maintainAspectRatio: false,
-                          title: {
-                              display: false,
-                          },
-                          plugins: {
-                              legend: {
-                                  display: false,
-                              }
-                          },
-                          elements: {
-                              bar: {
-                                  borderWidth: 2,
-                              }
-                          }
-                      }
-                  });
-              </script>
-            {% else %}
-              <div id="admin_chart_2_3" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">No data</div>
-            {% endif %}
-          </div>
-        </div>
-      </div>
-    </div>
-
-     <!-- Col 2/3 -->
-     <div class="col-md-4 col-sm-4 ">
-      <div class="x_panel tile" style="height:auto;">
-
-        <!-- Title -->
-        <div class="x_title">
-            <h2>Top 10 Bolsas</h2>
-            <ul class="nav navbar-right panel_toolbox">
-                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
-                <li><a class="close-link"><i class="fa fa-close"></i></a>
-                </li>
-            </ul>
-            <div class="clearfix"></div>
-        </div>
-
-        <div class="x_content">
-          <div class="col-md-12 col-sm-12">
-            {% if top_10.bolsas.show %}
-              <!-- Chart Canvas -->
-              <canvas id="admin_chart_2_3" style="height:500px!important;width:100%!important;"></canvas>
-              <!-- Chart script -->
-              <script>
-                  const ctx_admin_chart_2_3 = document.getElementById('admin_chart_2_3');
-                  var labels_2_3 = {{top_10.bolsas.labels | safe}};
-                  var colours_array_2_3 = get_colour_list(labels_2_3.length);
-
-                  new Chart(ctx_admin_chart_2_3, {
-                      type: 'bar',
-                      data: {
-                          labels: labels_2_3,
-                          datasets: [{
-                              label: "Total access",
-                              data: {{top_10.bolsas.values}},
-                              borderColor: colours_array_2_3[0],
-                              backgroundColor: colours_array_2_3[1],
-                              hoverOffset: 5,
-                              borderRadius: 0
-                          }]
-                      },
-                      options: {
-                          indexAxis: 'y',
-                          animation: {
-                              delay: (context) => {
-                                  let delay = 0;
-                                  if (context.type === 'data') {
-                                      delay = context.dataIndex * 400 + context.datasetIndex * 50;
+                              options: {
+                                  indexAxis: 'y',
+                                  animation: {
+                                      delay: (context) => {
+                                          let delay = 0;
+                                          if (context.type === 'data') {
+                                              delay = context.dataIndex * 400 + context.datasetIndex * 50;
+                                          }
+                                          return delay;
+                                      },
+                                  },
+                                  responsive: true,
+                                  maintainAspectRatio: false,
+                                  title: {
+                                      display: false,
+                                  },
+                                  plugins: {
+                                      legend: {
+                                          display: false,
+                                      },
+                                      tooltip: {
+                                          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                          padding: 12,
+                                          cornerRadius: 8,
+                                          titleFont: {
+                                              size: 14
+                                          },
+                                          bodyFont: {
+                                              size: 13
+                                          }
+                                      }
+                                  },
+                                  elements: {
+                                      bar: {
+                                          borderWidth: 2,
+                                      }
+                                  },
+                                  scales: {
+                                      y: {
+                                          ticks: {
+                                              color: '#73879C'
+                                          },
+                                          grid: {
+                                              color: 'rgba(0, 0, 0, 0.05)',
+                                              drawBorder: false
+                                          }
+                                      },
+                                      x: {
+                                          beginAtZero: true,
+                                          ticks: {
+                                              color: '#73879C'
+                                          },
+                                          grid: {
+                                              display: false
+                                          }
+                                      }
                                   }
-                                  return delay;
+                              }
+                          });
+                      </script>
+                    {% else %}
+                      <div style="height:400px!important;width:100%!important; display: flex; justify-content: center; align-items: center; color: #73879C;">
+                        <div style="text-align: center;">
+                          <i class="fa-solid fa-chart-bar" style="font-size: 48px; color: #E7E7E7; margin-bottom: 10px;"></i>
+                          <p style="margin: 0;">Sin datos disponibles</p>
+                        </div>
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Col 3/3 -->
+            <div class="col-md-4 col-sm-4">
+              <div class="chart-card" style="border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: all 0.3s ease; overflow: hidden;">
+                <div class="chart-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 20px; font-weight: 600;">
+                  <i class="fa-solid fa-building me-2"></i>
+                  Top Empresas
+                  <p style="color: rgba(255,255,255,0.9); font-size: 0.85em; margin: 5px 0 0 0; font-weight: 400;">
+                    Empresas más populares entre nuestros usuarios
+                  </p>
+                </div>
+                <div class="chart-body" style="padding: 25px; background: #f8f9fa;">
+                  <div class="chart-container" style="background: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                    {% if top_10.empresas.show %}
+                      <!-- Chart Canvas -->
+                      <canvas id="admin_chart_3_3" style="height:400px!important;width:100%!important;"></canvas>
+                      <!-- Chart script -->
+                      <script>
+                          const ctx_admin_chart_3_3 = document.getElementById('admin_chart_3_3');
+                          var labels_3_3 = {{top_10.empresas.labels | safe}};
+                          var colours_array_3_3 = get_colour_list(labels_3_3.length);
+
+                          new Chart(ctx_admin_chart_3_3, {
+                              type: 'bar',
+                              data: {
+                                  labels: labels_3_3,
+                                  datasets: [{
+                                      label: "Total accesos",
+                                      data: {{top_10.empresas.values}},
+                                      borderColor: colours_array_3_3[0],
+                                      backgroundColor: colours_array_3_3[1],
+                                      hoverOffset: 5,
+                                      borderRadius: 25
+                                  }]
                               },
-                          },
-                          responsive: true,
-                          maintainAspectRatio: false,
-                          title: {
-                              display: false,
-                          },
-                          plugins: {
-                              legend: {
-                                  display: false,
-                              }
-                          },
-                          elements: {
-                              bar: {
-                                  borderWidth: 2,
-                              }
-                          }
-                      }
-                  });
-              </script>
-            {% else %}
-              <div id="admin_chart_2_3" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">No data</div>
-            {% endif %}
-          </div>
-        </div>
-      </div>
-    </div>
-
-     <!-- Col 3/3 -->
-     <div class="col-md-4 col-sm-4 ">
-      <div class="x_panel tile" style="height:auto;">
-
-        <!-- Title -->
-        <div class="x_title">
-            <h2>Top Empresas</h2>
-            <ul class="nav navbar-right panel_toolbox">
-                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a> </li>
-                <li><a class="close-link"><i class="fa fa-close"></i></a>
-                </li>
-            </ul>
-            <div class="clearfix"></div>
-        </div>
-
-        <div class="x_content">
-          <div class="col-md-12 col-sm-12">
-            {% if top_10.empresas.show %}
-              <!-- Chart Canvas -->
-              <canvas id="admin_chart_3_3" style="height:500px!important;width:100%!important;"></canvas>
-              <!-- Chart script -->
-              <script>
-                  const ctx_admin_chart_3_3 = document.getElementById('admin_chart_3_3');
-                  var labels_3_3 = {{top_10.empresas.labels | safe}};
-                  var colours_array_3_3 = get_colour_list(labels_3_3.length);
-
-                  new Chart(ctx_admin_chart_3_3, {
-                      type: 'bar',
-                      data: {
-                          labels: labels_3_3,
-                          datasets: [{
-                              label: "Total access",
-                              data: {{top_10.empresas.values}},
-                              borderColor: colours_array_3_3[0],
-                              backgroundColor: colours_array_3_3[1],
-                              hoverOffset: 5,
-                              borderRadius: 0
-                          }]
-                      },
-                      options: {
-                          indexAxis: 'y',
-                          animation: {
-                              delay: (context) => {
-                                  let delay = 0;
-                                  if (context.type === 'data') {
-                                      delay = context.dataIndex * 400 + context.datasetIndex * 50;
+                              options: {
+                                  indexAxis: 'y',
+                                  animation: {
+                                      delay: (context) => {
+                                          let delay = 0;
+                                          if (context.type === 'data') {
+                                              delay = context.dataIndex * 400 + context.datasetIndex * 50;
+                                          }
+                                          return delay;
+                                      },
+                                  },
+                                  responsive: true,
+                                  maintainAspectRatio: false,
+                                  title: {
+                                      display: false,
+                                  },
+                                  plugins: {
+                                      legend: {
+                                          display: false,
+                                      },
+                                      tooltip: {
+                                          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                          padding: 12,
+                                          cornerRadius: 8,
+                                          titleFont: {
+                                              size: 14
+                                          },
+                                          bodyFont: {
+                                              size: 13
+                                          }
+                                      }
+                                  },
+                                  elements: {
+                                      bar: {
+                                          borderWidth: 2,
+                                      }
+                                  },
+                                  scales: {
+                                      y: {
+                                          ticks: {
+                                              color: '#73879C'
+                                          },
+                                          grid: {
+                                              color: 'rgba(0, 0, 0, 0.05)',
+                                              drawBorder: false
+                                          }
+                                      },
+                                      x: {
+                                          beginAtZero: true,
+                                          ticks: {
+                                              color: '#73879C'
+                                          },
+                                          grid: {
+                                              display: false
+                                          }
+                                      }
                                   }
-                                  return delay;
-                              },
-                          },
-                          responsive: true,
-                          maintainAspectRatio: false,
-                          title: {
-                              display: false,
-                          },
-                          plugins: {
-                              legend: {
-                                  display: false,
                               }
-                          },
-                          elements: {
-                              bar: {
-                                  borderWidth: 2,
-                              }
-                          }
-                      }
-                  });
-              </script>
-            {% else %}
-              <div id="admin_chart_2_3" style="height:500px!important;width:100%!important; display: flex; justify-content: center; align-items: center;">No data</div>
-            {% endif %}
-          </div>
-        </div>
-      </div>
-    </div>
+                          });
+                      </script>
+                    {% else %}
+                      <div style="height:400px!important;width:100%!important; display: flex; justify-content: center; align-items: center; color: #73879C;">
+                        <div style="text-align: center;">
+                          <i class="fa-solid fa-chart-bar" style="font-size: 48px; color: #E7E7E7; margin-bottom: 10px;"></i>
+                          <p style="margin: 0;">Sin datos disponibles</p>
+                        </div>
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
 
-  </div>
+        </div>
+    </div>
 </div>
 
 {% endblock %}
