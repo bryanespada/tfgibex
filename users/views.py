@@ -288,8 +288,12 @@ def subscription(request):
 
     # Check if current user has an active subscription
     today = timezone.now().date()
-    active_subscription = Subscription.objects.filter(user=request.user, due_date__gt=today).first()
-    if active_subscription:        
+    active_subscription = Subscription.objects.filter(
+        user=request.user,
+        due_date__gt=today,
+        status='ACTIVE'
+    ).first()
+    if active_subscription:
         context['active_subscription'] = active_subscription
     else:
         context['active_subscription'] = None

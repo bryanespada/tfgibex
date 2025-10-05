@@ -1047,12 +1047,13 @@ def assign_product(request):
                 currency = config.currency,
                 payment_method = 'Other',
                 start_date = timezone.now().date(),
-                due_date=timezone.now().date() + timezone.timedelta(days=subscription_days)
+                due_date=timezone.now().date() + timezone.timedelta(days=subscription_days),
+                status = 'ACTIVE'
             )
 
             messages.success(request, f"Subscription #{subscription.pk} of {subscription.user} successfully created")
             log(request, "AdminsLog", {"action_type":"create", "status":200, "details":f"Created #{subscription.id} by schema", "item":"Subscription"})
-            log(request, "SubscriptionLog", {"action_type":"create", "status":200, "details":f"Created #{subscription.id} by schema", "payment_gateway":"", "product":selected_product, "receptor": {subscription.user}})
+            log(request, "SubscriptionLog", {"action_type":"create", "status":200, "details":f"Created #{subscription.id} by schema", "payment_gateway":"", "product":selected_product, "receptor": subscription.user})
             return redirect('/administration/subscriptions')
 
     form = ProductAssignForm()

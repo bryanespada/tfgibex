@@ -129,20 +129,20 @@ class Image(models.Model):
 class Subscription(models.Model):
 
     PAYMENT_METHODS = (
-        ('Free', 'Free'),
+        ('Free', 'Gratis'),
         ('Paypal', 'Paypal'),
-        ('Cash', 'Cash'),
-        ('Bank transfer', 'Bank transfer'),
-        ('Other', 'Other'),
+        ('Cash', 'Efectivo'),
+        ('Bank transfer', 'Transferencia bancaria'),
+        ('Other', 'Otro'),
     )
 
     STATUS_CHOICES = (
-        ('ACTIVE', 'Active'),                   # When the subcription is right and usable
-        ('PENDING', 'Pending'),                 # When is paid but not activated by the gateway
-        ('HIDDEN', 'Hidden'),                   # When is precreated but not paid
-        ('PAYMENT ERROR', 'Payment error'),     # When the payment method has been refused
-        ('CANCELLING', 'Cancelling'),               # When the subscription is over
-        ('CANCELED', 'Canceled'),               # When the subscription is over
+        ('ACTIVE', 'Activa'),                   # When the subcription is right and usable
+        ('PENDING', 'Pendiente'),                 # When is paid but not activated by the gateway
+        ('HIDDEN', 'Oculta'),                   # When is precreated but not paid
+        ('PAYMENT ERROR', 'Error de pago'),     # When the payment method has been refused
+        ('CANCELLING', 'Cancelando'),               # When the subscription is over
+        ('CANCELED', 'Cancelada'),               # When the subscription is over
     )
 
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True) # Associated user

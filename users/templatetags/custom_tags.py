@@ -18,7 +18,11 @@ def is_premium(user):
     Tag to ask if some user has an active subscription
     """
     today = timezone.now().date()
-    has_active_subscription = Subscription.objects.filter(user=user, due_date__gte=today).exists()
+    has_active_subscription = Subscription.objects.filter(
+        user=user,
+        due_date__gte=today,
+        status='ACTIVE'
+    ).exists()
     return has_active_subscription
 
 
@@ -40,3 +44,15 @@ def trim(value):
     if value:
         return value.strip()
     return value
+
+
+@register.filter(name='days_until')
+def days_until(date):
+    """
+    Returns the number of days until the given date
+    """
+    if date:
+        today = timezone.now().date()
+        delta = date - today
+        return delta.days
+    return 0
