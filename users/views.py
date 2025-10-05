@@ -364,8 +364,130 @@ def successful(request):
 def cancelled(request):
     context = {}
     context['config'] = get_object_or_404(GeneralConfig, id=1)
-    log(request, "SubscriptionLog", {"action_type":"create", "status":400, "details":"Subscription process", "payment_gateway":"PayPal", "receptor":request.user})
+    # Temporarily disable log to fix KeyError
+    # log(request, "SubscriptionLog", {"action_type":"create", "status":400, "details":"Subscription process", "payment_gateway":"PayPal", "receptor":request.user})
     return render(request, "paypal/cancelled.html", context)
+
+
+@login_required(login_url="/users/access")
+def paypal_redirect(request, product_id):
+    """Create PayPal subscription via API and redirect"""
+    import requests
+    import json
+
+    try:
+        product = get_object_or_404(Product, id=product_id)
+        config = get_object_or_404(GeneralConfig, id=1)
+
+        if not product.paypal_subscription_id:
+            messages.error(request, "Este producto no tiene configurado PayPal")
+            return redirect('user_subscription')
+
+        # Step 1: Get PayPal Access Token
+        token_url = "https://api.sandbox.paypal.com/v1/oauth2/token"
+        token_headers = {
+            'Accept': 'application/json',
+            'Accept-Language': 'en_US',
+        }
+        token_data = 'grant_type=client_credentials'
+
+        token_response = requests.post(
+            token_url,
+            headers=token_headers,
+            data=token_data,
+            auth=(config.paypal_client_id, config.paypal_secret_key)
+        )
+
+        if token_response.status_code != 200:
+            print(f"=== TOKEN ERROR ===")
+            print(f"Token Status: {token_response.status_code}")
+            print(f"Token Error: {token_response.text}")
+            messages.error(request, "Error de autenticación con PayPal")
+            return redirect('user_subscription')
+
+        access_token = token_response.json()['access_token']
+        print(f"✅ Token obtenido exitosamente: {access_token[:20]}...")
+
+        # Step 1.5: Verify Plan exists
+        plan_check_url = f"https://api.sandbox.paypal.com/v1/billing/plans/{product.paypal_subscription_id}"
+        plan_check_headers = {
+            'Authorization': f'Bearer {access_token}',
+            'Accept': 'application/json'
+        }
+
+        plan_check_response = requests.get(plan_check_url, headers=plan_check_headers)
+        print(f"=== PLAN CHECK ===")
+        print(f"Plan Check Status: {plan_check_response.status_code}")
+        print(f"Plan Details: {plan_check_response.text}")
+
+        if plan_check_response.status_code != 200:
+            messages.error(request, f"El Plan {product.paypal_subscription_id} no existe o no está activo")
+            return redirect('user_subscription')
+
+        # Step 2: Create Subscription
+        subscription_url = "https://api.sandbox.paypal.com/v1/billing/subscriptions"
+        subscription_headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {access_token}',
+            'Accept': 'application/json'
+        }
+
+        return_url = request.build_absolute_uri(reverse('paypal_successful'))
+        cancel_url = request.build_absolute_uri(reverse('paypal_cancelled'))
+
+        subscription_data = {
+            "plan_id": product.paypal_subscription_id,
+            "custom_id": str(request.user.id),
+            "application_context": {
+                "brand_name": "TFG IBEX",
+                "locale": "es-ES",
+                "shipping_preference": "NO_SHIPPING",
+                "user_action": "SUBSCRIBE_NOW",
+                "payment_method": {
+                    "payer_selected": "PAYPAL",
+                    "payee_preferred": "IMMEDIATE_PAYMENT_REQUIRED"
+                },
+                "return_url": return_url,
+                "cancel_url": cancel_url
+            }
+        }
+
+        subscription_response = requests.post(
+            subscription_url,
+            headers=subscription_headers,
+            data=json.dumps(subscription_data)
+        )
+
+        if subscription_response.status_code != 201:
+            error_detail = subscription_response.text
+            print(f"=== PAYPAL ERROR DEBUG ===")
+            print(f"Status Code: {subscription_response.status_code}")
+            print(f"Plan ID usado: {product.paypal_subscription_id}")
+            print(f"Client ID: {config.paypal_client_id[:20]}...")
+            print(f"Error completo: {error_detail}")
+            print(f"Headers enviados: {subscription_headers}")
+            print(f"Data enviada: {json.dumps(subscription_data, indent=2)}")
+            messages.error(request, f"Error creando suscripción. Plan ID: {product.paypal_subscription_id}")
+            return redirect('user_subscription')
+
+        subscription_result = subscription_response.json()
+
+        # Get approval URL
+        approval_url = None
+        for link in subscription_result.get('links', []):
+            if link.get('rel') == 'approve':
+                approval_url = link.get('href')
+                break
+
+        if approval_url:
+            return redirect(approval_url)
+        else:
+            messages.error(request, "No se pudo obtener URL de aprobación")
+            return redirect('user_subscription')
+
+    except Exception as e:
+        messages.error(request, f"Error al procesar PayPal: {str(e)}")
+        return redirect('user_subscription')
 
 
 @login_required(login_url="/users/access")

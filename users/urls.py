@@ -28,5 +28,6 @@ urlpatterns = [
     path("paypal/", views.paypal, name="paypal"),
     path("successful/", views.successful, name="paypal_successful"),
     path("cancelled/", views.cancelled, name="paypal_cancelled"),
+    path("paypal-redirect/<int:product_id>/", views.paypal_redirect, name="paypal_redirect"),
     path("stripe_checkout/<str:product_id>/", views.stripe_checkout, name="stripe_checkout"),
 ]

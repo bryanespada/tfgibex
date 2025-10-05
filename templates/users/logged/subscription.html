@@ -381,7 +381,121 @@
                         <i class="fa-solid fa-shopping-cart"></i> Productos Disponibles
                     </div>
                     <div class="subscription-body">
-                        <script src="https://www.paypal.com/sdk/js?client-id={{config.paypal_client_id}}&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
+                        {% if config.paypal_client_id %}
+                        <script>
+                            // Definir la función antes de cargar el SDK
+                            function initAllPayPalButtons() {
+                                console.log('Iniciando botones PayPal...');
+
+                                {% for product in products %}
+                                {% if product.paypal_subscription_id %}
+
+                                console.log('Procesando producto: {{product.paypal_subscription_id}}');
+
+                                if (typeof paypal === 'undefined') {
+                                    console.error('PayPal SDK no disponible');
+                                    return;
+                                }
+
+                                console.log('✅ PayPal SDK disponible');
+
+                                // Limpiar el contenedor
+                                const container = document.getElementById('paypal-button-container-{{product.paypal_subscription_id}}');
+                                console.log('Contenedor encontrado:', container);
+
+                                if (container) {
+                                    console.log('✅ Contenedor existe, limpiando...');
+                                    container.innerHTML = '';
+
+                                    console.log('🔄 Creando botón PayPal...');
+
+                                    try {
+                                        paypal.Buttons({
+                                        style: {
+                                            shape: 'rect',
+                                            color: 'gold',
+                                            layout: 'vertical',
+                                            label: 'subscribe'
+                                        },
+                                        createSubscription: function(data, actions) {
+                                            console.log('🔄 Creando suscripción con Plan ID: {{product.paypal_subscription_id}}');
+                                            console.log('🔄 User ID: {{request.user.id}}');
+
+                                            return actions.subscription.create({
+                                                'plan_id': '{{product.paypal_subscription_id}}',
+                                                'custom_id': '{{request.user.id}}',
+                                                'application_context': {
+                                                    'brand_name': 'TFG IBEX',
+                                                    'locale': 'es-ES',
+                                                    'shipping_preference': 'NO_SHIPPING',
+                                                    'user_action': 'SUBSCRIBE_NOW',
+                                                    'return_url': 'http://localhost:8000{% url "paypal_successful" %}',
+                                                    'cancel_url': 'http://localhost:8000{% url "paypal_cancelled" %}'
+                                                }
+                                            });
+                                        },
+                                        onApprove: function(data, actions) {
+                                            console.log('✅ Suscripción aprobada:', data);
+                                            alert('¡ÉXITO! Subscription ID: ' + data.subscriptionID);
+                                            window.location.href = "{% url 'paypal_successful' %}?subscription_id=" + data.subscriptionID;
+                                        },
+                                        onError: function(err) {
+                                            console.error('❌ PayPal Error:', err);
+                                            alert('ERROR PAYPAL: ' + JSON.stringify(err));
+                                            window.location.href = "{% url 'paypal_cancelled' %}";
+                                        },
+                                        onCancel: function(data) {
+                                            console.log('❌ Suscripción cancelada:', data);
+                                            alert('CANCELADO: ' + JSON.stringify(data));
+                                            window.location.href = "{% url 'paypal_cancelled' %}";
+                                        }
+                                    }).render('#paypal-button-container-{{product.paypal_subscription_id}}');
+
+                                        console.log('✅ Botón PayPal creado y renderizado exitosamente!');
+
+                                    } catch (error) {
+                                        console.error('❌ Error creando botón PayPal:', error);
+                                    }
+                                } else {
+                                    console.error('❌ Contenedor no encontrado: paypal-button-container-{{product.paypal_subscription_id}}');
+                                }
+
+                                {% endif %}
+                                {% endfor %}
+                            }
+                        </script>
+
+                        <script
+                            src="https://www.paypal.com/sdk/js?client-id={{config.paypal_client_id}}&vault=true&intent=subscription&enable-funding=venmo,paylater"
+                            data-sdk-integration-source="button-factory"
+                            onload="console.log('PayPal SDK cargado exitosamente!'); window.paypalSDKLoaded = true;"
+                            onerror="console.error('Error cargando PayPal SDK!')">
+                        </script>
+
+                        <script>
+                            // Función que se ejecutará cuando todo esté listo
+                            function initPayPalWhenReady() {
+                                console.log('🔄 Verificando si PayPal SDK y DOM están listos...');
+
+                                if (typeof paypal === 'undefined' || !window.paypalSDKLoaded) {
+                                    console.log('⏳ PayPal SDK no listo, reintentando en 500ms...');
+                                    setTimeout(initPayPalWhenReady, 500);
+                                    return;
+                                }
+
+                                console.log('✅ PayPal SDK listo, ejecutando initAllPayPalButtons...');
+                                initAllPayPalButtons();
+                            }
+
+                            // Esperar a que el DOM esté completamente cargado
+                            document.addEventListener('DOMContentLoaded', function() {
+                                console.log('📄 DOM completamente cargado, iniciando PayPal...');
+                                initPayPalWhenReady();
+                            });
+                        </script>
+                        {% else %}
+                        <div style="background: red; color: white; padding: 10px;">ERROR: PayPal Client ID no configurado</div>
+                        {% endif %}
                         <script async src="https://js.stripe.com/v3/buy-button.js"> </script>
 
                         <div class="row">
@@ -422,33 +536,18 @@
 
                                         <div class="payment-buttons">
                                             {% if product.paypal_subscription_id %}
-                                                <div id="paypal-button-container-{{product.paypal_subscription_id}}" style="margin-bottom: 10px;"></div>
-                                                <script>
-                                                    paypal.Buttons({
-                                                        style: {
-                                                            shape: 'rect',
-                                                            color: 'gold',
-                                                            layout: 'vertical',
-                                                            label: 'subscribe'
-                                                        },
-                                                        createSubscription: function(data, actions) {
-                                                            return actions.subscription.create({
-                                                                custom_id: '{{request.user.id}}',
-                                                                plan_id: '{{product.paypal_subscription_id}}',
-                                                                custom_product_id: '{{product.paypal_subscription_id}}'
-                                                            });
-                                                        },
-                                                        onApprove: function(data, actions) {
-                                                            window.location.href = "{% url 'paypal_successful' %}";
-                                                        },
-                                                        onError(err) {
-                                                            window.location.href = "{% url 'paypal_cancelled' %}";
-                                                        },
-                                                        ontouchcancel(err) {
-                                                            window.location.href = "{% url 'paypal_cancelled' %}";
-                                                        }
-                                                    }).render('#paypal-button-container-{{product.paypal_subscription_id}}');
-                                                </script>
+                                                <!-- Botón PayPal directo (fallback) -->
+                                                <div style="margin-bottom: 10px;">
+                                                    <a href="/users/paypal-redirect/{{product.id}}/"
+                                                       style="display: inline-block; padding: 12px 24px; background: linear-gradient(135deg, #ffc439 0%, #f7a600 100%); color: #003087; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; text-align: center; min-width: 200px;">
+                                                        💳 Suscribirse con PayPal
+                                                    </a>
+                                                </div>
+
+                                                <!-- Botón SDK PayPal (si funciona) -->
+                                                <div id="paypal-button-container-{{product.paypal_subscription_id}}" style="margin-bottom: 10px; min-height: 50px; display: none;">
+                                                    <p>Cargando botón PayPal...</p>
+                                                </div>
                                             {% endif %}
 
                                             {% if product.stripe_subscription_id %}
@@ -570,5 +669,6 @@
     </div>
 </div>
 <!-- /page content -->
+
 
 {% endblock %}
