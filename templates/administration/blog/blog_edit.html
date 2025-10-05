@@ -1,119 +1,298 @@
 {% extends '../../base/base.html' %}
 {% block content %}
 
+<style>
+    .form-card {
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+
+    .form-card:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+
+    .form-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px 20px;
+        font-weight: 600;
+    }
+
+    .form-body {
+        padding: 25px;
+        background: #f8f9fa;
+    }
+
+    .form-group-custom {
+        margin-bottom: 20px;
+        padding: 15px;
+        background: white;
+        border-radius: 8px;
+        border-left: 3px solid #667eea;
+    }
+
+    .form-label-custom {
+        color: #2A3F54;
+        font-weight: 600;
+        margin-bottom: 8px;
+        display: block;
+        font-size: 0.95em;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        transition: all 0.3s;
+        font-size: 14px;
+    }
+
+    .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        outline: none;
+    }
+
+    .btn-save-custom {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 12px 40px;
+        border: none;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-save-custom:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+
+    .btn-cancel {
+        background: #6c757d;
+        color: white;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    .btn-cancel:hover {
+        background: #5a6268;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+        color: white;
+    }
+
+    .breadcrumb-nav {
+        background: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .breadcrumb-nav a {
+        color: #667eea;
+        text-decoration: none;
+        transition: all 0.3s;
+    }
+
+    .breadcrumb-nav a:hover {
+        color: #764ba2;
+    }
+
+    .breadcrumb-nav i {
+        margin: 0 10px;
+        color: #999;
+    }
+
+    .help-text {
+        font-size: 0.85em;
+        color: #999;
+        margin-top: 5px;
+        font-style: italic;
+    }
+
+    .required-field {
+        color: #dc3545;
+        font-weight: normal;
+    }
+
+    .error-list {
+        background: #fff5f5;
+        border-left: 3px solid #dc3545;
+        border-radius: 6px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    .error-list ul {
+        margin: 0;
+        padding-left: 20px;
+    }
+
+    .error-list li {
+        color: #dc3545;
+        margin-bottom: 5px;
+    }
+
+    .current-image {
+        background: white;
+        border-radius: 8px;
+        padding: 15px;
+        margin-top: 10px;
+        border: 2px solid #e0e0e0;
+        text-align: center;
+    }
+
+    .current-image img {
+        max-width: 100%;
+        max-height: 300px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .current-image-label {
+        color: #667eea;
+        font-weight: 600;
+        margin-bottom: 10px;
+        display: block;
+    }
+</style>
+
 <!-- page content -->
 <div class="right_col" role="main">
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>Blog posts</h3>
+                <h3>Posts del Blog</h3>
             </div>
         </div>
 
         <div class="clearfix"></div>
 
-        <div class="row" style="display: block;">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb-nav">
+            <a href="{% url 'administration_blogs' %}">
+                <i class="fas fa-list"></i> Posts del Blog
+            </a>
+            <i class="fas fa-chevron-right"></i>
+            <span>Editar Post</span>
+        </div>
 
-            <div class="clearfix"></div>
-
-            <div class="col-md-12 col-sm-12  ">
-                <div class="x_panel">
-                    <div class="x_title">
-                        <h2>Edit post</h2>
-
-                        <ul class="nav navbar-right panel_toolbox">
-                            <li>
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-12">
+                <div class="form-card">
+                    <div class="form-header">
+                        <i class="fas fa-edit me-2"></i>
+                        Editar Post del Blog
                     </div>
 
-                    <div class="x_content">
+                    <div class="form-body">
+                        <!-- Errores -->
+                        {% if errors %}
+                            <div class="error-list">
+                                <h5><i class="fas fa-exclamation-triangle me-2"></i>Errores encontrados:</h5>
+                                <ul>
+                                    {% for field, field_errors in errors.items %}
+                                        {% for error in field_errors %}
+                                            <li><strong>{{ field }}:</strong> {{ error }}</li>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
 
-                        <form action="" role="form" method="POST" class="text-start" enctype="multipart/form-data">
+                        <form action="" method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
-                            
-                            <div class="tab-content" id="myTabContent">
 
-                                <div class="tab-pane fade show active" id="general" role="tabpanel"
-                                    aria-labelledby="general-tab">
-                                    <div class="seccion bg-gray-100 border-radius-lg">
-                                        
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Title</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.title }}</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Description</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.description }}</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12">
-                                                <div class="font-weight-bold">URL</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <small class="form-text text-muted">URL for more info</small>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12 form-group has-feedback">
-                                                <p class="p-class">{{ form.url }} </p>
-                                            </div>
-                                        </div>
-
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Published</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <small class="form-text text-muted">To show in index slider</small>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <div class="input-group input-group-outline mb-3">
-                                                    <p class="p-class">{{ form.public }}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12">
-                                                <div class="font-weight-bold">Pic</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <small class="form-text text-muted">In good quality</small>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12 form-group has-feedback">
-                                                <p class="p-class">{{ form.pic }} </p>
-                                            </div>
-                                            {% if post.pic %}
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class"> <img src="/media/{{post.pic}}" alt="post pic" class="" style="max-width: 600px; max-height: 600px; width: 100%; margin-left: 0px; margin-top: 0px; object-fit: cover;"></p>
-                                            </div>
-                                            {% endif %}
-                                        </div>
-
-                                    </div>
-                                </div>
+                            <!-- Título -->
+                            <div class="form-group-custom">
+                                <label class="form-label-custom">
+                                    <i class="fas fa-tag me-1" style="color: #667eea;"></i>
+                                    Título del Post <span class="required-field">*</span>
+                                </label>
+                                {{ form.title }}
+                                <div class="help-text">Título descriptivo del post del blog</div>
                             </div>
 
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-primary">
-                                    Save <i class="fa-solid fa-check"></i>
+                            <!-- Descripción -->
+                            <div class="form-group-custom">
+                                <label class="form-label-custom">
+                                    <i class="fas fa-align-left me-1" style="color: #17a2b8;"></i>
+                                    Descripción
+                                </label>
+                                {{ form.description }}
+                                <div class="help-text">Descripción detallada del contenido del post</div>
+                            </div>
+
+                            <!-- URL -->
+                            <div class="form-group-custom">
+                                <label class="form-label-custom">
+                                    <i class="fas fa-link me-1" style="color: #28a745;"></i>
+                                    URL Externa
+                                </label>
+                                {{ form.url }}
+                                <div class="help-text">Enlace externo para más información (opcional)</div>
+                            </div>
+
+                            <!-- Imagen -->
+                            <div class="form-group-custom" style="min-height: 120px;">
+                                <label class="form-label-custom">
+                                    <i class="fas fa-image me-1" style="color: #ffc107;"></i>
+                                    Imagen del blog
+                                </label>
+                                <div style="padding: 10px 0;">
+                                    {{ form.pic }}
+                                </div>
+                                <div class="help-text">Imagen principal del post (recomendado: alta calidad)</div>
+
+                                {% if post.pic %}
+                                    <div class="current-image">
+                                        <span class="current-image-label">Imagen Actual:</span>
+                                        <img src="/media/{{post.pic}}" alt="{{post.title}}">
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Estado -->
+                            <div class="form-group-custom">
+                                <label class="form-label-custom">
+                                    <i class="fas fa-eye me-1" style="color: #28a745;"></i>
+                                    Visibilidad del Post
+                                </label>
+                                <div style="display: flex; align-items: center; margin-top: 10px;">
+                                    <div style="transform: scale(0.8); margin-right: 8px;">
+                                        {{ form.public }}
+                                    </div>
+                                    <span style="font-size: 0.9em; color: #6c757d;">Mostrar en el slider del dashboard</span>
+                                </div>
+                                <div class="help-text">Si está marcado, el post será visible en el slider del dashboard</div>
+                            </div>
+
+                            <!-- Botones -->
+                            <div class="text-center mt-4">
+                                <a href="{% url 'administration_blogs' %}" class="btn-cancel">
+                                    <i class="fas fa-arrow-left me-1"></i>
+                                    Cancelar
+                                </a>
+                                <button type="submit" class="btn-save-custom">
+                                    <i class="fas fa-save me-1"></i>
+                                    Guardar Cambios
                                 </button>
                             </div>
                         </form>
-
                     </div>
                 </div>
             </div>

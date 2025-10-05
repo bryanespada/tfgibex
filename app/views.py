@@ -16,7 +16,8 @@ def user_is_premium(user):
     today = timezone.now().date()
     return Subscription.objects.filter(
         user=user,
-        due_date__gte=today
+        due_date__gte=today,
+        status='ACTIVE'
     ).exists()
 
 

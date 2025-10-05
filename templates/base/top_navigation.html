@@ -30,9 +30,10 @@
                 <span class="badge bg-blue pull-left">ADMIN</span>
               {% elif request.user|is_premium %}
                 <span>Suscripción </span>
-                <span class="badge bg-red pull-right">PREMIUM</span>
+                <span class="badge bg-green pull-right">PREMIUM</span>
               {% else %}
-                Suscripción
+                <span>Suscripción </span>
+                <span class="badge bg-red pull-right">GRATUITO</span>
               {% endif %}
             </a>
 
