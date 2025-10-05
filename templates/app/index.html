@@ -63,7 +63,7 @@
 
                     <div class="carousel-inner" style="border-radius: 10px; overflow: hidden;">
                         {% for post in blog %}
-                            <div class="carousel-item {% if forloop.first %}active{% endif %}" style="position: relative; cursor: pointer;" onclick="window.open('{{post.url}}', '_blank')">
+                            <div class="carousel-item {% if forloop.first %}active{% endif %}" style="position: relative;">
                                 {% if post.pic %}
                                     <img class="d-block w-100"
                                          style="height: 650px !important; object-fit: cover !important; border-radius: 0;"
@@ -89,13 +89,23 @@
             {% else %}
                 <div style="height: 650px; display: flex; justify-content: center; align-items: center; color: #73879C; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 10px; cursor: default;">
                     <div style="text-align: center;">
-                        <i class="fa-solid fa-newspaper" style="font-size: 100px; color: #E7E7E7; margin-bottom: 25px;"></i>
-                        <h3 style="margin: 0; font-size: 1.5em; color: #6c757d;">No hay noticias disponibles</h3>
-                        <p style="margin: 15px 0 0 0; color: #adb5bd; font-size: 1.1em;">Las últimas noticias aparecerán aquí</p>
+                        <i class="fa-solid fa-image" style="font-size: 100px; color: #E7E7E7; margin-bottom: 25px;"></i>
+                        <h3 style="margin: 0; font-size: 1.5em; color: #6c757d;">No hay imágenes de muestra disponibles</h3>
+                        <p style="margin: 15px 0 0 0; color: #adb5bd; font-size: 1.1em;">Las imágenes de muestra aparecerán aquí</p>
                     </div>
                 </div>
             {% endif %}
         </div>
+
+        <script>
+            // Initialize carousel for automatic sliding
+            $(document).ready(function() {
+                $('#carouselExampleIndicators').carousel({
+                    interval: 5000, // 5 seconds
+                    ride: 'carousel'
+                });
+            });
+        </script>
 
         <script>
             // Function to choose the next corresponding color

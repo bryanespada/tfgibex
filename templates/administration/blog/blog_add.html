@@ -33,6 +33,20 @@
 
                     <div class="x_content">
 
+                        <!-- Errores del formulario -->
+                        {% if errors %}
+                            <div class="alert alert-danger">
+                                <h5>Errores encontrados:</h5>
+                                <ul>
+                                    {% for field, field_errors in errors.items %}
+                                        {% for error in field_errors %}
+                                            <li><strong>{{ field }}:</strong> {{ error }}</li>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+
                         <form action="" role="form" method="POST" class="text-start" enctype="multipart/form-data">
                             {% csrf_token %}
                             

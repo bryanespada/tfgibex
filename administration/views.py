@@ -1283,8 +1283,7 @@ def blog_add(request):
             return redirect('/administration/posts')
         else:
             log(request, "AdminsLog", {"action_type":"create", "status":400, "details":f"Creating form", "item":"Blog"})
-
-        context['errors'] = form.errors
+            context['errors'] = form.errors
 
     form = BlogForm()
     form.fields['title'].widget.attrs.update({'class': 'form-control'})
