@@ -19,6 +19,7 @@ urlpatterns = [
     path("subscriptions/", views.subscriptions, name="administration_subscriptions"),
     path("subscription_add/", views.subscription_add, name="administration_subscription_add"),
     path("subscription_edit/<int:subscription_id>/", views.subscription_edit, name="administration_subscription_edit"),
+    path("subscription_cancel/<int:subscription_id>/", views.subscription_cancel, name="administration_subscription_cancel"),
     path("subscription_delete/<int:subscription_id>/", views.subscription_delete, name="administration_subscription_delete"),
     path("assign_product/", views.assign_product, name="administration_assign_product"),
 
@@ -28,6 +29,7 @@ urlpatterns = [
     path("user_delete/<int:custom_user_id>/", views.user_delete, name="administration_user_delete"),
     path("user_make_admin/<int:custom_user_id>/", views.user_make_admin, name="administration_user_make_admin"),
     path("user_deactivate_account/<int:custom_user_id>/", views.user_deactivate_account, name="administration_user_deactivate_account"),
+    path("user_change_password/<int:custom_user_id>/", views.user_change_password, name="administration_user_change_password"),
     
     path("mercados/", views.mercados, name="administration_mercados"),
     path("mercado_add/", views.mercado_add, name="administration_mercado_add"),

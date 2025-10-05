@@ -1,176 +1,679 @@
 {% extends '../../base/base.html' %}
 {% block content %}
 
+<style>
+    .form-card {
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+
+    .form-card:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+
+    .form-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px 20px;
+        font-weight: 600;
+    }
+
+    .form-body {
+        padding: 25px;
+        background: #f8f9fa;
+    }
+
+    .form-section {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .section-title {
+        color: #667eea;
+        font-size: 1.1em;
+        font-weight: 600;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #f0f0f0;
+    }
+
+    .form-group-custom {
+        margin-bottom: 20px;
+        padding: 15px;
+        background: white;
+        border-radius: 8px;
+        border-left: 3px solid #667eea;
+    }
+
+    .form-label-custom {
+        color: #2A3F54;
+        font-weight: 600;
+        margin-bottom: 8px;
+        display: block;
+        font-size: 0.95em;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        transition: all 0.3s;
+        font-size: 14px;
+        min-height: 45px;
+        line-height: 1.5;
+    }
+
+    select.form-control {
+        cursor: pointer;
+        min-height: 45px;
+        line-height: 1.5;
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+
+    .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        outline: none;
+    }
+
+    .form-control[readonly] {
+        background-color: #f5f5f5;
+        cursor: not-allowed;
+    }
+
+    .btn-save-custom {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 12px 40px;
+        border: none;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-save-custom:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+
+    .btn-cancel {
+        background: #6c757d;
+        color: white;
+        padding: 12px 30px;
+        border: none;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    .btn-cancel:hover {
+        background: #5a6268;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+        color: white;
+    }
+
+    .breadcrumb-nav {
+        background: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .breadcrumb-nav a {
+        color: #667eea;
+        text-decoration: none;
+        transition: all 0.3s;
+    }
+
+    .breadcrumb-nav a:hover {
+        color: #764ba2;
+    }
+
+    .breadcrumb-nav i {
+        margin: 0 10px;
+        color: #999;
+    }
+
+    .help-text {
+        font-size: 0.85em;
+        color: #999;
+        margin-top: 5px;
+        font-style: italic;
+    }
+
+    .error-list {
+        background: #fff5f5;
+        border-left: 3px solid #dc3545;
+        border-radius: 6px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    .error-list ul {
+        margin: 0;
+        padding-left: 20px;
+    }
+
+    .error-list li {
+        color: #dc3545;
+        margin-bottom: 5px;
+    }
+
+    .info-badge {
+        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 20px;
+        display: inline-block;
+        font-size: 0.9em;
+        margin-bottom: 20px;
+    }
+
+    .field-error {
+        color: #dc3545;
+        font-size: 0.875em;
+        margin-top: 5px;
+        display: block;
+    }
+
+    .required-field {
+        color: #dc3545;
+        font-size: 1.2em;
+        margin-left: 3px;
+    }
+
+    .status-badge {
+        padding: 5px 12px;
+        border-radius: 15px;
+        font-size: 0.85em;
+        font-weight: 600;
+        display: inline-block;
+    }
+
+    .status-active {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+    }
+
+    .status-canceled {
+        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        color: white;
+    }
+
+    .status-pending {
+        background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+        color: white;
+    }
+
+    .info-alert {
+        background: linear-gradient(135deg, #d1ecf1 0%, #b8daff 100%);
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+    }
+
+    .info-alert i {
+        font-size: 24px;
+        color: #004085;
+        margin-right: 12px;
+    }
+
+    .info-alert p {
+        margin: 0;
+        color: #004085;
+        font-size: 14px;
+    }
+
+    .status-card {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 25px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .status-card::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+        animation: pulse 4s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 0.5; }
+        50% { transform: scale(1.1); opacity: 0.8; }
+    }
+
+    .status-card-header {
+        font-size: 0.9em;
+        color: #6c757d;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 10px;
+        font-weight: 600;
+    }
+
+    .status-card-body {
+        position: relative;
+        z-index: 1;
+    }
+
+    .status-badge-large {
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-size: 1.1em;
+        font-weight: 700;
+        display: inline-block;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        animation: fadeInScale 0.5s ease;
+    }
+
+    @keyframes fadeInScale {
+        0% { transform: scale(0.8); opacity: 0; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+
+    .status-active-large {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+    }
+
+    .status-canceled-large {
+        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        color: white;
+    }
+
+    .status-pending-large {
+        background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+        color: white;
+    }
+
+    .status-icon {
+        font-size: 48px;
+        margin-bottom: 15px;
+        opacity: 0.1;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 0;
+    }
+</style>
+
 <!-- page content -->
 <div class="right_col" role="main">
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>Subscriptions</h3>
+                <h3>
+                    <i class="fa-solid fa-credit-card"></i> Editar Suscripción
+                </h3>
             </div>
         </div>
 
         <div class="clearfix"></div>
 
-        <div class="row" style="display: block;">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb-nav">
+            <a href="{% url 'administration_subscriptions' %}">
+                <i class="fa-solid fa-list"></i> Suscripciones
+            </a>
+            <i class="fa-solid fa-chevron-right"></i>
+            <span>Editar Suscripción #{{ subscription.id }}</span>
+        </div>
 
-            <div class="clearfix"></div>
-
-            <div class="col-md-12 col-sm-12  ">
-                <div class="x_panel">
-                    <div class="x_title">
-                        <h2>Edit subscription</h2>
-
-                        <ul class="nav navbar-right panel_toolbox">
-                            <li>
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <div class="form-card">
+                    <div class="form-header">
+                        <i class="fa-solid fa-edit"></i> Formulario de Edición de Suscripción
                     </div>
+                    <div class="form-body">
 
-                    <div class="x_content">
+                        <!-- Info Alert -->
+                        <div class="info-alert">
+                            <i class="fa-solid fa-info-circle"></i>
+                            <p>Aquí puedes editar los detalles de la suscripción. Los campos marcados con * son obligatorios.</p>
+                        </div>
 
+                        <!-- Current Status Card -->
+                        <div class="status-card">
+                            <div class="status-card-body">
+                                {% if subscription.status == "ACTIVE" %}
+                                    <i class="fa-solid fa-circle-check status-icon" style="color: #28a745;"></i>
+                                {% elif subscription.status == "CANCELED" %}
+                                    <i class="fa-solid fa-circle-xmark status-icon" style="color: #dc3545;"></i>
+                                {% else %}
+                                    <i class="fa-solid fa-circle-exclamation status-icon" style="color: #ffc107;"></i>
+                                {% endif %}
 
+                                <div class="status-card-header">
+                                    <i class="fa-solid fa-info-circle"></i> Estado Actual de la Suscripción
+                                </div>
 
+                                {% if subscription.status == "ACTIVE" %}
+                                    <span class="status-badge-large status-active-large">
+                                        <i class="fa-solid fa-check-circle"></i> ACTIVA
+                                    </span>
+                                    <div style="margin-top: 15px; color: #28a745; font-size: 0.9em;">
+                                        <i class="fa-solid fa-calendar-check"></i>
+                                        Suscripción vigente hasta {{ subscription.due_date|date:"d/m/Y" }}
+                                    </div>
+                                {% elif subscription.status == "CANCELED" %}
+                                    <span class="status-badge-large status-canceled-large">
+                                        <i class="fa-solid fa-ban"></i> CANCELADA
+                                    </span>
+                                    <div style="margin-top: 15px; color: #dc3545; font-size: 0.9em;">
+                                        <i class="fa-solid fa-calendar-xmark"></i>
+                                        Esta suscripción ha sido cancelada
+                                    </div>
+                                {% else %}
+                                    <span class="status-badge-large status-pending-large">
+                                        <i class="fa-solid fa-clock"></i> {{ subscription.status }}
+                                    </span>
+                                    <div style="margin-top: 15px; color: #ff9800; font-size: 0.9em;">
+                                        <i class="fa-solid fa-hourglass-half"></i>
+                                        Estado pendiente de actualización
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
 
+                        {% if errors %}
+                        <div class="error-list">
+                            <h6 style="color: #dc3545; margin-bottom: 10px;">
+                                <i class="fa-solid fa-exclamation-triangle"></i> Error al actualizar la suscripción:
+                            </h6>
+                            <ul>
+                                {% for field, errors_list in errors.items %}
+                                    {% for error in errors_list %}
+                                        <li>
+                                            {% if field != '__all__' %}
+                                                <strong>{{ field }}:</strong>
+                                            {% endif %}
+                                            {{ error }}
+                                        </li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
 
                         <form action="" role="form" method="POST" class="text-start">
                             {% csrf_token %}
-                            
-                            <div class="tab-content" id="myTabContent">
 
-                                <div class="tab-pane fade show active" id="general" role="tabpanel"
-                                    aria-labelledby="general-tab">
-                                    <div class="seccion bg-gray-100 border-radius-lg">
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Associated user</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.user }}</p>
-                                            </div>
+                            <!-- Información de Usuario -->
+                            <div class="form-section">
+                                <div class="section-title">
+                                    <i class="fa-solid fa-user"></i> Información de Usuario
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-custom">
+                                                <i class="fa-solid fa-user-tag"></i> Usuario Asociado
+                                                <span class="required-field">*</span>
+                                            </label>
+                                            {{ form.user }}
+                                            {% if form.user.errors %}
+                                                {% for error in form.user.errors %}
+                                                    <span class="field-error">{{ error }}</span>
+                                                {% endfor %}
+                                            {% endif %}
+                                            <small class="help-text">Usuario al que pertenece esta suscripción</small>
                                         </div>
-
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Amount paid</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.amount }}</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Currency</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <small class="form-text text-muted">Set in general configuration parameters </small>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.currency }}</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Payment gateway</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.payment_method }}</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Product ID</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <small class="form-text text-muted">Self-editable. In case of subscription by Payment Gateway.</small>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.payment_product_id }}</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Payment subscription ID</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <small class="form-text text-muted">Self-editable. In case of subscription by Payment Gateway.</small>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.payment_subscription_id }}</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Start date</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.start_date }}</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="campo-agrupado input-group input-group-outline">
-                                            <div class="col-md-12 col-sm-12 title-in-tag">
-                                                <div class="font-weight-bold">Due date</div>
-                                            </div>
-                                            <div class="col-md-12 col-sm-12">
-                                                <p class="p-class">{{ form.due_date }}</p>
-                                            </div>
-                                        </div>
-
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="text-danger">
-                                {% if errors %}
-                                  <ul>
-                                      {% for field, errors_list in errors.items %}
-                                          {% for error in errors_list %}
-                                              <li style='text-align-last: left;'>{{ error }}</li>
-                                          {% endfor %}
-                                      {% endfor %}
-                                  </ul>
-                              </div>
+                            <!-- Selección de Producto -->
+                            <div class="form-section">
+                                <div class="section-title">
+                                    <i class="fa-solid fa-box"></i> Selección de Producto
+                                </div>
 
-                              <div class="text-center">
-                                <button type="submit" class="btn btn-primary">
-                                    Save <i class="fa-solid fa-check"></i>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-custom">
+                                                <i class="fa-solid fa-shopping-cart"></i> Producto
+                                            </label>
+                                            {{ form.product }}
+                                            {% if form.product.errors %}
+                                                {% for error in form.product.errors %}
+                                                    <span class="field-error">{{ error }}</span>
+                                                {% endfor %}
+                                            {% endif %}
+                                            <small class="help-text">Seleccione un producto existente para asignar a esta suscripción</small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Información del producto seleccionado -->
+                                <div id="product-info" style="display: none; margin-top: 25px;">
+                                    <div style="background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%); border-radius: 15px; overflow: hidden; box-shadow: 0 4px 20px rgba(33, 150, 243, 0.15);">
+                                        <!-- Header con gradiente más oscuro -->
+                                        <div style="background: linear-gradient(135deg, #42A5F5 0%, #64B5F6 100%); padding: 15px 20px;">
+                                            <h6 style="color: white; margin: 0; font-weight: 600; font-size: 1em; text-shadow: 0 1px 2px rgba(0,0,0,0.1);">
+                                                <i class="fa-solid fa-box-open" style="margin-right: 8px;"></i>
+                                                Detalles del Producto Seleccionado
+                                            </h6>
+                                        </div>
+
+                                        <!-- Body con información -->
+                                        <div style="padding: 25px;">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div style="background: white; border-radius: 10px; padding: 15px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); height: 100%;">
+                                                        <div style="background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;">
+                                                            <i class="fa-solid fa-dollar-sign" style="color: white; font-size: 20px;"></i>
+                                                        </div>
+                                                        <p style="color: #757575; font-size: 0.85em; margin: 0;">Precio Final</p>
+                                                        <p id="product-price" style="color: #2E7D32; font-size: 1.3em; font-weight: 700; margin: 5px 0;">-</p>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div style="background: white; border-radius: 10px; padding: 15px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); height: 100%;">
+                                                        <div style="background: linear-gradient(135deg, #FF9800 0%, #FFB74D 100%); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;">
+                                                            <i class="fa-solid fa-calendar-days" style="color: white; font-size: 20px;"></i>
+                                                        </div>
+                                                        <p style="color: #757575; font-size: 0.85em; margin: 0;">Período</p>
+                                                        <p id="product-interval" style="color: #E65100; font-size: 1.1em; font-weight: 600; margin: 5px 0;">-</p>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div style="background: white; border-radius: 10px; padding: 15px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); height: 100%;">
+                                                        <div style="background: linear-gradient(135deg, #9C27B0 0%, #BA68C8 100%); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;">
+                                                            <i class="fa-solid fa-percent" style="color: white; font-size: 20px;"></i>
+                                                        </div>
+                                                        <p style="color: #757575; font-size: 0.85em; margin: 0;">Descuento</p>
+                                                        <p id="product-discount" style="color: #6A1B9A; font-size: 1.1em; font-weight: 600; margin: 5px 0;">-</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Información adicional -->
+                                            <div style="background: rgba(255,255,255,0.7); border-radius: 10px; padding: 15px; margin-top: 20px; border: 1px solid rgba(33, 150, 243, 0.2);">
+                                                <div style="display: flex; align-items: center;">
+                                                    <i class="fa-solid fa-lightbulb" style="color: #1976D2; margin-right: 10px; font-size: 18px;"></i>
+                                                    <div>
+                                                        <p style="margin: 0; color: #424242; font-size: 0.9em;">
+                                                            <strong>Nota:</strong> El precio mostrado ya incluye el descuento aplicado.
+                                                            Este monto se actualizará automáticamente en el campo "Monto Pagado".
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Información de Pago -->
+                            <div class="form-section">
+                                <div class="section-title">
+                                    <i class="fa-solid fa-money-bill-wave"></i> Información de Pago
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-custom">
+                                                <i class="fa-solid fa-dollar-sign"></i> Monto Pagado
+                                                <span class="required-field">*</span>
+                                            </label>
+                                            {{ form.amount }}
+                                            {% if form.amount.errors %}
+                                                {% for error in form.amount.errors %}
+                                                    <span class="field-error">{{ error }}</span>
+                                                {% endfor %}
+                                            {% endif %}
+                                            <small class="help-text">Se calcula automáticamente según el producto seleccionado</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-custom">
+                                                <i class="fa-solid fa-coins"></i> Moneda
+                                                <span class="required-field">*</span>
+                                            </label>
+                                            {{ form.currency }}
+                                            {% if form.currency.errors %}
+                                                {% for error in form.currency.errors %}
+                                                    <span class="field-error">{{ error }}</span>
+                                                {% endfor %}
+                                            {% endif %}
+                                            <small class="help-text">Configurada en parámetros generales</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-custom">
+                                                <i class="fa-solid fa-credit-card"></i> Método de Pago
+                                                <span class="required-field">*</span>
+                                            </label>
+                                            {{ form.payment_method }}
+                                            {% if form.payment_method.errors %}
+                                                {% for error in form.payment_method.errors %}
+                                                    <span class="field-error">{{ error }}</span>
+                                                {% endfor %}
+                                            {% endif %}
+                                            <small class="help-text">Gateway de pago utilizado</small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-custom">
+                                                <i class="fa-solid fa-receipt"></i> ID de Suscripción
+                                            </label>
+                                            {{ form.payment_subscription_id }}
+                                            {% if form.payment_subscription_id.errors %}
+                                                {% for error in form.payment_subscription_id.errors %}
+                                                    <span class="field-error">{{ error }}</span>
+                                                {% endfor %}
+                                            {% endif %}
+                                            <small class="help-text">ID único en el gateway (opcional)</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-custom">
+                                                <i class="fa-solid fa-flag"></i> Estado
+                                            </label>
+                                            {{ form.status }}
+                                            {% if form.status.errors %}
+                                                {% for error in form.status.errors %}
+                                                    <span class="field-error">{{ error }}</span>
+                                                {% endfor %}
+                                            {% endif %}
+                                            <small class="help-text">Estado actual de la suscripción</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{ form.payment_product_id }}
+                            </div>
+
+                            <!-- Período de Suscripción -->
+                            <div class="form-section">
+                                <div class="section-title">
+                                    <i class="fa-solid fa-calendar-days"></i> Período de Suscripción
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-custom">
+                                                <i class="fa-solid fa-calendar-check"></i> Fecha de Inicio
+                                                <span class="required-field">*</span>
+                                            </label>
+                                            {{ form.start_date }}
+                                            {% if form.start_date.errors %}
+                                                {% for error in form.start_date.errors %}
+                                                    <span class="field-error">{{ error }}</span>
+                                                {% endfor %}
+                                            {% endif %}
+                                            <small class="help-text">Fecha en que comenzó la suscripción</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-custom">
+                                                <i class="fa-solid fa-calendar-xmark"></i> Fecha de Vencimiento
+                                                <span class="required-field">*</span>
+                                            </label>
+                                            {{ form.due_date }}
+                                            {% if form.due_date.errors %}
+                                                {% for error in form.due_date.errors %}
+                                                    <span class="field-error">{{ error }}</span>
+                                                {% endfor %}
+                                            {% endif %}
+                                            <small class="help-text">Fecha en que termina la suscripción</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-center" style="margin-top: 30px;">
+                                <a href="{% url 'administration_subscriptions' %}" class="btn-cancel">
+                                    <i class="fa-solid fa-times"></i> Cancelar
+                                </a>
+                                <button type="submit" class="btn btn-save-custom">
+                                    <i class="fa-solid fa-save"></i> Guardar Cambios
                                 </button>
                             </div>
                         </form>
-
-
-
-                        <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
-                        <link href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css" rel="stylesheet">
-                        <script>
-                          /*Use flatpicket to the calendar-datepicket*/
-                        
-                          // Initialize datepickets with the previous dates
-                          flatpickr("#{{ form.start_date.id_for_label }}", {
-                            dateFormat: "Y-m-d", // Set date format
-                            defaultDate: "{{ form.start_date.value|date:'Y-m-d'|default:'' }}",
-                          });
-                        
-                          flatpickr("#{{ form.due_date.id_for_label }}", {
-                            dateFormat: "Y-m-d", // Set date format
-                            defaultDate: "{{ form.due_date.value|date:'Y-m-d'|default:'' }}",
-                          });
-                        </script>
-
-
-
-
-
 
                     </div>
                 </div>
@@ -178,6 +681,166 @@
         </div>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/l10n/es.js" rel="stylesheet">
+
+<script>
+$(document).ready(function() {
+    // Products data from server
+    const productsData = {{ products_json|safe }};
+
+    // Add Bootstrap classes to form elements
+    $('input[type="text"], input[type="number"], select').each(function() {
+        if (!$(this).hasClass('form-control')) {
+            $(this).addClass('form-control');
+        }
+        // Add error class if field has errors
+        if ($(this).parent().find('.field-error').length > 0) {
+            $(this).addClass('is-invalid');
+        }
+    });
+
+    // Initialize date pickers with Spanish locale
+    flatpickr.localize(flatpickr.l10ns.es);
+
+    const startDatePicker = flatpickr("#{{ form.start_date.id_for_label }}", {
+        dateFormat: "Y-m-d",
+        defaultDate: "{{ form.start_date.value|date:'Y-m-d'|default:'' }}",
+        locale: "es",
+        onChange: function(selectedDates, dateStr, instance) {
+            // Update due date when start date changes
+            updateDueDate();
+        }
+    });
+
+    const dueDatePicker = flatpickr("#{{ form.due_date.id_for_label }}", {
+        dateFormat: "Y-m-d",
+        defaultDate: "{{ form.due_date.value|date:'Y-m-d'|default:'' }}",
+        locale: "es",
+        minDate: new Date()
+    });
+
+    // Hide payment_product_id field
+    $('#id_payment_product_id').closest('.form-group').hide();
+
+    // Currency and Amount fields readonly
+    $('#id_currency').attr('readonly', true);
+    $('#id_currency').css('background-color', '#f5f5f5');
+
+    $('#id_amount').attr('readonly', true);
+    $('#id_amount').css('background-color', '#f5f5f5');
+
+    // Function to calculate due date based on product interval
+    function updateDueDate() {
+        const productId = $('#id_product').val();
+        const startDate = $('#{{ form.start_date.id_for_label }}').val() ||
+                        $('#{{ form.start_date.id_for_label }}')[0]._flatpickr.selectedDates[0];
+
+        if (productId && productsData[productId] && startDate) {
+            const product = productsData[productId];
+            const intervalCount = product.interval_count;
+            const intervalUnit = product.interval_unit;
+
+            // Calculate due date
+            const start = startDate instanceof Date ? startDate : new Date(startDate);
+            let dueDate = new Date(start);
+
+            // Handle interval units ('Y' = Year, 'M' = Month, 'W' = Week)
+            switch(intervalUnit) {
+                case 'Y':
+                    dueDate.setFullYear(dueDate.getFullYear() + intervalCount);
+                    break;
+                case 'M':
+                    dueDate.setMonth(dueDate.getMonth() + intervalCount);
+                    break;
+                case 'W':
+                    dueDate.setDate(dueDate.getDate() + (intervalCount * 7));
+                    break;
+            }
+
+            // Format date as YYYY-MM-DD
+            const year = dueDate.getFullYear();
+            const month = String(dueDate.getMonth() + 1).padStart(2, '0');
+            const day = String(dueDate.getDate()).padStart(2, '0');
+            const formattedDate = `${year}-${month}-${day}`;
+
+            // Update due date picker
+            dueDatePicker.setDate(formattedDate);
+        }
+    }
+
+    // Product selection handler
+    $('#id_product').on('change', function() {
+        const productId = $(this).val();
+
+        if (productId && productsData[productId]) {
+            // Show product info section
+            $('#product-info').fadeIn();
+
+            // Get product data
+            const product = productsData[productId];
+
+            // Calculate final price
+            const finalPrice = product.price - (product.price * product.discount / 100);
+
+            // Format interval for display
+            let intervalText = product.interval_count + ' ';
+            switch(product.interval_unit) {
+                case 'Y':
+                    intervalText += product.interval_count === 1 ? 'Año' : 'Años';
+                    break;
+                case 'M':
+                    intervalText += product.interval_count === 1 ? 'Mes' : 'Meses';
+                    break;
+                case 'W':
+                    intervalText += product.interval_count === 1 ? 'Semana' : 'Semanas';
+                    break;
+            }
+
+            // Update display with actual product data
+            $('#product-price').text('$' + finalPrice.toFixed(2) + ' (Original: $' + product.price.toFixed(2) + ')');
+            $('#product-interval').text(intervalText);
+            $('#product-discount').text(product.discount + '%');
+
+            // Update hidden payment_product_id field
+            $('#id_payment_product_id').val(productId);
+
+            // Always update the amount field with the product price
+            $('#id_amount').val(finalPrice.toFixed(2));
+
+            // Update due date based on product interval
+            updateDueDate();
+        } else {
+            // Hide product info section
+            $('#product-info').fadeOut();
+            $('#id_payment_product_id').val('');
+        }
+    });
+
+    // Add default value for status if not selected
+    if (!$('#id_status').val()) {
+        $('#id_status').val('{{ subscription.status }}');
+    }
+
+    // Check if product is pre-selected based on payment_product_id
+    const currentProductId = $('#id_payment_product_id').val();
+    if (currentProductId && $('#id_product option[value="' + currentProductId + '"]').length) {
+        $('#id_product').val(currentProductId).trigger('change');
+    } else if ($('#id_product').val()) {
+        // Trigger change event if product is pre-selected
+        $('#id_product').trigger('change');
+    }
+
+    // Focus on first field with error
+    $('.field-error:first').parent().find('input, select').focus();
+});
+</script>
+
+<!-- Load Spanish locale for flatpickr -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/l10n/es.js"></script>
+
 <!-- /page content -->
 
 {% endblock %}

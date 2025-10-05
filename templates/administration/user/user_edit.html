@@ -419,7 +419,7 @@
                                     <i class="fa-solid fa-arrow-left"></i> Volver
                                 </a>
                                 {% if custom_user.id %}
-                                <a href="/admin/auth/user/{{ custom_user.id }}/password/" class="btn-change-password" target="_blank">
+                                <a href="{% url 'administration_user_change_password' custom_user_id=custom_user.id %}" class="btn-change-password">
                                     <i class="fa-solid fa-key"></i> Cambiar Contraseña
                                 </a>
                                 {% endif %}

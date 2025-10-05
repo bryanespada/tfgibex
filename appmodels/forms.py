@@ -70,10 +70,16 @@ class ImageForm(forms.ModelForm):
 class SubscriptionForm(forms.ModelForm):
 
     user = forms.ModelChoiceField( queryset = CustomUser.objects.all(), required=True )
+    product = forms.ModelChoiceField(
+        queryset=Product.objects.filter(public=True),
+        required=False,
+        empty_label="Seleccionar producto (opcional)",
+        label="Producto"
+    )
 
     class Meta:
         model = Subscription
-        fields = ['user', 'amount', 'currency', 'payment_method', 'payment_product_id', 'payment_subscription_id', 'start_date', 'due_date']
+        fields = ['user', 'product', 'amount', 'currency', 'payment_method', 'payment_product_id', 'payment_subscription_id', 'status', 'start_date', 'due_date']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -81,8 +87,20 @@ class SubscriptionForm(forms.ModelForm):
         config = GeneralConfig.objects.get(id=1) # Get general config information
         self.fields['currency'].initial = config.currency # Set the same currency value as general config
         self.fields['currency'].widget.attrs['readonly'] = True # Disallow currency field to set it unwritable
-        self.fields['payment_product_id'].widget.attrs['readonly'] = True # Disallow payment_product_id field to set it unwritable
-        self.fields['payment_subscription_id'].widget.attrs['readonly'] = True # Disallow payment_subscription_id field to set it unwritable
+        self.fields['payment_product_id'].widget = forms.HiddenInput() # Hide the payment_product_id field
+
+    def save(self, commit=True):
+        subscription = super().save(commit=False)
+        # If a product is selected, use its ID and price
+        if self.cleaned_data.get('product'):
+            product = self.cleaned_data['product']
+            subscription.payment_product_id = product.id
+            # Optionally update the amount with the product's price
+            if not self.cleaned_data.get('amount') or self.cleaned_data.get('amount') == 0:
+                subscription.amount = product.final_price
+        if commit:
+            subscription.save()
+        return subscription
 
 
 class ProductForm(forms.ModelForm):

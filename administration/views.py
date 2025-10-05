@@ -832,6 +832,38 @@ def user_deactivate_account(request, custom_user_id):
 
     return redirect('/administration/users')
 
+@login_required(login_url="/users/access")
+def user_change_password(request, custom_user_id):
+    """
+    Function to change user password by admin
+    """
+    from django.contrib.auth.forms import SetPasswordForm
+
+    custom_user = get_object_or_404(CustomUser, id=custom_user_id)
+    context = {}
+
+    if request.method == 'POST':
+        form = SetPasswordForm(custom_user, request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f"Contraseña actualizada exitosamente para {custom_user.username}")
+            log(request, "AdminsLog", {"action_type":"update", "status":200, "details":f"Changed password for {custom_user.username}", "item":"CustomUser"})
+            return redirect('administration_user_edit', custom_user_id=custom_user_id)
+        else:
+            context['errors'] = form.errors
+    else:
+        form = SetPasswordForm(custom_user)
+
+    # Add Bootstrap classes to form fields
+    form.fields['new_password1'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Ingrese la nueva contraseña'})
+    form.fields['new_password2'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Confirme la nueva contraseña'})
+
+    context['form'] = form
+    context['config'] = get_object_or_404(GeneralConfig, id=1)
+    context['custom_user'] = custom_user
+
+    return render(request, "administration/user/user_change_password.html", context)
+
 
 ######################################################################################################################################################
 # CRUD SUBSCRIPTIONS
@@ -864,7 +896,7 @@ def subscription_add(request):
             subscription.save()
             messages.success(request, f"Subscription #{subscription.pk} of {subscription.user} successfully added")
             log(request, "AdminsLog", {"action_type":"create", "status":200, "details":f"Created #{subscription.id}", "item":"Subscription"})
-            log(request, "SubscriptionLog", {"action_type":"create", "status":200, "details":f"Created #{subscription.id} by admin", "payment_gateway":f"{subscription.payment_method}", "receptor": {receptor}, "product":None})
+            log(request, "SubscriptionLog", {"action_type":"create", "status":200, "details":f"Created #{subscription.id} by admin", "payment_gateway":f"{subscription.payment_method}", "receptor": receptor, "product":None})
             return redirect('/administration/subscriptions')
         else:
             log(request, "AdminsLog", {"action_type":"create", "status":200, "details":f"Creating form", "item":"Subscription"})
@@ -875,12 +907,30 @@ def subscription_add(request):
 
     form = SubscriptionForm()
     form.fields['user'].widget.attrs.update({'class': 'form-control'})
+    form.fields['product'].widget.attrs.update({'class': 'form-control'})
     form.fields['amount'].widget.attrs.update({'class': 'form-control'})
     form.fields['currency'].widget.attrs.update({'class': 'form-control'})
     form.fields['payment_method'].widget.attrs.update({'class': 'form-control'})
+    form.fields['payment_product_id'].widget.attrs.update({'class': 'form-control'})
+    form.fields['payment_subscription_id'].widget.attrs.update({'class': 'form-control'})
+    form.fields['status'].widget.attrs.update({'class': 'form-control'})
     form.fields['start_date'].widget.attrs.update({'class': 'form-control'})
     form.fields['due_date'].widget.attrs.update({'class': 'form-control'})
 
+    # Pass products data for JavaScript
+    from appmodels.models import Product
+    products = Product.objects.filter(public=True).values('id', 'title', 'price', 'discount', 'interval_count', 'interval_unit')
+    products_json = {}
+    for product in products:
+        products_json[product['id']] = {
+            'title': product['title'],
+            'price': float(product['price']),
+            'discount': float(product['discount']),
+            'interval_count': product['interval_count'],
+            'interval_unit': product['interval_unit']  # Now sending 'Y', 'M', or 'W'
+        }
+    import json
+    context['products_json'] = json.dumps(products_json)
     context['form'] = form
     context['config'] = get_object_or_404(GeneralConfig, id=1)
     log(request, "AdminsLog", {"action_type":"read", "status":200, "details":f"Creating form", "item":"Subscription"})
@@ -899,41 +949,72 @@ def subscription_edit(request, subscription_id):
             subscription.save()
             messages.success(request, f"Subscription #{subscription.pk} of {subscription.user} successfully updated")
             log(request, "AdminsLog", {"action_type":"update", "status":200, "details":f"Updated #{subscription.id}", "item":"Subscription"})
-            log(request, "SubscriptionLog", {"action_type":"update", "status":200, "details":f"Updated #{subscription.id} by admin", "payment_gateway":"", "product":None, "receptor": {subscription.user}})
+            log(request, "SubscriptionLog", {"action_type":"update", "status":200, "details":f"Updated #{subscription.id} by admin", "payment_gateway":"", "product":None, "receptor": subscription.user})
             return redirect('/administration/subscriptions')
         else:
-            log(request, "AdminsLog", {"action_type":"update", "status":400, "details":f"Invalid form updating #{custom_user.username}", "item":"Subscription"})
-            log(request, "SubscriptionLog", {"action_type":"create", "status":400, "details":f"Error updating #{subscription.id} by admin", "payment_gateway":"", "product":None, "receptor": {subscription.user}})
+            log(request, "AdminsLog", {"action_type":"update", "status":400, "details":f"Invalid form updating subscription #{subscription.id}", "item":"Subscription"})
+            log(request, "SubscriptionLog", {"action_type":"create", "status":400, "details":f"Error updating #{subscription.id} by admin", "payment_gateway":"", "product":None, "receptor": subscription.user})
 
         context['errors'] = form.errors
 
 
     form = SubscriptionForm(instance=subscription)
     form.fields['user'].widget.attrs.update({'class': 'form-control'})
+    form.fields['product'].widget.attrs.update({'class': 'form-control'})
     form.fields['amount'].widget.attrs.update({'class': 'form-control'})
     form.fields['currency'].widget.attrs.update({'class': 'form-control'})
     form.fields['payment_method'].widget.attrs.update({'class': 'form-control'})
     form.fields['payment_product_id'].widget.attrs.update({'class': 'form-control'})
     form.fields['payment_subscription_id'].widget.attrs.update({'class': 'form-control'})
+    form.fields['status'].widget.attrs.update({'class': 'form-control'})
     form.fields['start_date'].widget.attrs.update({'class': 'form-control'})
     form.fields['due_date'].widget.attrs.update({'class': 'form-control'})
 
+    # Pass products data for JavaScript
+    from appmodels.models import Product
+    products = Product.objects.filter(public=True).values('id', 'title', 'price', 'discount', 'interval_count', 'interval_unit')
+    products_json = {}
+    for product in products:
+        products_json[product['id']] = {
+            'title': product['title'],
+            'price': float(product['price']),
+            'discount': float(product['discount']),
+            'interval_count': product['interval_count'],
+            'interval_unit': product['interval_unit']
+        }
+    import json
+    context['products_json'] = json.dumps(products_json)
     context['form'] = form
+    context['subscription'] = subscription
     context['config'] = get_object_or_404(GeneralConfig, id=1)
     log(request, "AdminsLog", {"action_type":"read", "status":200, "details":f"Update form of subscription #{subscription.id}", "item":"Subscription"})
     return render (request, "administration/subscription/subscription_edit.html", context)
 
 @login_required(login_url="/users/access")
-def subscription_delete(request, subscription_id):
+def subscription_cancel(request, subscription_id):
     """
-    Function to detete an existing subscription
+    Function to cancel a subscription (changes status to CANCELED)
     """
     subscription = get_object_or_404(Subscription, id=subscription_id)
-    log(request, "AdminsLog", {"action_type":"delete", "status":200, "details":f"Deleted subscription #{subscription.id}", "item":"Subscription"})
-    log(request, "SubscriptionLog", {"action_type":"delete", "status":200, "details":f"Deleted subscription #{subscription.id} by admin", "payment_gateway":"", "product":None, "receptor": {subscription.user}})
-    subscription_id = subscription.pk
+    subscription.status = "CANCELED"
+    subscription.save()
+    messages.success(request, f"Subscription #{subscription.pk} of {subscription.user} successfully canceled")
+    log(request, "AdminsLog", {"action_type":"update", "status":200, "details":f"Canceled subscription #{subscription.id}", "item":"Subscription"})
+    log(request, "SubscriptionLog", {"action_type":"cancel", "status":200, "details":f"Canceled subscription #{subscription.id} by admin", "payment_gateway":subscription.payment_method, "product":None, "receptor": subscription.user})
+    return redirect('/administration/subscriptions')
+
+@login_required(login_url="/users/access")
+def subscription_delete(request, subscription_id):
+    """
+    Function to delete an existing subscription
+    """
+    subscription = get_object_or_404(Subscription, id=subscription_id)
+    user = subscription.user
+    subscription_pk = subscription.pk
+    log(request, "AdminsLog", {"action_type":"delete", "status":200, "details":f"Deleted subscription #{subscription_pk}", "item":"Subscription"})
+    log(request, "SubscriptionLog", {"action_type":"delete", "status":200, "details":f"Deleted subscription #{subscription_pk} by admin", "payment_gateway":"", "product":None, "receptor": user})
     subscription.delete()
-    messages.success(request, f"Subscription #{subscription_id} of {subscription.user} successfully deleted")
+    messages.success(request, f"Subscription #{subscription_pk} of {user} successfully deleted")
     return redirect('/administration/subscriptions')
 
 @login_required(login_url="/users/access")

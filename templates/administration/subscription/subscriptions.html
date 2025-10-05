@@ -2,90 +2,523 @@
 {% block content %}
 {% load custom_tags %}
 
+<style>
+    .subscriptions-card {
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+
+    .subscriptions-card:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+
+    .subscriptions-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px 20px;
+        font-weight: 600;
+    }
+
+    .subscriptions-body {
+        padding: 25px;
+        background: #f8f9fa;
+    }
+
+    .table-container {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        overflow-x: auto;
+    }
+
+    .table {
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .table thead th {
+        background: var(--app-primary) !important;
+        color: white !important;
+        border: none !important;
+        padding: 12px 15px !important;
+        font-weight: 600;
+        font-size: 0.9em;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+    }
+
+    .table thead th:first-child {
+        border-radius: 8px 0 0 0;
+    }
+
+    .table thead th:last-child {
+        border-radius: 0 8px 0 0;
+    }
+
+    .table tbody tr {
+        transition: all 0.2s ease;
+    }
+
+    .table tbody tr:hover {
+        background-color: #f5f5ff !important;
+        transform: translateX(2px);
+        box-shadow: 0 2px 4px rgba(102, 126, 234, 0.1);
+    }
+
+    .table tbody td {
+        padding: 12px 15px;
+        vertical-align: middle;
+        border-top: 1px solid #e0e0e0;
+    }
+
+    .btn-action {
+        padding: 5px 8px;
+        margin: 0 2px;
+        border-radius: 6px;
+        transition: all 0.3s;
+        display: inline-block;
+        text-decoration: none;
+        font-size: 0.85em;
+    }
+
+    .btn-edit {
+        background: #17a2b8;
+        color: white;
+    }
+
+    .btn-edit:hover {
+        background: #138496;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(23, 162, 184, 0.3);
+        color: white;
+    }
+
+    .btn-cancel {
+        background: #fd7e14;
+        color: white;
+    }
+
+    .btn-cancel:hover {
+        background: #dc6502;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(253, 126, 20, 0.3);
+        color: white;
+    }
+
+    .btn-delete {
+        background: #dc3545;
+        color: white;
+    }
+
+    .btn-delete:hover {
+        background: #c82333;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+        color: white;
+    }
+
+    .btn-add-new {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 25px;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-add-new:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #73879C;
+    }
+
+    .empty-state i {
+        font-size: 48px;
+        color: #E7E7E7;
+        margin-bottom: 15px;
+    }
+
+    .empty-state p {
+        font-size: 1.1em;
+        margin: 0;
+    }
+
+    .header-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .search-box {
+        display: flex;
+        align-items: center;
+        background: white;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        padding: 8px 15px;
+        width: 300px;
+        transition: all 0.3s;
+    }
+
+    .search-box:focus-within {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+
+    .search-box i {
+        color: #999;
+        margin-right: 10px;
+    }
+
+    .search-box input {
+        border: none;
+        outline: none;
+        width: 100%;
+        background: transparent;
+    }
+
+    .id-badge {
+        font-weight: 600;
+        color: #667eea;
+        background: #f0f4ff;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.85em;
+    }
+
+    .user-badge {
+        background: #e3f2fd;
+        color: #1976d2;
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 0.85em;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .amount-badge {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 0.85em;
+        font-weight: 600;
+    }
+
+    .gateway-badge {
+        background: #fff3e0;
+        color: #f57c00;
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 0.85em;
+        font-weight: 500;
+    }
+
+    .date-badge {
+        color: #73879C;
+        font-size: 0.9em;
+    }
+
+    .status-active {
+        background: #d4edda;
+        color: #155724;
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 0.85em;
+        font-weight: 600;
+    }
+
+    .status-canceled {
+        background: #f8d7da;
+        color: #721c24;
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 0.85em;
+        font-weight: 600;
+    }
+
+    .status-pending {
+        background: #fff3cd;
+        color: #856404;
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 0.85em;
+        font-weight: 600;
+    }
+
+    .active-check {
+        color: #28a745;
+        font-size: 1.2em;
+    }
+
+    .inactive-check {
+        color: #dc3545;
+        font-size: 1.2em;
+    }
+
+    .stats-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        text-align: center;
+        transition: all 0.3s;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .stat-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 8px;
+        font-size: 16px;
+        color: white;
+    }
+
+    .stat-icon.active {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    }
+
+    .stat-icon.canceled {
+        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    }
+
+    .stat-icon.total {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .stat-value {
+        font-size: 22px;
+        font-weight: 700;
+        color: #2A3F54;
+        margin: 4px 0;
+    }
+
+    .stat-label {
+        color: #73879C;
+        font-size: 0.85em;
+        font-weight: 500;
+    }
+</style>
+
 <!-- page content -->
 <div class="right_col" role="main">
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>Subscriptions</h3>
+                <h3><i class="fa-solid fa-credit-card"></i> Gestión de Suscripciones</h3>
             </div>
         </div>
 
         <div class="clearfix"></div>
 
-        <div class="row" style="display: block;">
+        <!-- Stats Cards -->
+        <div class="stats-cards">
+            <div class="stat-card">
+                <div class="stat-icon active">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <div class="stat-value" id="activeCount">
+                    0
+                </div>
+                <div class="stat-label">Suscripciones Activas</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon canceled">
+                    <i class="fa-solid fa-circle-xmark"></i>
+                </div>
+                <div class="stat-value" id="canceledCount">
+                    0
+                </div>
+                <div class="stat-label">Suscripciones Canceladas</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon total">
+                    <i class="fa-solid fa-list"></i>
+                </div>
+                <div class="stat-value">
+                    {{ subscriptions|length }}
+                </div>
+                <div class="stat-label">Total de Suscripciones</div>
+            </div>
+        </div>
 
-            <div class="clearfix"></div>
-
-            <div class="col-md-12 col-sm-12  ">
-                <div class="x_panel">
-                    <div class="x_title">
-                        <h2>Showing all subscriptions</h2>
-
-                        <ul class="nav navbar-right panel_toolbox">
-                            <li>
-                                <a class="collapse-link">
-                                    <i class="fa fa-chevron-up"></i>
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-md-12 col-sm-12">
+                <div class="subscriptions-card">
+                    <div class="subscriptions-header">
+                        <i class="fa-solid fa-list"></i> Listado de Suscripciones
                     </div>
+                    <div class="subscriptions-body">
+                        <div class="header-actions">
+                            <div class="search-box">
+                                <i class="fa-solid fa-search"></i>
+                                <input type="text" id="searchInput" placeholder="Buscar suscripciones...">
+                            </div>
+                            <a href="{% url 'administration_subscription_add' %}" class="btn-add-new">
+                                <i class="fa-solid fa-plus"></i> Añadir Nueva Suscripción
+                            </a>
+                        </div>
 
-                    <div class="x_content">
-
-                        <div class="table-responsive">
-                            <table class="table table-striped jambo_table bulk_action">
+                        <div class="table-container">
+                            {% if subscriptions %}
+                            <table class="table table-striped" id="subscriptionsTable">
                                 <thead>
-                                    <tr class="headings">
-                                        <th class="column-title">ID</th>
-                                        <th class="column-title">User</th>
-                                        <th class="column-title">Amount</th>
-                                        <th class="column-title">Payment gateway</th>
-                                        <th class="column-title">Product ID</th>
-                                        <th class="column-title">Payment subscription ID</th>
-                                        <th class="column-title">Start date</th>
-                                        <th class="column-title">Due date</th>
-                                        <th class="column-title">Active</th>
-                                        <th class="column-title">Status</th>
-                                        <th class="column-title no-link last" style="text-align: right !important;"><span class="nobr">Actions</span>
-                                        </th>
+                                    <tr>
+                                        <th style="width: 5%;">ID</th>
+                                        <th style="width: 12%;">Usuario</th>
+                                        <th style="width: 10%;">Monto</th>
+                                        <th style="width: 10%;">Gateway</th>
+                                        <th style="width: 10%;">ID Producto</th>
+                                        <th style="width: 12%;">ID Suscripción</th>
+                                        <th style="width: 10%;">Fecha Inicio</th>
+                                        <th style="width: 10%;">Vencimiento</th>
+                                        <th style="width: 8%;">Activa</th>
+                                        <th style="width: 8%;">Estado</th>
+                                        <th style="width: 5%; text-align: center;">Acciones</th>
                                     </tr>
                                 </thead>
-
                                 <tbody>
                                     {% for subscription in subscriptions %}
-                                        <tr class="even pointer">
-                                            <td>#{{ subscription.pk }} </td>
-                                            <td>{{ subscription.user.username }} </td>
-                                            <td>{{ subscription.amount }} {{ subscription.currency }} </td>
-                                            <td>{{ subscription.payment_method }} </td>
-                                            <td>{{ subscription.payment_product_id }} </td>
-                                            <td>{{ subscription.payment_subscription_id }} </td>
-                                            <td>{{ subscription.start_date|date:"d/m/Y" }} </td>
-                                            <td>{{ subscription.due_date|date:"d/m/Y" }} </td>
-                                            <td>{% if subscription.due_date >= today.date %} <i class="fa-solid fa-circle-check" style="color:{{config.app_success}}"></i> {% else %} <i class="fa-solid fa-circle-xmark" style="color:{{config.app_danger}}"></i> {% endif %} </td>
-                                            <td>{{ subscription.status }}</td>
-                                            <td class="last" style="text-align: right !important;"><a href="#">
-
-                                                {% if subscription.status == "ACTIVE" %}
-                                                    <a href="{% url 'cancel_subscription' payment_subscription_id=subscription.payment_subscription_id %}" onclick="return confirm('Are you sure?')"><i class="fa-solid fa-ban" title="Cancel"></i></a>
-                                                {% endif %}
-                                                
-                                                {% if subscription.status == "CANCELED" %}
-                                                <a href="{% url 'administration_subscription_delete' subscription_id=subscription.id %}" onclick="return confirm('Are you sure?')"><i class="fa-solid fa-trash" title="Delete"></i></a>
-                                                {% endif %}
-                                                
-                                                <a href="{% url 'administration_subscription_edit' subscription_id=subscription.id %}"><i class="fa-regular fa-pen-to-square" title="Edit"></i></a>
-
+                                    <tr>
+                                        <td>
+                                            <span class="id-badge">#{{subscription.pk}}</span>
+                                        </td>
+                                        <td>
+                                            <span class="user-badge">
+                                                <i class="fa-solid fa-user"></i> {{ subscription.user.username }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="amount-badge">
+                                                {{ subscription.amount }} {{ subscription.currency }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="gateway-badge">
+                                                {{ subscription.payment_method }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span style="font-size: 0.85em; color: #666;">
+                                                {{ subscription.payment_product_id|default:"—" }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span style="font-size: 0.85em; color: #666;">
+                                                {{ subscription.payment_subscription_id|truncatechars:20 }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="date-badge">
+                                                <i class="fa-regular fa-calendar"></i>
+                                                {{ subscription.start_date|date:"d/m/Y" }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="date-badge">
+                                                <i class="fa-regular fa-clock"></i>
+                                                {{ subscription.due_date|date:"d/m/Y" }}
+                                            </span>
+                                        </td>
+                                        <td style="text-align: center;">
+                                            {% if subscription.due_date >= today.date %}
+                                                <i class="fa-solid fa-circle-check active-check" title="Activa"></i>
+                                            {% else %}
+                                                <i class="fa-solid fa-circle-xmark inactive-check" title="Vencida"></i>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if subscription.status == "ACTIVE" %}
+                                                <span class="status-active">ACTIVA</span>
+                                            {% elif subscription.status == "CANCELED" %}
+                                                <span class="status-canceled">CANCELADA</span>
+                                            {% else %}
+                                                <span class="status-pending">{{ subscription.status }}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td style="text-align: center; white-space: nowrap;">
+                                            <a href="{% url 'administration_subscription_edit' subscription_id=subscription.id %}"
+                                               class="btn-action btn-edit"
+                                               title="Editar">
+                                                <i class="fa-solid fa-pen-to-square"></i>
                                             </a>
-                                            </td>
-                                        </tr>
+                                            {% if subscription.status == "ACTIVE" %}
+                                                {% if subscription.payment_subscription_id %}
+                                                    <a href="{% url 'cancel_subscription' payment_subscription_id=subscription.payment_subscription_id %}"
+                                                       class="btn-action btn-cancel"
+                                                       onclick="return confirm('¿Estás seguro de que deseas cancelar esta suscripción?')"
+                                                       title="Cancelar">
+                                                        <i class="fa-solid fa-ban"></i>
+                                                    </a>
+                                                {% else %}
+                                                    <!-- Si no hay payment_subscription_id, cambiar directamente el estado -->
+                                                    <form method="post" style="display: inline;" action="{% url 'administration_subscription_cancel' subscription_id=subscription.id %}">
+                                                        {% csrf_token %}
+                                                        <button type="submit"
+                                                                class="btn-action btn-cancel"
+                                                                onclick="return confirm('¿Estás seguro de que deseas cancelar esta suscripción?')"
+                                                                title="Cancelar"
+                                                                style="border: none; background: none; padding: 0;">
+                                                            <i class="fa-solid fa-ban"></i>
+                                                        </button>
+                                                    </form>
+                                                {% endif %}
+                                            {% endif %}
+                                            {% if subscription.status == "CANCELED" %}
+                                                <a href="{% url 'administration_subscription_delete' subscription_id=subscription.id %}"
+                                                   class="btn-action btn-delete"
+                                                   onclick="return confirm('¿Estás seguro de que deseas eliminar esta suscripción?')"
+                                                   title="Eliminar">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
                                     {% endfor %}
                                 </tbody>
                             </table>
+                            {% else %}
+                            <div class="empty-state">
+                                <i class="fa-solid fa-inbox"></i>
+                                <p>No hay suscripciones registradas</p>
+                                <a href="{% url 'administration_subscription_add' %}" class="btn-add-new" style="margin-top: 20px;">
+                                    <i class="fa-solid fa-plus"></i> Añadir Primera Suscripción
+                                </a>
+                            </div>
+                            {% endif %}
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -93,5 +526,91 @@
     </div>
 </div>
 <!-- /page content -->
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Contar suscripciones por estado
+    function countSubscriptions() {
+        let activeCount = 0;
+        let canceledCount = 0;
+
+        {% for subscription in subscriptions %}
+            {% if subscription.status == "ACTIVE" %}
+                activeCount++;
+            {% elif subscription.status == "CANCELED" %}
+                canceledCount++;
+            {% endif %}
+        {% endfor %}
+
+        // Actualizar los contadores en la página
+        const activeElement = document.getElementById('activeCount');
+        const canceledElement = document.getElementById('canceledCount');
+
+        if (activeElement) activeElement.textContent = activeCount;
+        if (canceledElement) canceledElement.textContent = canceledCount;
+    }
+
+    // Llamar a la función al cargar
+    countSubscriptions();
+
+    // Función de búsqueda
+    function filterTable() {
+        const input = document.getElementById("searchInput");
+        const filter = input.value.toLowerCase();
+        const table = document.getElementById("subscriptionsTable");
+
+        if (!table) {
+            console.log("Tabla no encontrada");
+            return;
+        }
+
+        const tbody = table.getElementsByTagName("tbody")[0];
+        if (!tbody) {
+            console.log("Tbody no encontrado");
+            return;
+        }
+
+        const rows = tbody.getElementsByTagName("tr");
+
+        // Si no hay texto de búsqueda, mostrar todas las filas
+        if (filter === "") {
+            for (let i = 0; i < rows.length; i++) {
+                rows[i].style.display = "";
+            }
+            return;
+        }
+
+        // Filtrar filas
+        for (let i = 0; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName("td");
+            let found = false;
+
+            // Buscar en todas las columnas excepto la última (acciones)
+            for (let j = 0; j < cells.length - 1; j++) {
+                if (cells[j]) {
+                    const txtValue = cells[j].textContent || cells[j].innerText;
+                    if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+
+            // Mostrar u ocultar la fila
+            rows[i].style.display = found ? "" : "none";
+        }
+    }
+
+    // Conectar el evento al input
+    const searchInput = document.getElementById("searchInput");
+    if (searchInput) {
+        searchInput.addEventListener('keyup', filterTable);
+        searchInput.addEventListener('input', filterTable);
+        searchInput.addEventListener('paste', function() {
+            setTimeout(filterTable, 100);
+        });
+    }
+});
+</script>
 
 {% endblock %}
