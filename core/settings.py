@@ -112,6 +112,17 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'tfgibex@gmail.com'  # CAMBIAR por tu email de Gmail
 EMAIL_HOST_PASSWORD = 'nnxtxrsywwzjukok'  # CAMBIAR por tu contraseña de aplicación de 16 caracteres
 
+# GNews API Configuration
+GNEWS_API_KEY = os.environ.get('GNEWS_API_KEY', 'demo_key')  # Obtener de variable de entorno
+GNEWS_CONFIG = {
+    'base_url': 'https://gnews.io/api/v4/search',
+    'rate_limit': 100,  # requests per day for free tier
+    'max_articles_per_request': 10,
+    'default_language': 'es',
+    'default_country': 'es',
+    'fetch_interval_hours': 3,
+}
+
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
