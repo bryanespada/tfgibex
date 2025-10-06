@@ -15,6 +15,7 @@ from .models import CustomUser
 from appmodels.models import GeneralConfig, Product, Subscription
 from paypal.standard.forms import PayPalPaymentsForm
 from utils.functions import get_client_geolocation
+from app.views import user_is_premium
 from django.conf import settings
 import requests
 from django.contrib import messages
@@ -376,6 +377,11 @@ def paypal_redirect(request, product_id):
     import json
 
     try:
+        # Check if user already has an active subscription
+        if user_is_premium(request.user):
+            messages.error(request, "Ya tienes una suscripción activa. No puedes crear otra suscripción.")
+            return redirect('user_subscription')
+
         product = get_object_or_404(Product, id=product_id)
         config = get_object_or_404(GeneralConfig, id=1)
 
@@ -530,8 +536,13 @@ def get_paypal_bearer_token():
     return access_token['access_token']
 
 def stripe_checkout(request, product_id):
+    # Check if user already has an active subscription
+    if user_is_premium(request.user):
+        messages.error(request, "Ya tienes una suscripción activa. No puedes crear otra suscripción.")
+        return redirect('user_subscription')
+
     config = get_object_or_404(GeneralConfig, id=1)
-        
+
     stripe.api_key = config.stripe_secret_key
     checkout_session = stripe.checkout.Session.create(
         payment_method_types=['card'],

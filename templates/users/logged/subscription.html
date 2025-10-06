@@ -528,11 +528,14 @@
                                         <h4 style="color: #2A3F54; font-weight: 600; margin-bottom: 10px;">{{product.title}}</h4>
                                         <p class="product-description">{{product.description}}</p>
 
-                                        <!-- if product.id == active_subscription.payment_product_id -->
+                                        {% if request.user|is_premium %}
                                             <div class="product-active">
-                                                <i class="fa-solid fa-check-circle"></i> ACTIVO
+                                                <i class="fa-solid fa-check-circle"></i> SUSCRIPCIÓN ACTIVA
                                             </div>
-                                        <!-- else -->
+                                            <div style="text-align: center; margin-top: 15px; padding: 10px; background: #d4edda; border-radius: 8px; color: #155724;">
+                                                <i class="fa-solid fa-info-circle"></i> Ya tienes una suscripción activa
+                                            </div>
+                                        {% else %}
 
                                         <div class="payment-buttons">
                                             {% if product.paypal_subscription_id %}
@@ -559,7 +562,7 @@
                                             {% endif %}
                                         </div>
 
-                                        <!-- endif -->
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
