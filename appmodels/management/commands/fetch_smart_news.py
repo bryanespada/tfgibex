@@ -285,6 +285,10 @@ class Command(BaseCommand):
                 public=True,
                 is_premium=False
             )
+
+            # Descargar imagen si está disponible
+            self.download_image(noticia, article_data.get('image'))
+
             return True
         except Exception as e:
             return False
@@ -339,3 +343,27 @@ class Command(BaseCommand):
                 self.stdout.write(f"  • {noticia.title[:60]}... ({noticia.empresa.title})")
         else:
             self.stdout.write(f"\n📰 No se agregaron noticias nuevas")
+
+    def download_image(self, noticia, image_url):
+        """Descargar imagen del artículo"""
+        if not image_url:
+            return
+
+        try:
+            response = requests.get(image_url, timeout=10)
+            response.raise_for_status()
+
+            from django.core.files.base import ContentFile
+            import uuid
+
+            ext = image_url.split('.')[-1][:3]
+            filename = f"{uuid.uuid4().hex}.{ext}"
+
+            noticia.image.save(
+                filename,
+                ContentFile(response.content),
+                save=True
+            )
+
+        except Exception as e:
+            self.stdout.write(f"    ⚠️  Error descargando imagen: {e}")

@@ -82,6 +82,14 @@ class Bolsa(models.Model):
     def __str__(self):
         return self.title
 
+    @property
+    def total_noticias(self):
+        """Calcula el total de noticias de todas las empresas en esta bolsa"""
+        total = 0
+        for empresa in self.empresas.all():
+            total += empresa.noticias.count()
+        return total
+
 
 
 class Empresa(models.Model):

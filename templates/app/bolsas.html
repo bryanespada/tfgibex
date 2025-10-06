@@ -88,13 +88,7 @@
                                                 </div>
                                                 <div style="text-align: center;">
                                                     <strong style="color: #26B99A; font-size: 1.1em;">
-                                                        {% with bolsa.empresas.all as empresas %}
-                                                            {% if empresas %}
-                                                                {{ empresas.0.noticias.count|add:empresas.1.noticias.count|default:"0" }}
-                                                            {% else %}
-                                                                0
-                                                            {% endif %}
-                                                        {% endwith %}
+                                                        {{ bolsa.total_noticias|default:"0" }}
                                                     </strong><br>
                                                     <small style="color: #73879C; font-size: 0.85em;">Noticias</small>
                                                 </div>
