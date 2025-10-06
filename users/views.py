@@ -348,7 +348,7 @@ def auth_receiver(request):
         
         new_user.save()
         login(request, new_user)
-        log(request, "UserLog", {"action_type":"create", "status":200, "details":"Registered by Google", "change_by_admin":False})
+        log(request, "UserLog", {"action_type":"create", "status":200, "details":"Registered by Google", "change_by_admin":False, "new_user":new_user})
         return redirect('/users/access')
 
 
