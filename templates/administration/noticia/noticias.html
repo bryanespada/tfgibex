@@ -219,29 +219,6 @@
         font-size: 0.9em;
     }
 
-    .premium-badge {
-        background: linear-gradient(135deg, #ffd700 0%, #ffa500 100%);
-        color: white;
-        padding: 4px 10px;
-        border-radius: 15px;
-        font-size: 0.85em;
-        font-weight: 600;
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
-    }
-
-    .free-badge {
-        background: #d4edda;
-        color: #155724;
-        padding: 4px 10px;
-        border-radius: 15px;
-        font-size: 0.85em;
-        font-weight: 600;
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
-    }
 
     .status-public {
         color: #28a745;
@@ -288,11 +265,10 @@
                                 <thead>
                                     <tr>
                                         <th style="width: 5%;">ID</th>
-                                        <th style="width: 28%;">Título</th>
-                                        <th style="width: 15%;">Empresa</th>
-                                        <th style="width: 12%;">Fuente</th>
-                                        <th style="width: 14%;">Fecha</th>
-                                        <th style="width: 10%;">Tipo</th>
+                                        <th style="width: 30%;">Título</th>
+                                        <th style="width: 18%;">Empresa</th>
+                                        <th style="width: 15%;">Fuente</th>
+                                        <th style="width: 16%;">Fecha</th>
                                         <th style="width: 8%;">Estado</th>
                                         <th style="width: 8%; text-align: center;">Acciones</th>
                                     </tr>
@@ -325,17 +301,6 @@
                                                 <i class="fa-regular fa-calendar"></i>
                                                 {{ noticia.published_date|date:"d/m/Y H:i" }}
                                             </span>
-                                        </td>
-                                        <td>
-                                            {% if noticia.is_premium %}
-                                                <span class="premium-badge">
-                                                    <i class="fa-solid fa-crown"></i> Premium
-                                                </span>
-                                            {% else %}
-                                                <span class="free-badge">
-                                                    <i class="fa-solid fa-users"></i> Gratuita
-                                                </span>
-                                            {% endif %}
                                         </td>
                                         <td style="text-align: center;">
                                             {% if noticia.public %}
