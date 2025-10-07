@@ -367,20 +367,7 @@
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group-custom">
-                                            <label class="form-label-custom">
-                                                <i class="fa-solid fa-crown"></i> Contenido Premium
-                                            </label>
-                                            <div class="checkbox-group">
-                                                {{ form.is_premium }}
-                                                <label for="{{ form.is_premium.id_for_label }}" class="checkbox-label">
-                                                    Requiere suscripción para ver el contenido completo
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <div class="form-group-custom">
                                             <label class="form-label-custom">
                                                 <i class="fa-solid fa-eye"></i> Estado de Publicación
@@ -391,7 +378,7 @@
                                                     Publicar noticia (visible para usuarios)
                                                 </label>
                                             </div>
-                                            <small class="help-text">Desmarcar para guardar como borrador</small>
+                                            <small class="help-text">Desmarcar para guardar como borrador. El acceso premium se determina automáticamente por la bolsa de la empresa.</small>
                                         </div>
                                     </div>
                                 </div>
