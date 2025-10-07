@@ -220,7 +220,6 @@ class Command(BaseCommand):
                 api_id=api_id,
                 api_source='gnews',
                 public=True,
-                is_premium=False
             )
 
             # Intentar descargar imagen

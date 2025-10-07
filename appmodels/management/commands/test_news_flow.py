@@ -144,7 +144,6 @@ class Command(BaseCommand):
                 api_id=api_id,
                 api_source='gnews_simulado',
                 public=True,
-                is_premium=False
             )
 
             self.stdout.write(f"📝 Título: {noticia.title[:50]}...")

@@ -78,6 +78,7 @@ class Bolsa(models.Model):
     title = models.CharField(max_length=200, blank=False, null=False, default='')
     description = models.CharField(max_length=6000, blank=True, null=True, default='')
     mercado = models.ForeignKey(Mercado, on_delete=models.CASCADE)
+    is_premium = models.BooleanField(default=False)  # Requires subscription to access
 
     def __str__(self):
         return self.title
@@ -279,7 +280,6 @@ class Noticia(models.Model):
     tags = models.CharField(max_length=500, blank=True, null=True)  # Comma separated tags
 
     # Access control
-    is_premium = models.BooleanField(default=False)  # Requires subscription to view
     public = models.BooleanField(default=True)  # Is visible
 
     # API tracking

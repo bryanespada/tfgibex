@@ -21,10 +21,11 @@ class MercadoForm(forms.ModelForm):
 class BolsaForm(forms.ModelForm):
 
     description = forms.CharField( widget=forms.Textarea(attrs={'class': 'form-control', 'cols': '40', 'rows': '5'}) )
+    is_premium = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={'class': ''}))
 
     class Meta:
         model = Bolsa
-        fields = ['title', 'description', 'mercado']
+        fields = ['title', 'description', 'mercado', 'is_premium']
 
 
 class EmpresaForm(forms.ModelForm):
@@ -148,7 +149,6 @@ class ProductAssignForm(forms.Form):
 class NoticiaForm(forms.ModelForm):
 
     public = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={'class': ''}))
-    is_premium = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={'class': ''}))
     summary = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'cols': '40', 'rows': '3'}))
     content = forms.CharField(required=False, widget=forms.Textarea(attrs={'class': 'form-control', 'cols': '40', 'rows': '10'}))
     tags = forms.CharField(required=False, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'earnings, merger, IPO'}))
@@ -156,7 +156,7 @@ class NoticiaForm(forms.ModelForm):
     class Meta:
         model = Noticia
         fields = ['title', 'summary', 'content', 'published_date', 'source', 'source_url', 'author',
-                  'image', 'video_link', 'empresa', 'tags', 'is_premium', 'public']
+                  'image', 'video_link', 'empresa', 'tags', 'public']
         widgets = {
             'published_date': forms.DateTimeInput(attrs={'type': 'datetime-local', 'class': 'form-control'})
         }

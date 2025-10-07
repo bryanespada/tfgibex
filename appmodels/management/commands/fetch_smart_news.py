@@ -283,7 +283,6 @@ class Command(BaseCommand):
                 api_id=api_id,
                 api_source='gnews_smart',
                 public=True,
-                is_premium=False
             )
 
             # Descargar imagen si está disponible

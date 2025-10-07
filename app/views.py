@@ -131,11 +131,16 @@ def empresa(request, empresa_id):
     # Check if user has active subscription
     is_premium = user_is_premium(request.user)
 
-    # Get related news for this company (filter premium if user is free)
+    # Get related news for this company (filter premium bolsas if user is free)
     if is_premium:
+        # Premium users see all news
         context['noticias'] = selected_empresa.noticias.filter(public=True).order_by('-published_date')
     else:
-        context['noticias'] = selected_empresa.noticias.filter(public=True, is_premium=False).order_by('-published_date')
+        # Free users only see news from non-premium bolsas
+        context['noticias'] = selected_empresa.noticias.filter(
+            public=True,
+            empresa__bolsas__is_premium=False
+        ).order_by('-published_date')
 
     # Como una empresa puede tener múltiples bolsas, tomamos la primera si existe
     first_bolsa = selected_empresa.bolsas.first() if selected_empresa.bolsas.exists() else None
@@ -162,8 +167,11 @@ def noticias(request):
         # Premium users see all public news
         context['noticias'] = Noticia.objects.filter(public=True).order_by('-published_date')
     else:
-        # Free users only see non-premium news
-        context['noticias'] = Noticia.objects.filter(public=True, is_premium=False).order_by('-published_date')
+        # Free users only see news from non-premium bolsas
+        context['noticias'] = Noticia.objects.filter(
+            public=True,
+            empresa__bolsas__is_premium=False
+        ).order_by('-published_date')
 
     log(request, "TrackingLog", {"action_type":"read", "status":200, "details":"List", "item":"Noticia", "has_active_subscription":is_premium, "mercado":None, "bolsa":None, "empresa":None})
     return render(request, "app/noticias.html", context=context)
@@ -181,8 +189,9 @@ def noticia(request, noticia_id):
     # Check if user has active subscription
     is_premium = user_is_premium(request.user)
 
-    # If news is premium and user doesn't have subscription, deny access
-    if selected_noticia.is_premium and not is_premium:
+    # Check if news belongs to premium bolsa and user doesn't have subscription
+    is_from_premium_bolsa = selected_noticia.empresa.bolsas.filter(is_premium=True).exists()
+    if is_from_premium_bolsa and not is_premium:
         messages.error(request, "Esta noticia requiere una suscripción activa para poder acceder.")
         return redirect('user_noticias')
 

@@ -199,6 +199,27 @@
         font-weight: 600;
         display: inline-block;
     }
+
+    .premium-badge {
+        background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+        color: #333;
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 0.85em;
+        font-weight: 600;
+        display: inline-block;
+        box-shadow: 0 2px 4px rgba(255, 215, 0, 0.3);
+    }
+
+    .free-badge {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 0.85em;
+        font-weight: 600;
+        display: inline-block;
+    }
 </style>
 
 <!-- page content -->
@@ -235,10 +256,11 @@
                                 <thead>
                                     <tr>
                                         <th style="width: 8%;">ID</th>
-                                        <th style="width: 25%;">Título</th>
-                                        <th style="width: 35%;">Descripción</th>
-                                        <th style="width: 20%;">Mercado</th>
-                                        <th style="width: 12%; text-align: center;">Acciones</th>
+                                        <th style="width: 20%;">Título</th>
+                                        <th style="width: 30%;">Descripción</th>
+                                        <th style="width: 15%;">Mercado</th>
+                                        <th style="width: 12%;">Tipo</th>
+                                        <th style="width: 15%; text-align: center;">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -257,6 +279,17 @@
                                             <span class="mercado-badge">
                                                 <i class="fa-solid fa-globe"></i> {{bolsa.mercado.title}}
                                             </span>
+                                        </td>
+                                        <td>
+                                            {% if bolsa.is_premium %}
+                                            <span class="premium-badge">
+                                                <i class="fa-solid fa-crown"></i> Premium
+                                            </span>
+                                            {% else %}
+                                            <span class="free-badge">
+                                                <i class="fa-solid fa-unlock"></i> Gratuita
+                                            </span>
+                                            {% endif %}
                                         </td>
                                         <td style="text-align: center; white-space: nowrap;">
                                             <a href="{% url 'administration_bolsa_edit' bolsa_id=bolsa.id %}"

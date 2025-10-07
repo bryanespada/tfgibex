@@ -10,7 +10,8 @@ class MercadoAdmin(admin.ModelAdmin):
 admin.site.register(Mercado, MercadoAdmin)
 
 class BolsaAdmin(admin.ModelAdmin):
-    list_display = ('title',)
+    list_display = ('title', 'mercado', 'is_premium')
+    list_filter = ('is_premium', 'mercado')
 admin.site.register(Bolsa, BolsaAdmin)
 
 class EmpresaAdmin(admin.ModelAdmin):
@@ -34,8 +35,8 @@ class BlogAdmin(admin.ModelAdmin):
 admin.site.register(Blog, BlogAdmin)
 
 class NoticiaAdmin(admin.ModelAdmin):
-    list_display = ('title', 'empresa', 'published_date', 'is_premium', 'public')
-    list_filter = ('is_premium', 'public', 'published_date', 'empresa__mercado', 'empresa__bolsas')
+    list_display = ('title', 'empresa', 'published_date', 'public')
+    list_filter = ('public', 'published_date', 'empresa__mercado', 'empresa__bolsas', 'empresa__bolsas__is_premium')
     search_fields = ('title', 'summary', 'content', 'empresa__title', 'tags')
     date_hierarchy = 'published_date'
     ordering = ('-published_date',)
@@ -54,7 +55,7 @@ class NoticiaAdmin(admin.ModelAdmin):
             'fields': ('published_date', 'author', 'source', 'source_url')
         }),
         ('Control de acceso', {
-            'fields': ('is_premium', 'public')
+            'fields': ('public',)
         }),
         ('API', {
             'fields': ('api_id', 'api_source'),
