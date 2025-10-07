@@ -176,9 +176,9 @@ class Subscription(models.Model):
 class Product(models.Model):
     
     INTERVAL_UNITS = (
-        ('Y', 'Year'),
-        ('M', 'Month'),
-        ('W', 'Week'),
+        ('Y', 'Año'),
+        ('M', 'Mes'),
+        ('W', 'Semana'),
     )
 
     title = models.CharField(max_length=200, blank=False, null=False, default='')
@@ -196,7 +196,20 @@ class Product(models.Model):
     
     def get_interval_display(self):
         interval_unit_display = dict(self.INTERVAL_UNITS).get(self.interval_unit, '')
-        unit_display = interval_unit_display if self.interval_count == 1 else f"{interval_unit_display}s"
+
+        if self.interval_count == 1:
+            unit_display = interval_unit_display
+        else:
+            # Pluralización correcta en español
+            if self.interval_unit == 'Y':  # Año
+                unit_display = "Años"
+            elif self.interval_unit == 'M':  # Mes
+                unit_display = "Meses"
+            elif self.interval_unit == 'W':  # Semana
+                unit_display = "Semanas"
+            else:
+                unit_display = f"{interval_unit_display}s"
+
         return f"{self.interval_count} {unit_display}" if interval_unit_display else ''
 
     @property
